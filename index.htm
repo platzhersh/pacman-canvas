@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>HTML 5 Canvas 3 - Pacman</title>
+	<link rel="stylesheet" href="pacman-canvas.css">
+</head>
+
+<body>
+	<div class="canvas">
+		<canvas id="myCanvas" width="500" height="500">
+		<p>Canvas not supported</p>
+		</canvas>
+	</div>
+	
+	<div class="content">
+	<h1>Pacman in HTML5 Canvas</h1>
+	<p>Use the arrow keys to navigate Pac-Man</p>
+	
+	<p>This whole thing was written in HTML5, CSS3 and Javascript (using small bits of jquery). For the basics I was following the <a href="http://devhammer.net/blog/exploring-html5-canvas-part-1---introduction" target="_blank">"Exploring HTML5 Canvas"</a> Tutorials (Part 1 - 6) by Devhammer. Thanks for the great Tutorial!</a>
+	<p>For some other stuff, like how to write objectorientated javascript I was following the tutorials over at <a href="http://www.codecademy.com/" target="_blank">http://www.codecademy.com/</a>, which is a really great site to learn Javascript and also other languages.</a>
+	<p>If you understand German you can also read my blogpost about this site: <a href="http://blog.platzh1rsch.ch/2012/08/pacman-in-html5-canvas.html">"Pacman in HTML5 Canvas"</a>.</p>
+	
+	<h2>Version 0.2 - 23.08.2012</h2>
+	<ul>
+	<li>Started cleaning up the code using Objects</li>
+	<li>Pacman now turns around when changing directions</li>
+	</ul>
+	
+	<h2>ToDo</h2>
+	<ul>
+	<li><strike>Come back in from left side when leaving canvas on the right (same for top & bottom)</strike></li>
+	<li>Walls</li>
+	<li>Enemies</li>
+	<li>Lives</li>
+	<li>Pause Function</li>
+	<li>Touch Support?</li>
+	<li>Food! (classical white dots)</li>
+	<li>Points System</li>
+	<li>Global Highscore</li>
+	<li>Lock Mouse</li>
+	<li>Sound?</li>
+	</ul>
+	
+	<p>&copy; by <a href="http://platzh1rsch.ch">platzh1rsch</a></p>
+	
+	</div>
+	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js" type="text/javascript"></script>
+	<script src="pacman-canvas.js" type="text/javascript"></script>
+
+</body>
+</html>
