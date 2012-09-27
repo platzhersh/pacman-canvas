@@ -1,5 +1,7 @@
 	// global variables
 	
+	
+	// Direction object in Constructor notation
 	function Direction(name,angle1,angle2,dirX,dirY) {
 		this.name = name;
 		this.angle1 = angle1;
@@ -8,15 +10,20 @@
 		this.dirY = dirY;
 	}
 	
-	function Monster() {
-		
+	// Direction Objects
+	var up = new Direction("up",1.75,1.25,0,-1);		// UP
+	var left = new Direction("left",1.25,0.75,-1,0);	// LEFT
+	var down = new Direction("down",0.75,0.25,0,1);		// DOWN
+	var right = new Direction("right",0.25,1.75,1,0);	// RIGHT
+	
+	
+	// Monster object in Constructor notation
+	function Monster(color, direction) {
+		this.posX = 0;
+		this.posY = 0;
+		this.color = color;
+		this.direction = direction;
 	}
-	
-	var up = new Direction("up",1.75,1.25,0,-1);
-	var left = new Direction("left",1.25,0.75,-1,0);
-	var down = new Direction("down",0.75,0.25,0,1);
-	var right = new Direction("right",0.25,1.75,1,0);
-	
 	
 	var pacman = new Object();
 		pacman.posX = 0;
