@@ -53,7 +53,45 @@
 			{
                 //context.save()
                 
-                // Pac Man
+				
+				// Monster Draft
+				context.beginPath();
+				context.fillStyle = "Pink";
+				context.strokeStyle = "Pink";
+				context.arc(20,20,20,0*Math.PI,2*Math.PI);
+				context.lineTo(20,20);
+				context.stroke();
+				context.fill();
+				
+				// WhiteDot Draft 1
+				context.beginPath();
+				context.fillStyle = "White";
+				context.strokeStyle = "White";
+				context.arc(pacman.radius,pacman.radius,5,0*Math.PI,2*Math.PI);
+				context.lineTo(pacman.radius, pacman.radius);
+				context.stroke();
+				context.fill();
+				
+				// WhiteDot Draft 2
+				context.beginPath();
+				context.fillStyle = "White";
+				context.strokeStyle = "White";
+				context.arc(pacman.radius+2*pacman.radius,pacman.radius,5,0*Math.PI,2*Math.PI);
+				context.lineTo(pacman.radius+2*pacman.radius, pacman.radius);
+				context.stroke();
+				context.fill();
+				
+				// WhiteDot Draft 2
+				context.beginPath();
+				context.fillStyle = "White";
+				context.strokeStyle = "White";
+				context.arc(pacman.radius+4*pacman.radius,pacman.radius,5,0*Math.PI,2*Math.PI);
+				context.lineTo(pacman.radius+4*pacman.radius, pacman.radius);
+				context.stroke();
+				context.fill();
+				
+				
+				// Pac Man
 				context.beginPath();
 				context.fillStyle = "Yellow";
 				context.strokeStyle = "Yellow";
@@ -103,8 +141,8 @@
 				pacman.posY += 5 * pacman.dirY;
 				
 				/* Mouth Animation */
-				pacman.angle1 -= pacman.mouth*0.02;
-				pacman.angle2 += pacman.mouth*0.02;
+				pacman.angle1 -= pacman.mouth*0.07;
+				pacman.angle2 += pacman.mouth*0.07;
 				
 				var limitMax1 = pacman.direction.angle1;
 				var limitMax2 = pacman.direction.angle2;
