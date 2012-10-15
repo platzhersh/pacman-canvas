@@ -25,10 +25,49 @@
 		this.direction = direction;
 	}
 	
+	// whiteDot object in Constructor notation
+	function whiteDot(posX, posY, context) {
+		this.posX = posX;
+		this.posY = posY;
+		this.radius = pacman.radius / 3;
+		this.color = "White";
+		
+		context.beginPath();
+		context.fillStyle = "White";
+		context.strokeStyle = "White";
+		context.arc(this.posX,this.posY,this.radius,0*Math.PI,2*Math.PI);
+		context.lineTo(this.PosX, this.PosY);
+		context.stroke();
+		context.fill();
+		
+		// TODO: seems to forward ref. to Window object instead of whiteDot Object..
+		whiteDotTable.add(this);
+	}
+	
+	// Monitors all the white Dots
+	function whiteDotTable() {
+		this.hash = new Object();
+		this.add = function (whiteDot) {
+			var key = whiteDot.posX.toString()+whiteDot.posY.toString();
+			this.hash[key] = whiteDot;
+		}
+		this.getAll = function () {
+			for (var k in this.hash) {
+				console.log("key is: "+k + ", value is: "+this.hash[k]);
+			}
+		}
+		this.get = function(key) {
+			return this.hash[key] !== null ? this.hash[key] : false;
+		}
+	}
+	
+	var whiteDotTable = new whiteDotTable();
+	
+	
 	var pacman = new Object();
 		pacman.posX = 0;
 		pacman.posY = 0;
-		pacman.radius = 20;
+		pacman.radius = 15;
 		pacman.angle1 = 0.25;
 		pacman.angle2 = 1.75;
 		pacman.mouth = 1; /* Switches between 1 and -1, depending on mouth closing / opening */
@@ -71,6 +110,8 @@
 				context.lineTo(pacman.radius, pacman.radius);
 				context.stroke();
 				context.fill();
+				
+				whiteDot(50,50,context);
 				
 				// WhiteDot Draft 2
 				context.beginPath();
@@ -135,6 +176,7 @@
             function animationLoop()
             {
                 canvas.width = canvas.width;
+				renderGrid(pacman.radius, "red");
                 renderContent();
 				
                 pacman.posX += 5 * pacman.dirX;
@@ -146,8 +188,8 @@
 				
 				var limitMax1 = pacman.direction.angle1;
 				var limitMax2 = pacman.direction.angle2;
-				var limitMin1 = pacman.direction.angle1 - 0.24;
-				var limitMin2 = pacman.direction.angle2 + 0.24;
+				var limitMin1 = pacman.direction.angle1 - 0.21;
+				var limitMin2 = pacman.direction.angle2 + 0.21;
 					
 					//alert("Direction: "+pacman.direction+", limitMin1 = "+limitMin1+" limit2 = "+limitMin2+" mouth = "+pacman.mouth+" angle1 = "+pacman.angle1+" angle2 = "+pacman.angle2);
 					
@@ -183,7 +225,7 @@
 			}
             
 			
-            renderGrid(20, "red");
+            
 			//renderContent();
             animationLoop();
 		});
