@@ -1,6 +1,10 @@
 	// global variables
 	
 	
+	function LiveScore() {
+		var score;
+	}
+	
 	// Direction object in Constructor notation
 	function Direction(name,angle1,angle2,dirX,dirY) {
 		this.name = name;
@@ -18,20 +22,47 @@
 	
 	
 	// Monster object in Constructor notation
-	function Monster(color, direction) {
-		this.posX = 0;
-		this.posY = 0;
+	function Monster(posX, posY, color) {
+		this.posX = posX;
+		this.posY = posY;
 		this.color = color;
-		this.direction = direction;
+		//this.direction = ;
+		this.radius = pacman.radius;
+	}
+	Monster.prototype.paint = function (context) {					
+		// Monster Draft
+		context.beginPath();
+		context.fillStyle = this.color;
+		context.strokeStyle = this.color;
+		context.arc(this.posX,this.posY,this.radius,0*Math.PI,2*Math.PI);
+		context.lineTo(this.posX,this.posY);
+		context.stroke();
+		context.fill();
+	}
+	
+	// Monitors all the Monsters
+	function whiteDotTable() {
+
+		this.add = function(monster) {
+		}
+		this.getAll = function () {
+		}
+		this.get = function() {
+		}
 	}
 	
 	// whiteDot object in Constructor notation
-	function whiteDot(posX, posY, context) {
+	function whiteDot(posX, posY) {
 		this.posX = posX;
 		this.posY = posY;
-		this.radius = pacman.radius / 3;
+		this.radius = pacman.radius / 5;
 		this.color = "White";
 		
+		// IMPORTANT: create new whiteDot instances with new whiteDot(..)
+		whiteDotTable.add(this);
+	}
+	
+	whiteDot.prototype.paint = function (context) {
 		context.beginPath();
 		context.fillStyle = "White";
 		context.strokeStyle = "White";
@@ -39,9 +70,6 @@
 		context.lineTo(this.PosX, this.PosY);
 		context.stroke();
 		context.fill();
-		
-		// TODO: seems to forward ref. to Window object instead of whiteDot Object..
-		whiteDotTable.add(this);
 	}
 	
 	// Monitors all the white Dots
@@ -93,44 +121,19 @@
                 //context.save()
                 
 				
-				// Monster Draft
-				context.beginPath();
-				context.fillStyle = "Pink";
-				context.strokeStyle = "Pink";
-				context.arc(20,20,20,0*Math.PI,2*Math.PI);
-				context.lineTo(20,20);
-				context.stroke();
-				context.fill();
+				// Whitedots
+				for (var i = pacman.radius; i < canvas.width; i +=2*pacman.radius) {
+					for (var j = pacman.radius; j < canvas.height; j+= 2*pacman.radius) {
+						var dot = new whiteDot(i,j);
+						dot.paint(context);
+					}
+				}
 				
-				// WhiteDot Draft 1
-				context.beginPath();
-				context.fillStyle = "White";
-				context.strokeStyle = "White";
-				context.arc(pacman.radius,pacman.radius,5,0*Math.PI,2*Math.PI);
-				context.lineTo(pacman.radius, pacman.radius);
-				context.stroke();
-				context.fill();
+				var monster1 = new Monster(pacman.radius, pacman.radius,"Pink");
+				monster1.paint(context);
 				
-				whiteDot(50,50,context);
-				
-				// WhiteDot Draft 2
-				context.beginPath();
-				context.fillStyle = "White";
-				context.strokeStyle = "White";
-				context.arc(pacman.radius+2*pacman.radius,pacman.radius,5,0*Math.PI,2*Math.PI);
-				context.lineTo(pacman.radius+2*pacman.radius, pacman.radius);
-				context.stroke();
-				context.fill();
-				
-				// WhiteDot Draft 2
-				context.beginPath();
-				context.fillStyle = "White";
-				context.strokeStyle = "White";
-				context.arc(pacman.radius+4*pacman.radius,pacman.radius,5,0*Math.PI,2*Math.PI);
-				context.lineTo(pacman.radius+4*pacman.radius, pacman.radius);
-				context.stroke();
-				context.fill();
-				
+				var monster2 = new Monster(135, 135,"Green");
+				monster2.paint(context);
 				
 				// Pac Man
 				context.beginPath();
@@ -224,10 +227,8 @@
                 setTimeout(animationLoop, 33);
 			}
             
-			
-            
-			//renderContent();
             animationLoop();
+			
 		});
 	
 	function doKeyDown(evt){

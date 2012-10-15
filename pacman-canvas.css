@@ -2,6 +2,9 @@ body {
 	background-color: #000;
 	color: white;
 }
-#myCanvas { border: 1px solid white; display: inline-block; float: left;}
+#myCanvas { border: 1px solid white; display: block; background: rgb(0,0,0);}
 .canvas { position:absolute; padding-top: 20px;}
-.content { margin: 0; position:absolute; left: 530px; max-width: 600px;}
+.main {width: auto; max-width: 700px; margin: 10px auto; position: static; left: auto;}
+.content { width: 100%; text-align: left; margin: 0;}
+.container {text-align: center; }
+body, html { font-size: 15px; }
