@@ -89,10 +89,17 @@
 		this.remove = function(key) {
 
 			delete this.hash[key]
-			console.log(key+" deleted");
+			console.log("nom nom "+key);
+		}
+		this.size = function () {
+			var count = 0;
+			for (var k in this.hash) {
+				count++;
+			}
+			return count;
 		}
 		this.empty = function() {
-		
+			return (this.size() == 0);
 		}
 	}
 
@@ -115,11 +122,24 @@
 			var key = (pacman.posX+pacman.radius).toString()+(pacman.posY+pacman.radius).toString();
 			var dot = whiteDotTable.get(key);
 			if (dot != null) {
-				console.log("Collision at "+pacman.posX+","+pacman.posY+". (key: "+key+")");
+				//console.log("Collision at "+pacman.posX+","+pacman.posY+". (key: "+key+")");
 				whiteDotTable.remove(key);
 				score.add(10);
 				}
+			}
+		pacman.setDirection = function(dir) {			
+			pacman.dirX = dir.dirX;
+			pacman.dirY = dir.dirY;
+			pacman.angle1 = dir.angle1;
+			pacman.angle2 = dir.angle2;
+			pacman.direction = dir;
 		}
+
+		pacman.stop = function() {
+			pacman.dirX = 0;
+			pacman.dirY = 0;
+		}
+		
 	
 	
 	
@@ -238,10 +258,10 @@
 				// Border Handling
                 /*
 				Turn 180?
-				if (pacman.posX >= 500-2*pacman.radius) setDirection(left);
-                if (pacman.posX < 0) setDirection(right);
-                if (pacman.posY >= 500-2*pacman.radius) setDirection(up);
-                if (pacman.posY < 0) setDirection(down);
+				if (pacman.posX >= 500-2*pacman.radius) pacman.setDirection(left);
+                if (pacman.posX < 0) pacman.setDirection(right);
+                if (pacman.posY >= 500-2*pacman.radius) pacman.setDirection(up);
+                if (pacman.posY < 0) pacman.setDirection(down);
 				*/
 				
 				// Reenter
@@ -252,11 +272,18 @@
 				
 				
                 //if (posX >= 500-2*radius) stopMoving();
-
-                setTimeout(animationLoop, 33);
+				
+				// All dots collected?
+				if (whiteDotTable.empty()) {
+					alert("You definitely have a lot of time.");
+				} else {
+					setTimeout(animationLoop, 33);
+				}
+                
 			}
             
             animationLoop();
+			
 			
 		});
 	
@@ -266,32 +293,20 @@
 			{
 			case 87:	/* W pressed */
 			case 38:  /* Up arrow was pressed */
-				setDirection(up);
+				pacman.setDirection(up);
 				break;
 			case 83:	/* S pressed */
 			case 40:  /* Down arrow was pressed */
-				setDirection(down);
+				pacman.setDirection(down);
 				break;
 			case 65:	// A pressed
 			case 37:  /* Left arrow was pressed */
-				setDirection(left);
+				pacman.setDirection(left);
 				break;
 			case 68:	// D pressed
 			case 39:  /* Right arrow was pressed */
-				setDirection(right);
+				pacman.setDirection(right);
 				break;
 			}
 	}
 
-	function setDirection(dir) {			
-		pacman.dirX = dir.dirX;
-		pacman.dirY = dir.dirY;
-		pacman.angle1 = dir.angle1;
-		pacman.angle2 = dir.angle2;
-		pacman.direction = dir;
-	}
-
-	function stopMoving() {
-	pacman.dirX = 0;
-	pacman.dirY = 0;
-	}
