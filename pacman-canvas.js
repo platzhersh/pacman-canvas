@@ -87,6 +87,11 @@
 		this.get = function(key) {
 			return this.hash[key] !== null ? this.hash[key] : false;
 		}
+		this.remove = function(key) {
+
+			delete this.hash[key]
+			console.log(key+" deleted");
+		}
 	}
 	
 	var whiteDotTable = new whiteDotTable();
@@ -103,6 +108,15 @@
 		pacman.dirY = right.dirY;
 		
 		pacman.direction = right;
+		
+		pacman.checkCollisions = function () {
+			var key = (pacman.posX+pacman.radius).toString()+(pacman.posY+pacman.radius).toString();
+			var dot = whiteDotTable.get(key);
+			if (dot != null) {
+				console.log("Collision at "+pacman.posX+","+pacman.posY+". (key: "+key+")");
+				whiteDotTable.remove(key);
+				}
+		}
 	
 	
 	
@@ -114,7 +128,13 @@
 		var context = canvas.getContext("2d");
 		
 		//alert("Pacman created, angle1" + pacman.angle1);
-
+		
+		// Whitedots preparation
+		for (var i = pacman.radius; i < canvas.width; i +=2*pacman.radius) {
+			for (var j = pacman.radius; j < canvas.height; j+= 2*pacman.radius) {
+			var dot = new whiteDot(i,j);
+			}
+		}
 
 			function renderContent()
 			{
@@ -122,11 +142,8 @@
                 
 				
 				// Whitedots
-				for (var i = pacman.radius; i < canvas.width; i +=2*pacman.radius) {
-					for (var j = pacman.radius; j < canvas.height; j+= 2*pacman.radius) {
-						var dot = new whiteDot(i,j);
-						dot.paint(context);
-					}
+				for (var k in whiteDotTable.hash) {
+					whiteDotTable.hash[k].paint(context);
 				}
 				
 				var monster1 = new Monster(pacman.radius, pacman.radius,"Pink");
@@ -182,8 +199,15 @@
 				renderGrid(pacman.radius, "red");
                 renderContent();
 				
+				
+				// Move forward
+				
                 pacman.posX += 5 * pacman.dirX;
 				pacman.posY += 5 * pacman.dirY;
+				
+				
+				
+				pacman.checkCollisions();
 				
 				/* Mouth Animation */
 				pacman.angle1 -= pacman.mouth*0.07;
@@ -216,10 +240,10 @@
 				*/
 				
 				// Reenter
-				if (pacman.posX >= 500-pacman.radius) pacman.posX = 1-pacman.radius;
-				if (pacman.posX <= 0-pacman.radius) pacman.posX = 499-pacman.radius;
-				if (pacman.posY >= 500-pacman.radius) pacman.posY = 1-pacman.radius;
-				if (pacman.posY <= 0-pacman.radius) pacman.posY = 499-pacman.radius;
+				if (pacman.posX >= 500-pacman.radius) pacman.posX = 5-pacman.radius;
+				if (pacman.posX <= 0-pacman.radius) pacman.posX = 495-pacman.radius;
+				if (pacman.posY >= 500-pacman.radius) pacman.posY = 5-pacman.radius;
+				if (pacman.posY <= 0-pacman.radius) pacman.posY = 495-pacman.radius;
 				
 				
                 //if (posX >= 500-2*radius) stopMoving();
