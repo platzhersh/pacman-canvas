@@ -1,9 +1,19 @@
 	// global variables
 	
 	
-	function LiveScore() {
-		var score;
+	function Score() {
+		this.score = 0;
+		this.add = function(i) {
+			this.score += i;
+		}
+		this.refresh = function(h) {
+			$(h).html("Score: "+this.score);
+		}
+		
 	}
+	var score = new Score();
+	
+	
 	
 	// Direction object in Constructor notation
 	function Direction(name,angle1,angle2,dirX,dirY) {
@@ -38,17 +48,6 @@
 		context.lineTo(this.posX,this.posY);
 		context.stroke();
 		context.fill();
-	}
-	
-	// Monitors all the Monsters
-	function whiteDotTable() {
-
-		this.add = function(monster) {
-		}
-		this.getAll = function () {
-		}
-		this.get = function() {
-		}
 	}
 	
 	// whiteDot object in Constructor notation
@@ -92,8 +91,11 @@
 			delete this.hash[key]
 			console.log(key+" deleted");
 		}
+		this.empty = function() {
+		
+		}
 	}
-	
+
 	var whiteDotTable = new whiteDotTable();
 	
 	
@@ -115,6 +117,7 @@
 			if (dot != null) {
 				console.log("Collision at "+pacman.posX+","+pacman.posY+". (key: "+key+")");
 				whiteDotTable.remove(key);
+				score.add(10);
 				}
 		}
 	
@@ -129,7 +132,7 @@
 		
 		//alert("Pacman created, angle1" + pacman.angle1);
 		
-		// Whitedots preparation
+		// Whitedots vorbereiten
 		for (var i = pacman.radius; i < canvas.width; i +=2*pacman.radius) {
 			for (var j = pacman.radius; j < canvas.height; j+= 2*pacman.radius) {
 			var dot = new whiteDot(i,j);
@@ -139,7 +142,9 @@
 			function renderContent()
 			{
                 //context.save()
-                
+				
+				// Refresh Score
+				score.refresh(".score");
 				
 				// Whitedots
 				for (var k in whiteDotTable.hash) {
