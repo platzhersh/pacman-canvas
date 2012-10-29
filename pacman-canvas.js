@@ -1,5 +1,16 @@
+/*
+___________    ____   _____ _____    ____  
+\____ \__  \ _/ ___\ /     \\__  \  /    \ 
+|  |_> > __ \\  \___|  Y Y  \/ __ \|   |  \
+|   __(____  /\___  >__|_|  (____  /___|  /
+|__|       \/     \/      \/     \/     \/ .platzh1rsch.ch
+
+
+*/
 	// global variables
 	
+	// set to false when game ends
+	var running = true;
 	
 	function Score() {
 		this.score = 0;
@@ -30,6 +41,19 @@
 	var down = new Direction("down",0.75,0.25,0,1);		// DOWN
 	var right = new Direction("right",0.25,1.75,1,0);	// RIGHT
 	
+	
+	// DirectionWatcher
+	function directionWatcher() {
+		this.dir = null;
+		this.set = function(dir) {
+			this.dir = dir;
+		}
+		this.get = function() {
+			return this.dir;
+		}
+		}
+		
+	var directionWatcher = new directionWatcher();
 	
 	// Monster object in Constructor notation
 	function Monster(posX, posY, color) {
@@ -86,6 +110,9 @@
 		this.get = function(key) {
 			return this.hash[key] !== null ? this.hash[key] : false;
 		}
+		this.removeAll = function() {
+			this.hash = new Object();
+		}
 		this.remove = function(key) {
 
 			delete this.hash[key]
@@ -127,6 +154,16 @@
 				score.add(10);
 				}
 			}
+		pacman.checkDirectionChange = function() {
+			if (directionWatcher.get() != null) {
+				console.log("next Direction: "+directionWatcher.get());
+				if ((pacman.posX % (2*pacman.radius) === 0) && (pacman.posY % (2*pacman.radius) === 0)) {
+				console.log("changeDirection to "+directionWatcher.get());
+				pacman.setDirection(directionWatcher.get());
+				directionWatcher.set(null);
+				}
+			}
+		}
 		pacman.setDirection = function(dir) {			
 			pacman.dirX = dir.dirX;
 			pacman.dirY = dir.dirY;
@@ -233,6 +270,8 @@
 				
 				
 				pacman.checkCollisions();
+				pacman.checkDirectionChange();
+				
 				
 				/* Mouth Animation */
 				pacman.angle1 -= pacman.mouth*0.07;
@@ -274,11 +313,12 @@
                 //if (posX >= 500-2*radius) stopMoving();
 				
 				// All dots collected?
-				if (whiteDotTable.empty()) {
+				if ((whiteDotTable.empty()) && running) {
 					alert("You definitely have a lot of time.");
-				} else {
-					setTimeout(animationLoop, 33);
+					running = false;
 				}
+					setTimeout(animationLoop, 33);
+				
                 
 			}
             
@@ -291,22 +331,34 @@
 	
 		switch (evt.keyCode)
 			{
-			case 87:	/* W pressed */
-			case 38:  /* Up arrow was pressed */
-				pacman.setDirection(up);
+			case 87:	// W pressed
+				directionWatcher.set(up);
 				break;
-			case 83:	/* S pressed */
-			case 40:  /* Down arrow was pressed */
-				pacman.setDirection(down);
+			case 83:	// S pressed 
+				directionWatcher.set(down);
 				break;
 			case 65:	// A pressed
-			case 37:  /* Left arrow was pressed */
-				pacman.setDirection(left);
+				directionWatcher.set(left);
 				break;
+
 			case 68:	// D pressed
-			case 39:  /* Right arrow was pressed */
+				directionWatcher.set(right);
+				break;
+
+			/*
+			case 38:  // Up arrow was pressed
+				pacman.setDirection(up);
+				break;
+			case 40:  // Down arrow was pressed
+				pacman.setDirection(down);
+				break;
+			case 39:  // Right arrow was pressed 
 				pacman.setDirection(right);
 				break;
+			case 37:  // Left arrow was pressed
+				pacman.setDirection(left);
+				break;
+			*/
 			}
 	}
 
