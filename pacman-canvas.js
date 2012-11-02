@@ -186,7 +186,25 @@ ___________    ____   _____ _____    ____
 
 		var canvas = $("#myCanvas").get(0);
 		var context = canvas.getContext("2d");
+        
+        
+        // Blinky
+        var blinky = new Image();
+            blinky.src = 'img/blinky.svg';
+            
+        // Pinky
+        var pinky = new Image();
+            pinky.src = 'img/pinky.svg';
 		
+        // Inky
+        var inky = new Image();
+            inky.src = 'img/inky.svg';
+            
+        // Clyde
+        var clyde = new Image();
+            clyde.src = 'img/clyde.svg';
+            
+         
 		//alert("Pacman created, angle1" + pacman.angle1);
 		
 		// Whitedots vorbereiten
@@ -208,11 +226,14 @@ ___________    ____   _____ _____    ____
 					whiteDotTable.hash[k].paint(context);
 				}
 				
-				var monster1 = new Monster(pacman.radius, pacman.radius,"Pink");
-				monster1.paint(context);
-				
-				var monster2 = new Monster(135, 135,"Green");
-				monster2.paint(context);
+                
+                // Ghosts
+                context.drawImage(blinky, 2*pacman.radius, 2*pacman.radius, 2*pacman.radius, 2*pacman.radius);
+                context.drawImage(pinky, 2*pacman.radius, 4*pacman.radius, 2*pacman.radius, 2*pacman.radius);
+                context.drawImage(inky, 2*pacman.radius, 6*pacman.radius, 2*pacman.radius, 2*pacman.radius);
+                context.drawImage(clyde, 2*pacman.radius, 8*pacman.radius, 2*pacman.radius, 2*pacman.radius);
+                
+                
 				
 				// Pac Man
 				context.beginPath();
