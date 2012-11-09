@@ -25,6 +25,21 @@ ___________    ____   _____ _____    ____
 	var score = new Score();
 	
 	
+	// used to play sounds during the game
+	var Sound = new Object();
+	Sound.play = function (sound) {
+	
+		switch (sound) {
+			case ("waka"): 
+					var waka = document.getElementById("waka");
+					waka.play();
+					console.log("play waka");
+
+				break;
+		}
+		/*$("#dummy").innerHTML="<embed src=\""+soundfile+"\" hidden=\"true\" autostart=\"true\" loop=\"false\" />";*/
+	}
+	
 	
 	// Direction object in Constructor notation
 	function Direction(name,angle1,angle2,dirX,dirY) {
@@ -55,24 +70,20 @@ ___________    ____   _____ _____    ____
 		
 	var directionWatcher = new directionWatcher();
 	
-	// Monster object in Constructor notation
-	function Monster(posX, posY, color) {
+	// Ghost object in Constructor notation
+	function Ghost(posX, posY, image) {
 		this.posX = posX;
 		this.posY = posY;
-		this.color = color;
-		//this.direction = ;
+		this.image = new Image();
+		this.image.src = image;
+		this.direction = right;
 		this.radius = pacman.radius;
 	}
-	Monster.prototype.paint = function (context) {					
+	Ghost.prototype.draw = function (context) {					
 		// Monster Draft
-		context.beginPath();
-		context.fillStyle = this.color;
-		context.strokeStyle = this.color;
-		context.arc(this.posX,this.posY,this.radius,0*Math.PI,2*Math.PI);
-		context.lineTo(this.posX,this.posY);
-		context.stroke();
-		context.fill();
+		context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
 	}
+	
 	
 	// whiteDot object in Constructor notation
 	function whiteDot(posX, posY) {
@@ -117,6 +128,7 @@ ___________    ____   _____ _____    ____
 
 			delete this.hash[key]
 			console.log("nom nom "+key);
+			Sound.play("waka");
 		}
 		this.size = function () {
 			var count = 0;
@@ -134,9 +146,9 @@ ___________    ____   _____ _____    ____
 	
 	
 	var pacman = new Object();
-		pacman.posX = 0;
-		pacman.posY = 0;
 		pacman.radius = 15;
+		pacman.posX = 8*pacman.radius;
+		pacman.posY = 0;
 		pacman.angle1 = 0.25;
 		pacman.angle2 = 1.75;
 		pacman.mouth = 1; /* Switches between 1 and -1, depending on mouth closing / opening */
@@ -177,6 +189,7 @@ ___________    ____   _____ _____    ____
 			pacman.dirY = 0;
 		}
 		
+
 	
 	
 	
@@ -187,22 +200,6 @@ ___________    ____   _____ _____    ____
 		var canvas = $("#myCanvas").get(0);
 		var context = canvas.getContext("2d");
         
-        
-        // Blinky
-        var blinky = new Image();
-            blinky.src = 'img/blinky.svg';
-            
-        // Pinky
-        var pinky = new Image();
-            pinky.src = 'img/pinky.svg';
-		
-        // Inky
-        var inky = new Image();
-            inky.src = 'img/inky.svg';
-            
-        // Clyde
-        var clyde = new Image();
-            clyde.src = 'img/clyde.svg';
             
          
 		//alert("Pacman created, angle1" + pacman.angle1);
@@ -213,6 +210,12 @@ ___________    ____   _____ _____    ____
 			var dot = new whiteDot(i,j);
 			}
 		}
+		
+		// initalize Ghosts
+		var pinky = new Ghost(0,0,'img/pinky.svg');
+		var inky = new Ghost(2*pacman.radius,0,'img/inky.svg');
+		var blinky = new Ghost(4*pacman.radius,0,'img/blinky.svg');
+		var clyde = new Ghost(6*pacman.radius,0,'img/clyde.svg');
 
 			function renderContent()
 			{
@@ -228,11 +231,10 @@ ___________    ____   _____ _____    ____
 				
                 
                 // Ghosts
-                context.drawImage(blinky, 2*pacman.radius, 2*pacman.radius, 2*pacman.radius, 2*pacman.radius);
-                context.drawImage(pinky, 2*pacman.radius, 4*pacman.radius, 2*pacman.radius, 2*pacman.radius);
-                context.drawImage(inky, 2*pacman.radius, 6*pacman.radius, 2*pacman.radius, 2*pacman.radius);
-                context.drawImage(clyde, 2*pacman.radius, 8*pacman.radius, 2*pacman.radius, 2*pacman.radius);
-                
+				pinky.draw(context);
+				blinky.draw(context);
+				inky.draw(context);
+				clyde.draw(context);             
                 
 				
 				// Pac Man
@@ -288,7 +290,17 @@ ___________    ____   _____ _____    ____
                 pacman.posX += 5 * pacman.dirX;
 				pacman.posY += 5 * pacman.dirY;
 				
+				/*blinky.posX += 5 * pacman.dirX;
+				blinky.posY += 5 * pacman.dirY;
 				
+				inky.posX += 5 * pacman.dirX;
+				inky.posY += 5 * pacman.dirY;
+				
+				pinky.posX += 5 * pacman.dirX;
+				pinky.posY += 5 * pacman.dirY;
+				
+				clyde.posX += 5 * pacman.dirX;
+				clyde.posY += 5 * pacman.dirY;*/
 				
 				pacman.checkCollisions();
 				pacman.checkDirectionChange();

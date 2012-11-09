@@ -18,6 +18,24 @@
 	<h1>Pacman in HTML5 Canvas</h1>
 	<p>Use W-A-S-D keys to navigate Pac-Man</p>
 		<div class="score">Score:</div>
+		<span id="audio">
+		<audio id="theme" controls="controls" preload="auto">
+			<source src="wav/theme.wav" type="audio/wav">
+			<source src="mp3/theme.mp3" type="audio/mpeg">
+		</audio>
+		<audio id="waka" controls="controls" preload="auto">
+			<source src="wav/waka.wav" type="audio/wav">
+			<source src="mp3/waka.mp3" type="audio/mpeg">
+		</audio>
+		<audio id="die" controls="controls" preload="auto">
+			<source src="wav/die.wav" type="audio/wav">
+			<source src="mp3/die.mp3" type="audio/mpeg">
+		</audio>
+		<audio id="powerpill" controls="controls" preload="auto">
+			<source src="wav/powerpill.wav" type="audio/wav">
+			<source src="mp3/powerpill.mp3" type="audio/mpeg">
+		</audio>
+		</span>
 		<canvas id="myCanvas" width="500" height="500">
 		<p>Canvas not supported</p>
 		</canvas>
