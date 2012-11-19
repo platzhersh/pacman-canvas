@@ -1,16 +1,29 @@
-/*
-___________    ____   _____ _____    ____  
-\____ \__  \ _/ ___\ /     \\__  \  /    \ 
-|  |_> > __ \\  \___|  Y Y  \/ __ \|   |  \
-|   __(____  /\___  >__|_|  (____  /___|  /
-|__|       \/     \/      \/     \/     \/ .platzh1rsch.ch
+/* -----------------------------------------------------------------
 
-
-*/
-	// global variables
+	___________    ____   _____ _____    ____  
+	\____ \__  \ _/ ___\ /     \\__  \  /    \ 
+	|  |_> > __ \\  \___|  Y Y  \/ __ \|   |  \
+	|   __(____  /\___  >__|_|  (____  /___|  /
+	|__|       \/     \/      \/     \/     \/ .platzh1rsch.ch
 	
-	// set to false when game ends
-	var running = true;
+	author: platzh1rsch		(www.platzh1rsch.ch)
+	
+-------------------------------------------------------------------*/
+	
+	
+	// Manages the whole game ("God Object")
+	function Game() {
+		this.running = true;
+		this.pause = false;
+		this.score = new Score();
+		this.whiteDots;
+		this.monsters;
+		this.restart = function() {
+			}
+		this.initialize = function () {
+			}
+	}
+	var game = new Game();
 	
 	function Score() {
 		this.score = 0;
@@ -28,16 +41,8 @@ ___________    ____   _____ _____    ____
 	// used to play sounds during the game
 	var Sound = new Object();
 	Sound.play = function (sound) {
-	
-		switch (sound) {
-			case ("waka"): 
-					var waka = document.getElementById("waka");
-					waka.play();
-					console.log("play waka");
-
-				break;
-		}
-		/*$("#dummy").innerHTML="<embed src=\""+soundfile+"\" hidden=\"true\" autostart=\"true\" loop=\"false\" />";*/
+		var audio = document.getElementById(sound);
+		(audio != null) ? audio.play() : console.log(sound+" not found");
 	}
 	
 	
@@ -127,7 +132,7 @@ ___________    ____   _____ _____    ____
 		this.remove = function(key) {
 
 			delete this.hash[key]
-			console.log("nom nom "+key);
+			//console.log("nom nom "+key);
 			Sound.play("waka");
 		}
 		this.size = function () {
@@ -145,53 +150,99 @@ ___________    ____   _____ _____    ____
 	var whiteDotTable = new whiteDotTable();
 	
 	
-	var pacman = new Object();
-		pacman.radius = 15;
-		pacman.posX = 8*pacman.radius;
-		pacman.posY = 0;
-		pacman.angle1 = 0.25;
-		pacman.angle2 = 1.75;
-		pacman.mouth = 1; /* Switches between 1 and -1, depending on mouth closing / opening */
-		pacman.dirX = right.dirX;
-		pacman.dirY = right.dirY;
+	function pacman() {
+		this.radius = 15;
+		this.posX = 8*this.radius;
+		this.posY = 0;
+		this.angle1 = 0.25;
+		this.angle2 = 1.75;
+		this.mouth = 1; /* Switches between 1 and -1, depending on mouth closing / opening */
+		this.dirX = right.dirX;
+		this.dirY = right.dirY;
+		this.lives = 3;
 		
-		pacman.direction = right;
+		this.direction = right;
 		
-		pacman.checkCollisions = function () {
-			var key = (pacman.posX+pacman.radius).toString()+(pacman.posY+pacman.radius).toString();
+		this.checkCollisions = function () {
+			var key = (this.posX+this.radius).toString()+(this.posY+this.radius).toString();
 			var dot = whiteDotTable.get(key);
 			if (dot != null) {
-				//console.log("Collision at "+pacman.posX+","+pacman.posY+". (key: "+key+")");
+				//console.log("Collision at "+this.posX+","+this.posY+". (key: "+key+")");
 				whiteDotTable.remove(key);
 				score.add(10);
 				}
 			}
-		pacman.checkDirectionChange = function() {
+		this.checkDirectionChange = function() {
 			if (directionWatcher.get() != null) {
-				console.log("next Direction: "+directionWatcher.get());
-				if ((pacman.posX % (2*pacman.radius) === 0) && (pacman.posY % (2*pacman.radius) === 0)) {
-				console.log("changeDirection to "+directionWatcher.get());
-				pacman.setDirection(directionWatcher.get());
+				//console.log("next Direction: "+directionWatcher.get().name);
+				if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
+				//console.log("changeDirection to "+directionWatcher.get().name);
+				this.setDirection(directionWatcher.get());
 				directionWatcher.set(null);
 				}
 			}
 		}
-		pacman.setDirection = function(dir) {			
-			pacman.dirX = dir.dirX;
-			pacman.dirY = dir.dirY;
-			pacman.angle1 = dir.angle1;
-			pacman.angle2 = dir.angle2;
-			pacman.direction = dir;
+		this.setDirection = function(dir) {			
+			this.dirX = dir.dirX;
+			this.dirY = dir.dirY;
+			this.angle1 = dir.angle1;
+			this.angle2 = dir.angle2;
+			this.direction = dir;
 		}
 
-		pacman.stop = function() {
-			pacman.dirX = 0;
-			pacman.dirY = 0;
+		this.move = function() {
+			this.posX += 5 * this.dirX;
+			this.posY += 5 * this.dirY;
+			
+			// Check if out of canvas
+			if (this.posX >= 500-this.radius) this.posX = 5-this.radius;
+			if (this.posX <= 0-this.radius) this.posX = 495-this.radius;
+			if (this.posY >= 500-this.radius) this.posY = 5-this.radius;
+			if (this.posY <= 0-this.radius) this.posY = 495-this.radius;
+			
+			this.eat();
 		}
 		
-
+		this.eat = function () {
+		
+			this.angle1 -= this.mouth*0.07;
+			this.angle2 += this.mouth*0.07;
+			
+			var limitMax1 = this.direction.angle1;
+			var limitMax2 = this.direction.angle2;
+			var limitMin1 = this.direction.angle1 - 0.21;
+			var limitMin2 = this.direction.angle2 + 0.21;
+				
+			if (this.angle1 < limitMin1 || this.angle2 > limitMin2)
+			{
+				this.mouth = -1;
+			}
+			if (this.angle1 >= limitMax1 || this.angle2 <= limitMax2)
+			{
+				this.mouth = 1;
+			}
+		
+		}
+		
+		this.stop = function() {
+			this.dirX = 0;
+			this.dirY = 0;
+		}
+		
+		this.die = function() {
+			this.stop();
+			this.lives > 0 ? --this.lives : alert("Game over!");
+			Sound.play("die");
+			}
+		this.reset = function() {
+			this.dirX = 1;
+			this.dirY = 0;
+			}
+	}
+		var pacman = new pacman();
 	
 	
+	// Action starts here:
 	
 	$(document).ready(function() {
 
@@ -201,9 +252,12 @@ ___________    ____   _____ _____    ____
 		var context = canvas.getContext("2d");
         
             
-         
-		//alert("Pacman created, angle1" + pacman.angle1);
+ 
+		/* --------------- GAME INITIALISATION ------------------------------------
 		
+			TODO: put this into Game object and change code to accept different setups / levels
+		
+		-------------------------------------------------------------------------- */
 		// Whitedots vorbereiten
 		for (var i = pacman.radius; i < canvas.width; i +=2*pacman.radius) {
 			for (var j = pacman.radius; j < canvas.height; j+= 2*pacman.radius) {
@@ -281,74 +335,19 @@ ___________    ____   _____ _____    ____
             function animationLoop()
             {
                 canvas.width = canvas.width;
-				renderGrid(pacman.radius, "red");
+				//renderGrid(pacman.radius, "red");
                 renderContent();
 				
 				
-				// Move forward
-				
-                pacman.posX += 5 * pacman.dirX;
-				pacman.posY += 5 * pacman.dirY;
-				
-				/*blinky.posX += 5 * pacman.dirX;
-				blinky.posY += 5 * pacman.dirY;
-				
-				inky.posX += 5 * pacman.dirX;
-				inky.posY += 5 * pacman.dirY;
-				
-				pinky.posX += 5 * pacman.dirX;
-				pinky.posY += 5 * pacman.dirY;
-				
-				clyde.posX += 5 * pacman.dirX;
-				clyde.posY += 5 * pacman.dirY;*/
-				
+				// Make changes before next loop
+                pacman.move();
 				pacman.checkCollisions();
-				pacman.checkDirectionChange();
-				
-				
-				/* Mouth Animation */
-				pacman.angle1 -= pacman.mouth*0.07;
-				pacman.angle2 += pacman.mouth*0.07;
-				
-				var limitMax1 = pacman.direction.angle1;
-				var limitMax2 = pacman.direction.angle2;
-				var limitMin1 = pacman.direction.angle1 - 0.21;
-				var limitMin2 = pacman.direction.angle2 + 0.21;
-					
-					//alert("Direction: "+pacman.direction+", limitMin1 = "+limitMin1+" limit2 = "+limitMin2+" mouth = "+pacman.mouth+" angle1 = "+pacman.angle1+" angle2 = "+pacman.angle2);
-					
-				if (pacman.angle1 < limitMin1 || pacman.angle2 > limitMin2)
-				{
-					pacman.mouth = -1;
-				}
-				if (pacman.angle1 >= limitMax1 || pacman.angle2 <= limitMax2)
-				{
-					pacman.mouth = 1;
-				}
-				
-				
-				// Border Handling
-                /*
-				Turn 180?
-				if (pacman.posX >= 500-2*pacman.radius) pacman.setDirection(left);
-                if (pacman.posX < 0) pacman.setDirection(right);
-                if (pacman.posY >= 500-2*pacman.radius) pacman.setDirection(up);
-                if (pacman.posY < 0) pacman.setDirection(down);
-				*/
-				
-				// Reenter
-				if (pacman.posX >= 500-pacman.radius) pacman.posX = 5-pacman.radius;
-				if (pacman.posX <= 0-pacman.radius) pacman.posX = 495-pacman.radius;
-				if (pacman.posY >= 500-pacman.radius) pacman.posY = 5-pacman.radius;
-				if (pacman.posY <= 0-pacman.radius) pacman.posY = 495-pacman.radius;
-				
-				
-                //if (posX >= 500-2*radius) stopMoving();
+				pacman.checkDirectionChange();		
 				
 				// All dots collected?
-				if ((whiteDotTable.empty()) && running) {
+				if ((whiteDotTable.empty()) && game.running) {
 					alert("You definitely have a lot of time.");
-					running = false;
+					game.running = false;
 				}
 					setTimeout(animationLoop, 33);
 				
@@ -377,21 +376,6 @@ ___________    ____   _____ _____    ____
 			case 68:	// D pressed
 				directionWatcher.set(right);
 				break;
-
-			/*
-			case 38:  // Up arrow was pressed
-				pacman.setDirection(up);
-				break;
-			case 40:  // Down arrow was pressed
-				pacman.setDirection(down);
-				break;
-			case 39:  // Right arrow was pressed 
-				pacman.setDirection(right);
-				break;
-			case 37:  // Left arrow was pressed
-				pacman.setDirection(left);
-				break;
-			*/
 			}
 	}
 
