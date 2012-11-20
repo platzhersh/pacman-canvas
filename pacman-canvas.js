@@ -73,7 +73,7 @@
 		}
 		}
 		
-	var directionWatcher = new directionWatcher();
+	//var directionWatcher = new directionWatcher();
 	
 	// Ghost object in Constructor notation
 	function Ghost(posX, posY, image) {
@@ -83,11 +83,13 @@
 		this.image.src = image;
 		this.direction = right;
 		this.radius = pacman.radius;
-	}
-	Ghost.prototype.draw = function (context) {					
+		this.draw = function (context) {					
 		// Monster Draft
 		context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
+		}
 	}
+	
+	Ghost.prototype = new Figure();
 	
 	
 	// whiteDot object in Constructor notation
@@ -149,6 +151,28 @@
 
 	var whiteDotTable = new whiteDotTable();
 	
+	// Super Class for Pacman & Ghosts
+	function Figure() {
+		this.posX;
+		this.posY;
+		this.dirX = 1;
+		this.dirY = 0;
+		this.direction;
+		this.directionWatcher = new directionWatcher();
+		this.checkCollisions = function() {}
+		this.checkDirectionChange = function() {}
+		this.move = function() {
+			this.posX += 5 * this.dirX;
+			this.posY += 5 * this.dirY;
+			
+			// Check if out of canvas
+			if (this.posX >= 500-this.radius) this.posX = 5-this.radius;
+			if (this.posX <= 0-this.radius) this.posX = 495-this.radius;
+			if (this.posY >= 500-this.radius) this.posY = 5-this.radius;
+			if (this.posY <= 0-this.radius) this.posY = 495-this.radius;
+			}
+		this.stop = function() {}
+	}
 	
 	function pacman() {
 		this.radius = 15;
@@ -160,6 +184,7 @@
 		this.dirX = right.dirX;
 		this.dirY = right.dirY;
 		this.lives = 3;
+		this.directionWatcher = new directionWatcher();
 		
 		this.direction = right;
 		
@@ -173,12 +198,12 @@
 				}
 			}
 		this.checkDirectionChange = function() {
-			if (directionWatcher.get() != null) {
+			if (this.directionWatcher.get() != null) {
 				//console.log("next Direction: "+directionWatcher.get().name);
 				if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
 				//console.log("changeDirection to "+directionWatcher.get().name);
-				this.setDirection(directionWatcher.get());
-				directionWatcher.set(null);
+				this.setDirection(this.directionWatcher.get());
+				this.directionWatcher.set(null);
 				}
 			}
 		}
@@ -199,9 +224,7 @@
 			if (this.posX <= 0-this.radius) this.posX = 495-this.radius;
 			if (this.posY >= 500-this.radius) this.posY = 5-this.radius;
 			if (this.posY <= 0-this.radius) this.posY = 495-this.radius;
-			
-			this.eat();
-		}
+			}
 		
 		this.eat = function () {
 		
@@ -258,6 +281,7 @@
 			TODO: put this into Game object and change code to accept different setups / levels
 		
 		-------------------------------------------------------------------------- */
+		
 		// Whitedots vorbereiten
 		for (var i = pacman.radius; i < canvas.width; i +=2*pacman.radius) {
 			for (var j = pacman.radius; j < canvas.height; j+= 2*pacman.radius) {
@@ -271,91 +295,96 @@
 		var blinky = new Ghost(4*pacman.radius,0,'img/blinky.svg');
 		var clyde = new Ghost(6*pacman.radius,0,'img/clyde.svg');
 
-			function renderContent()
-			{
-                //context.save()
-				
-				// Refresh Score
-				score.refresh(".score");
-				
-				// Whitedots
-				for (var k in whiteDotTable.hash) {
-					whiteDotTable.hash[k].paint(context);
-				}
-				
-                
-                // Ghosts
-				pinky.draw(context);
-				blinky.draw(context);
-				inky.draw(context);
-				clyde.draw(context);             
-                
-				
-				// Pac Man
-				context.beginPath();
-				context.fillStyle = "Yellow";
-				context.strokeStyle = "Yellow";
-				context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
-				context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
-				context.stroke();
-				context.fill();
-                
-                //context.restore();
-			}
-            
-            function renderGrid(gridPixelSize, color)
-            {
-                context.save();
-                context.lineWidth = 0.5;
-                context.strokeStyle = color;
-                
-                // horizontal grid lines
-                for(var i = 0; i <= canvas.height; i = i + gridPixelSize)
-                {
-                    context.beginPath();
-                    context.moveTo(0, i);
-                    context.lineTo(canvas.width, i);
-                    context.closePath();
-                    context.stroke();
-                }
-                
-                // vertical grid lines
-                for(var i = 0; i <= canvas.width; i = i + gridPixelSize)
-                {
-                    context.beginPath();
-                    context.moveTo(i, 0);
-                    context.lineTo(i, canvas.height);
-                    context.closePath();
-                    context.stroke();
-                }
-                
-                context.restore();
-            }
-            
-            function animationLoop()
-            {
-                canvas.width = canvas.width;
-				//renderGrid(pacman.radius, "red");
-                renderContent();
-				
-				
-				// Make changes before next loop
-                pacman.move();
-				pacman.checkCollisions();
-				pacman.checkDirectionChange();		
-				
-				// All dots collected?
-				if ((whiteDotTable.empty()) && game.running) {
-					alert("You definitely have a lot of time.");
-					game.running = false;
-				}
-					setTimeout(animationLoop, 33);
-				
-                
-			}
-            
-            animationLoop();
+		function renderContent()
+		{
+			//context.save()
 			
+			// Refresh Score
+			score.refresh(".score");
+			
+			// Whitedots
+			for (var k in whiteDotTable.hash) {
+				whiteDotTable.hash[k].paint(context);
+			}
+			
+			
+			// Ghosts
+			pinky.draw(context);
+			blinky.draw(context);
+			inky.draw(context);
+			clyde.draw(context);             
+			
+			
+			// Pac Man
+			context.beginPath();
+			context.fillStyle = "Yellow";
+			context.strokeStyle = "Yellow";
+			context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
+			context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
+			context.stroke();
+			context.fill();
+			
+			//context.restore();
+		}
+		
+		function renderGrid(gridPixelSize, color)
+		{
+			context.save();
+			context.lineWidth = 0.5;
+			context.strokeStyle = color;
+			
+			// horizontal grid lines
+			for(var i = 0; i <= canvas.height; i = i + gridPixelSize)
+			{
+				context.beginPath();
+				context.moveTo(0, i);
+				context.lineTo(canvas.width, i);
+				context.closePath();
+				context.stroke();
+			}
+			
+			// vertical grid lines
+			for(var i = 0; i <= canvas.width; i = i + gridPixelSize)
+			{
+				context.beginPath();
+				context.moveTo(i, 0);
+				context.lineTo(i, canvas.height);
+				context.closePath();
+				context.stroke();
+			}
+			
+			context.restore();
+		}
+		
+		function animationLoop()
+		{
+			canvas.width = canvas.width;
+			//renderGrid(pacman.radius, "red");
+			renderContent();
+			
+			
+			// Make changes before next loop
+			pacman.move();
+			pacman.eat();
+			pacman.checkCollisions();
+			pacman.checkDirectionChange();	
+
+			inky.move();
+			pinky.move();			
+			blinky.move();
+			clyde.move();
+			
+			// All dots collected?
+			if ((whiteDotTable.empty()) && game.running) {
+				alert("You definitely have a lot of time.");
+				game.running = false;
+			}
+				setTimeout(animationLoop, 33);
+			
+			
+		}
+		
+        animationLoop();
 			
 		});
 	
@@ -364,17 +393,17 @@
 		switch (evt.keyCode)
 			{
 			case 87:	// W pressed
-				directionWatcher.set(up);
+				pacman.directionWatcher.set(up);
 				break;
 			case 83:	// S pressed 
-				directionWatcher.set(down);
+				pacman.directionWatcher.set(down);
 				break;
 			case 65:	// A pressed
-				directionWatcher.set(left);
+				pacman.directionWatcher.set(left);
 				break;
 
 			case 68:	// D pressed
-				directionWatcher.set(right);
+				pacman.directionWatcher.set(right);
 				break;
 			}
 	}
