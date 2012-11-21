@@ -3,6 +3,7 @@ CACHE MANIFEST
 index.htm
 pacman-canvas.css
 pacman-canvas.js
+http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js
 img/blinky.svg
 img/clyde.svg
 img/inky.svg
