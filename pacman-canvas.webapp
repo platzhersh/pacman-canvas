@@ -1,0 +1,10 @@
+﻿{
+  "name": "Pacman Canvas (Early Beta)",
+  "description": "An old classic, rewritten in HTML5",
+  "launch_path": "/",
+  "developer": {
+    "name": "platzh1rsch",
+    "url": "http://platzh1rsch.ch"
+  },
+  "default_locale": "en"
+}
