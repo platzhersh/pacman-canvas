@@ -3,6 +3,7 @@ CACHE MANIFEST
 index.htm
 pacman-canvas.css
 http://platzh1rsch.ch/static/style.css
+http://platzh1rsch.ch/static/bg-pattern-black.png
 pacman-canvas.js
 http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js
 img/blinky.svg
