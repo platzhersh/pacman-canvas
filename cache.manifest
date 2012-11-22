@@ -1,10 +1,23 @@
 CACHE MANIFEST
-# 22.11.2012
+# Pacman 1.20 	22.11.2012
 index.htm
 pacman-canvas.css
+http://platzh1rsch.ch/static/style.css
 pacman-canvas.js
 http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js
 img/blinky.svg
 img/clyde.svg
 img/inky.svg
 img/pinky.svg
+
+mp3/die.mp3
+mp3/eatghost.mp3
+mp3/powerpill.mp3
+mp3/theme.mp3
+mp3/waka.mp3
+
+wav/die.wav
+wav/eatghost.wav
+wav/powerpill.wav
+wav/theme.wav
+wav/waka.wav
