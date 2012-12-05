@@ -24,7 +24,7 @@ audio {display: block; }
 		}
 	
 	.main { margin: 10px auto; }
-	.content { min-height: none; }
+	.content { min-height: 0; }
 	
 	canvas#myCanvas { margin: 5px auto; }	
 

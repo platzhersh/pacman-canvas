@@ -272,6 +272,25 @@
 	
 	$(document).ready(function() {
 
+		// jgestures
+			
+		$('.container').bind('swipeone',log);
+		$('.container').bind('swipetwo',log);
+		$('.container').bind('swipethree',log);
+		$('.container').bind('swipefour',log);
+	
+		$('.container').bind('swipeup',log);
+		$('.container').bind('swiperightup',log);
+		$('.container').bind('swiperight',log);
+		$('.container').bind('swiperightdown',log);
+	
+		$('.container').bind('swipedown',log);
+		$('.container').bind('swipeleftdown',log);
+		$('.container').bind('swipeleft',log);
+		$('.container').bind('swipeleftup',log);
+		
+		console.log("bindings complete!");
+	
 		window.addEventListener('keydown',doKeyDown,true);
 
 		var canvas = $("#myCanvas").get(0);
