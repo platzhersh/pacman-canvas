@@ -2,12 +2,30 @@ body {
 	background-color: #000;
 	color: white;
 }
-#myCanvas { border: 1px solid white; display: block; background: rgb(0,0,0);}
+#myCanvas { border: 1px solid white; display: block; background: rgb(0,0,0); width: 95%; max-width: 500px; height: auto;}
 .canvas { position:absolute; padding-top: 20px;}
 .main {width: auto; max-width: 700px; margin: 10px auto; position: static; left: auto;}
 .content { width: 100%; text-align: left; margin: 0;}
-.container {text-align: center; }
+.container {text-align: center; margin:0; padding: 0;}
 body, html { font-size: 15px; }
 
 div.audio {}
 audio {display: block; }
+
+@media screen and (max-width: 350px) {
+
+	.nomobile {display: none; }
+	.mobile {display: block; }
+	
+	html, body { 
+		background: rgb(0,0,0); 
+		overflow: hidden; 
+		height: 100%;
+		}
+	
+	.main { margin: 10px auto; }
+	.content { min-height: none; }
+	
+	canvas#myCanvas { margin: 5px auto; }	
+
+}

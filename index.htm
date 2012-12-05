@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 
-<html lang="en" manifest="cache.manifest">
+<!--<html lang="en" manifest="cache.manifest">-->
 <head>
 	<meta charset="utf-8" />
 	<title>Pacman in HTML 5 Canvas</title>
 	<link rel="stylesheet" href="http://platzh1rsch.ch/static/style.css">
 	<link rel="stylesheet" href="pacman-canvas.css">
+	
+	<!-- Mobile Viewport -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 </head>
 
 <body>
@@ -16,89 +19,90 @@
 	
 	
 	<h1>Pacman in HTML5 Canvas</h1>
-	<p>Use W-A-S-D keys to navigate Pac-Man</p>
+	<p class="nomobile">Use W-A-S-D keys to navigate Pac-Man</p>
+	<p class="mobile">Swipe into the direction you want to go.</p>
 		<div class="score">Score:</div>
 		<canvas id="myCanvas" width="500" height="500">
 		<p>Canvas not supported</p>
 		</canvas>
 		
-	
-	<p>This whole thing was written in HTML5, CSS3 and Javascript (using small bits of jquery). For the basics I was following the <a href="http://devhammer.net/blog/exploring-html5-canvas-part-1---introduction" target="_blank">"Exploring HTML5 Canvas"</a> Tutorials (Part 1 - 6) by Devhammer. Thanks for the great Tutorial!</a>
-	<p>For some other stuff, like how to write objectorientated javascript I was following the tutorials over at <a href="http://www.codecademy.com/" target="_blank">http://www.codecademy.com/</a>, which is a really great site to learn Javascript and also other languages.</a>
-	<p>If you understand German you can also read my blogpost about this site: <a href="http://blog.platzh1rsch.ch/2012/08/pacman-in-html5-canvas.html">"Pacman in HTML5 Canvas"</a>.</p>
-	
-	<h2>Version 0.20 - 22.11.2012</h2>
-	<ul>
-	<li>Code Refactored for further development.</li>
-	<li>Sound added.</li>
-	<li>Appcache implemented.</li>
-	</ul>
-	
-	<h2>Version 0.13 - 29.10.2012</h2>
-	<ul>
-	<li>Never miss a dot: Pacman now always stays in the grid.</li>
-	</ul>
-	
-	<h2>Version 0.12 - 19.10.2012</h2>
-	<ul>
-	<li>Pacman is now able to eat the dots. Eating a dot equals 10 points for now.</li>
-	<li>LiveScore implemented.</li>
-	<li>Game ends when all dots are eaten.</li>
-	</ul>
-	
-	<h2>Version 0.11 - 15.10.2012</h2>
-	<ul>
-	<li>Placing white Dots and storing them in a Hashtable</li>
-	<li>Monster/Ghost Prototype</li>
-	<li>Score Prototype</li>
-	<li>Pacman had to get smaller (r=15px)</li>
-	<li>Display Grid</li>
-	<li>Refactoring HTML</li>
-	</ul>
-	
-	<h2>Version 0.10 - 23.08.2012</h2>
-	<ul>
-	<li>Started cleaning up the code using Objects</li>
-	<li>Pacman now turns around when changing directions</li>
-	</ul>
-	
-	<h2>ToDo</h2>
-	<ul>
-	<li><strike>Come back in from left side when leaving canvas on the right (same for top & bottom)</strike></li>
-	<li>Walls</li>
-	<li>Enemies</li>
-	<li>Lives</li>
-	<li>Pause Function</li>
-	<li>Touch Support?</li>
-	<li><strike>Food! (classical white dots)</strike></li>
-	<li><strike>Points System</strike></li>
-	<li>Global Highscore</li>
-	<li>Lock Mouse</li>
-	<li>Sound?</li>
-	<li><strike>Only allow direction changes all 30px ( = 2*radius), so pacman never misses the dots</strike></li>
-	</ul>
-	
-	<p>&copy; by <a href="http://platzh1rsch.ch">platzh1rsch</a></p>
-	
-	<span id="audio">
-		<audio id="theme" preload="auto">
-			<source src="wav/theme.wav" type="audio/wav">
-			<source src="mp3/theme.mp3" type="audio/mpeg">
-		</audio>
-		<audio id="waka" preload="auto">
-			<source src="wav/waka.wav" type="audio/wav">
-			<source src="mp3/waka.mp3" type="audio/mpeg">
-		</audio>
-		<audio id="die" preload="auto">
-			<source src="wav/die.wav" type="audio/wav">
-			<source src="mp3/die.mp3" type="audio/mpeg">
-		</audio>
-		<audio id="powerpill" preload="auto">
-			<source src="wav/powerpill.wav" type="audio/wav">
-			<source src="mp3/powerpill.mp3" type="audio/mpeg">
-		</audio>
-	</span>
-	
+	<div class="description nomobile">
+		<p>This whole thing was written in HTML5, CSS3 and Javascript (using small bits of jquery). For the basics I was following the <a href="http://devhammer.net/blog/exploring-html5-canvas-part-1---introduction" target="_blank">"Exploring HTML5 Canvas"</a> Tutorials (Part 1 - 6) by Devhammer. Thanks for the great Tutorial!</a>
+		<p>For some other stuff, like how to write objectorientated javascript I was following the tutorials over at <a href="http://www.codecademy.com/" target="_blank">http://www.codecademy.com/</a>, which is a really great site to learn Javascript and also other languages.</a>
+		<p>If you understand German you can also read my blogpost about this site: <a href="http://blog.platzh1rsch.ch/2012/08/pacman-in-html5-canvas.html">"Pacman in HTML5 Canvas"</a>.</p>
+		
+		<h2>Version 0.20 - 22.11.2012</h2>
+		<ul>
+		<li>Code Refactored for further development.</li>
+		<li>Sound added.</li>
+		<li>Appcache implemented.</li>
+		</ul>
+		
+		<h2>Version 0.13 - 29.10.2012</h2>
+		<ul>
+		<li>Never miss a dot: Pacman now always stays in the grid.</li>
+		</ul>
+		
+		<h2>Version 0.12 - 19.10.2012</h2>
+		<ul>
+		<li>Pacman is now able to eat the dots. Eating a dot equals 10 points for now.</li>
+		<li>LiveScore implemented.</li>
+		<li>Game ends when all dots are eaten.</li>
+		</ul>
+		
+		<h2>Version 0.11 - 15.10.2012</h2>
+		<ul>
+		<li>Placing white Dots and storing them in a Hashtable</li>
+		<li>Monster/Ghost Prototype</li>
+		<li>Score Prototype</li>
+		<li>Pacman had to get smaller (r=15px)</li>
+		<li>Display Grid</li>
+		<li>Refactoring HTML</li>
+		</ul>
+		
+		<h2>Version 0.10 - 23.08.2012</h2>
+		<ul>
+		<li>Started cleaning up the code using Objects</li>
+		<li>Pacman now turns around when changing directions</li>
+		</ul>
+		
+		<h2>ToDo</h2>
+		<ul>
+		<li><strike>Come back in from left side when leaving canvas on the right (same for top & bottom)</strike></li>
+		<li>Walls</li>
+		<li>Enemies</li>
+		<li>Lives</li>
+		<li>Pause Function</li>
+		<li>Touch Support?</li>
+		<li><strike>Food! (classical white dots)</strike></li>
+		<li><strike>Points System</strike></li>
+		<li>Global Highscore</li>
+		<li>Lock Mouse</li>
+		<li>Sound?</li>
+		<li><strike>Only allow direction changes all 30px ( = 2*radius), so pacman never misses the dots</strike></li>
+		</ul>
+		
+		<p>&copy; by <a href="http://platzh1rsch.ch">platzh1rsch</a></p>
+		
+		<span id="audio">
+			<audio id="theme" preload="auto">
+				<source src="wav/theme.wav" type="audio/wav">
+				<source src="mp3/theme.mp3" type="audio/mpeg">
+			</audio>
+			<audio id="waka" preload="auto">
+				<source src="wav/waka.wav" type="audio/wav">
+				<source src="mp3/waka.mp3" type="audio/mpeg">
+			</audio>
+			<audio id="die" preload="auto">
+				<source src="wav/die.wav" type="audio/wav">
+				<source src="mp3/die.mp3" type="audio/mpeg">
+			</audio>
+			<audio id="powerpill" preload="auto">
+				<source src="wav/powerpill.wav" type="audio/wav">
+				<source src="mp3/powerpill.mp3" type="audio/mpeg">
+			</audio>
+		</span>
+	</div>
 	
 </div>
 </div>

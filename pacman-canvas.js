@@ -18,6 +18,9 @@
 		this.score = new Score();
 		this.whiteDots;
 		this.monsters;
+		this.canvas = $("#myCanvas").get(0);
+		this.width = this.canvas.width;
+		this.height = this.canvas.height;
 		this.restart = function() {
 			}
 		this.initialize = function () {
@@ -155,8 +158,8 @@
 	function Figure() {
 		this.posX;
 		this.posY;
-		this.dirX = 1;
-		this.dirY = 0;
+		this.dirX = right.dirX;
+		this.dirY = right.dirY;
 		this.direction;
 		this.directionWatcher = new directionWatcher();
 		this.checkCollisions = function() {}
@@ -166,10 +169,10 @@
 			this.posY += 5 * this.dirY;
 			
 			// Check if out of canvas
-			if (this.posX >= 500-this.radius) this.posX = 5-this.radius;
-			if (this.posX <= 0-this.radius) this.posX = 495-this.radius;
-			if (this.posY >= 500-this.radius) this.posY = 5-this.radius;
-			if (this.posY <= 0-this.radius) this.posY = 495-this.radius;
+			if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
+			if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
+			if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
+			if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
 			}
 		this.stop = function() {}
 	}
@@ -220,10 +223,10 @@
 			this.posY += 5 * this.dirY;
 			
 			// Check if out of canvas
-			if (this.posX >= 500-this.radius) this.posX = 5-this.radius;
-			if (this.posX <= 0-this.radius) this.posX = 495-this.radius;
-			if (this.posY >= 500-this.radius) this.posY = 5-this.radius;
-			if (this.posY <= 0-this.radius) this.posY = 495-this.radius;
+			if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
+			if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
+			if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
+			if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
 			}
 		
 		this.eat = function () {
