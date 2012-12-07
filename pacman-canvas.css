@@ -2,23 +2,44 @@ body {
 	background-color: #000;
 	color: white;
 }
-#myCanvas { border: 1px solid white; display: block; background: rgb(0,0,0); width: 95%; max-width: 500px; height: auto;}
+#myCanvas { border: 1px solid white; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
 .canvas { position:absolute; padding-top: 20px;}
 .main {width: auto; max-width: 700px; margin: 10px auto; position: static; left: auto;}
 .content { width: 100%; text-align: left; margin: 0;}
 .container {text-align: center; margin:0; padding: 0;}
+.wrapper { padding:0;}
+.game  { max-width: 540px;}
+
+
 body, html { font-size: 15px; }
 
 div.audio {}
 audio {display: block; }
 
+/* Controls */
+
+.controls { text-align: center; margin-top: 15px;}
+
+.controlButton {
+	display: inline-block;
+	width: 50px;
+	height: 50px;
+	margin: 5px;
+	background: red;
+	line-height: 50px;
+	border-radius: 50%;
+}
+@media screen and (max-width: 1050px) {
+	html, body { background: rgb(0,0,0);}
+}
 @media screen and (max-width: 350px) {
 
+	.game { width: 93%;}
+	
 	.nomobile {display: none; }
 	.mobile {display: block; }
 	
 	html, body { 
-		background: rgb(0,0,0); 
 		overflow: hidden; 
 		height: 100%;
 		}
@@ -26,6 +47,6 @@ audio {display: block; }
 	.main { margin: 10px auto; }
 	.content { min-height: 0; }
 	
-	canvas#myCanvas { margin: 5px auto; }	
+	/*canvas#myCanvas { margin: 5px auto; }	*/
 
 }

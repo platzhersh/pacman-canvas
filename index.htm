@@ -62,13 +62,26 @@
 
 	
 	
-	<h1>Pacman in HTML5 Canvas</h1>
+	<h1 class="nomobile">Pacman in HTML5 Canvas</h1>
 	<p class="nomobile">Use W-A-S-D keys to navigate Pac-Man</p>
-	<p class="mobile">Swipe into the direction you want to go.</p>
+	
+	<div class="game wrapper">
 		<div class="score">Score:</div>
-		<canvas id="myCanvas" width="500" height="500">
+		<canvas id="myCanvas" width="540" height="390">
 		<p>Canvas not supported</p>
 		</canvas>
+		
+		<div class="controls">
+			<div>
+				<a href="#"><span id="up" class="controlButton" onclick="pacman.directionWatcher.set(up);">&uarr;</span></a>
+			</div>
+			<div>
+				<a href="#"><span id="left" class="controlButton" onclick="pacman.directionWatcher.set(left);">&larr;</span></a>
+				<a href="#"><span id="down" class="controlButton" onclick="pacman.directionWatcher.set(down);">&darr;</span></a>
+				<a href="#"><span id="right" class="controlButton" onclick="pacman.directionWatcher.set(right);">&rarr;</span></a>
+			</div>
+		</div>
+	</div>
 		
 	<div class="description nomobile">
 		<p>This whole thing was written in HTML5, CSS3 and Javascript (using small bits of jquery). For the basics I was following the <a href="http://devhammer.net/blog/exploring-html5-canvas-part-1---introduction" target="_blank">"Exploring HTML5 Canvas"</a> Tutorials (Part 1 - 6) by Devhammer. Thanks for the great Tutorial!</a>

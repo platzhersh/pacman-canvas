@@ -383,11 +383,12 @@
 				alert("You definitely have a lot of time.");
 				game.running = false;
 			}
-				setTimeout(animationLoop, 33);
+			
+			setTimeout(animationLoop, 33);
 			
 			
 		}
-		
+
         animationLoop();
 			
 		});
