@@ -8,7 +8,10 @@ body {
 .content { width: 100%; text-align: left; margin: 0;}
 .container {text-align: center; margin:0; padding: 0;}
 .wrapper { padding:0;}
-.game  { max-width: 540px;}
+.game  { 
+	max-width: 540px;
+	font-family: 'Press Start 2P', cursive;
+	}
 
 
 body, html { font-size: 15px; }
@@ -25,10 +28,15 @@ audio {display: block; }
 	width: 50px;
 	height: 50px;
 	margin: 5px;
-	background: red;
+	background: #E01B1B;
 	line-height: 50px;
 	border-radius: 50%;
+	font-weight: bold;
+	font-size: 200%;
 }
+
+.controlButton:hover { background: #B01717;}
+
 @media screen and (max-width: 1050px) {
 	html, body { background: rgb(0,0,0);}
 }
