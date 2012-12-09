@@ -65,8 +65,7 @@
 
 	
 	
-	<h1 class="nomobile">Pacman in HTML5 Canvas</h1>
-	<p class="nomobile">Use W-A-S-D keys to navigate Pac-Man</p>
+	<!--<h1 class="nomobile">Pacman in HTML5 Canvas</h1>-->
 	
 	<div class="game wrapper">
 		<div class="score">Score:</div>
@@ -75,6 +74,7 @@
 		</canvas>
 		
 		<div class="controls">
+		<p class="nomobile">Use W-A-S-D keys to navigate Pac-Man</p>
 			<div>
 				<span id="up" class="controlButton" onclick="pacman.directionWatcher.set(up);">&uarr;</span>
 			</div>
@@ -83,6 +83,7 @@
 				<span id="down" class="controlButton" onclick="pacman.directionWatcher.set(down);">&darr;</span>
 				<span id="right" class="controlButton" onclick="pacman.directionWatcher.set(right);">&rarr;</span>
 			</div>
+			
 		</div>
 	</div>
 		
@@ -90,6 +91,12 @@
 		<p>This whole thing was written in HTML5, CSS3 and Javascript (using small bits of jquery). For the basics I was following the <a href="http://devhammer.net/blog/exploring-html5-canvas-part-1---introduction" target="_blank">"Exploring HTML5 Canvas"</a> Tutorials (Part 1 - 6) by Devhammer. Thanks for the great Tutorial!</a>
 		<p>For some other stuff, like how to write objectorientated javascript I was following the tutorials over at <a href="http://www.codecademy.com/" target="_blank">http://www.codecademy.com/</a>, which is a really great site to learn Javascript and also other languages.</a>
 		<p>If you understand German you can also read my blogpost about this site: <a href="http://blog.platzh1rsch.ch/2012/08/pacman-in-html5-canvas.html">"Pacman in HTML5 Canvas"</a>.</p>
+		
+		<h2>Version 0.40 - 08.12.2012</h2>
+		<ul>
+		<li>Control Buttons for mobile</a></li>
+		<li>Small Design Updates</li>
+		</ul>
 		
 		<h2>Version 0.30 - 05.12.2012</h2>
 		<ul>
@@ -139,12 +146,12 @@
 		<li>Enemies</li>
 		<li>Lives</li>
 		<li>Pause Function</li>
-		<li>Touch Support?</li>
+		<li><strike>Touch Support?</strike></li>
 		<li><strike>Food! (classical white dots)</strike></li>
 		<li><strike>Points System</strike></li>
 		<li>Global Highscore</li>
 		<li>Lock Mouse</li>
-		<li>Sound?</li>
+		<li><strike>Sound?</strike></li>
 		<li><strike>Only allow direction changes all 30px ( = 2*radius), so pacman never misses the dots</strike></li>
 		</ul>
 		
@@ -168,8 +175,14 @@
 				<source src="mp3/powerpill.mp3" type="audio/mpeg">
 			</audio>
 		</span>
+		
+		
 	</div>
-	
+
+	<div class="about">
+		written by <a href="http://platzh1rsch.ch">platzh1rsch</a> | 
+		<a href="https://github.com/platzhersh/pacman-canvas" target="_blank">view Project on github</a>
+	</div>
 </div>
 </div>
 </div>

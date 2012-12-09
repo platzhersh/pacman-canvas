@@ -1,17 +1,17 @@
 body {
 	background-color: #000;
 	color: white;
+	font-family: 'Press Start 2P', cursive;
 }
 #myCanvas { border: 1px solid white; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
 .canvas { position:absolute; padding-top: 20px;}
 .main {width: auto; max-width: 700px; margin: 10px auto; position: static; left: auto;}
-.content { width: 100%; text-align: left; margin: 0;}
+.content { width: auto; text-align: left; margin: 0;}
 .container {text-align: center; margin:0; padding: 0;}
 .wrapper { padding:0;}
-.game  { 
-	max-width: 540px;
-	font-family: 'Press Start 2P', cursive;
-	}
+.game  { max-width: 540px;}
+
+.about { font-size: 10px; margin-top: 20px; text-align: center;}
 
 
 body, html { font-size: 15px; }
@@ -36,6 +36,8 @@ audio {display: block; }
 }
 
 .controlButton:hover { background: #B01717;}
+
+.description { display: none; }
 
 @media screen and (max-width: 1050px) {
 	html, body { background: rgb(0,0,0);}
