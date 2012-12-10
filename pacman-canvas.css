@@ -50,7 +50,7 @@ audio {display: block; }
 	.mobile {display: block; }
 	
 	html, body { 
-		overflow: hidden; 
+		overflow-x: hidden; 
 		height: 100%;
 		}
 	
