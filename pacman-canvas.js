@@ -23,10 +23,16 @@
 		this.height = this.canvas.height;
 		this.restart = function() {
 			}
-		this.initialize = function () {
+		this.initialize = function (context) {
+			var text = "Insert Coin to Play!";
+			context.fillStyle = "#FFF";
+			context.font = "20px 'Press Start 2P'";
+			context.fillText(text, this.canvas.width/2-200, this.canvas.height/2-10);
 			}
 	}
 	var game = new Game();
+	
+	
 	
 	function Score() {
 		this.score = 0;
@@ -112,8 +118,6 @@
 		context.strokeStyle = "White";
 		context.arc(this.posX,this.posY,this.radius,0*Math.PI,2*Math.PI);
 		context.lineTo(this.PosX, this.PosY);
-		context.stroke();
-		context.fill();
 	}
 	
 	// Monitors all the white Dots
@@ -130,6 +134,13 @@
 		}
 		this.get = function(key) {
 			return this.hash[key] !== null ? this.hash[key] : false;
+		}
+		this.paint = function(context) {
+			for (var k in whiteDotTable.hash) {
+				whiteDotTable.hash[k].paint(context);
+				context.stroke();
+				context.fill();
+			}
 		}
 		this.removeAll = function() {
 			this.hash = new Object();
@@ -307,9 +318,7 @@
 			score.refresh(".score");
 			
 			// Whitedots
-			for (var k in whiteDotTable.hash) {
-				whiteDotTable.hash[k].paint(context);
-			}
+			whiteDotTable.paint(context);
 			
 			
 			// Ghosts
@@ -365,7 +374,7 @@
 			canvas.width = canvas.width;
 			//renderGrid(pacman.radius, "red");
 			renderContent();
-			
+			//game.initialize(context);
 			
 			// Make changes before next loop
 			pacman.move();
