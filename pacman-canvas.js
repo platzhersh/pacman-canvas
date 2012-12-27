@@ -33,7 +33,6 @@
 	var game = new Game();
 	
 	
-	
 	function Score() {
 		this.score = 0;
 		this.add = function(i) {
@@ -165,6 +164,14 @@
 
 	var whiteDotTable = new whiteDotTable();
 	
+	// Walls
+	function Wall() {
+		this.posX;
+		this.posY;
+		this.aperture = pacman.radius;
+	
+	}
+	
 	// Super Class for Pacman & Ghosts
 	function Figure() {
 		this.posX;
@@ -172,20 +179,25 @@
 		this.dirX = right.dirX;
 		this.dirY = right.dirY;
 		this.direction;
+		this.stop = true;
 		this.directionWatcher = new directionWatcher();
 		this.checkCollisions = function() {}
 		this.checkDirectionChange = function() {}
 		this.move = function() {
-			this.posX += 5 * this.dirX;
-			this.posY += 5 * this.dirY;
-			
-			// Check if out of canvas
-			if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
-			if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
-			if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
-			if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
+		
+			if (!this.stop) {
+				this.posX += 5 * this.dirX;
+				this.posY += 5 * this.dirY;
+				
+				// Check if out of canvas
+				if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
+				if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
+				}
 			}
-		this.stop = function() {}
+		this.stop = function() { this.stop = true;}
+		this.start = function() { this.stop = false;}
 	}
 	
 	function pacman() {
@@ -305,10 +317,10 @@
 		}
 		
 		// initalize Ghosts
-		var pinky = new Ghost(0,0,'img/pinky.svg');
-		var inky = new Ghost(2*pacman.radius,0,'img/inky.svg');
-		var blinky = new Ghost(4*pacman.radius,0,'img/blinky.svg');
-		var clyde = new Ghost(6*pacman.radius,0,'img/clyde.svg');
+		var pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
+		var inky = new Ghost(16*pacman.radius,10*pacman.radius,'img/inky.svg');
+		var blinky = new Ghost(18*pacman.radius,10*pacman.radius,'img/blinky.svg');
+		var clyde = new Ghost(20*pacman.radius,10*pacman.radius,'img/clyde.svg');
 
 		function renderContent()
 		{
@@ -320,6 +332,39 @@
 			// Whitedots
 			whiteDotTable.paint(context);
 			
+			
+			//context.beginPath();
+			context.fillStyle = "Blue";
+			context.strokeStyle = "Blue";
+			
+			//horizontal outer
+			context.fillRect(pacman.radius/2,pacman.radius/2, 35*pacman.radius, pacman.radius);
+			context.fillRect(pacman.radius/2,game.height-pacman.radius/2-pacman.radius, 35*pacman.radius, pacman.radius);
+			
+			// vertical outer
+			context.fillRect(pacman.radius/2,pacman.radius/2, pacman.radius, 11*pacman.radius);
+			context.fillRect(game.width-pacman.radius/2-pacman.radius,pacman.radius/2, pacman.radius, 11*pacman.radius);
+			
+			context.fillRect(pacman.radius/2,pacman.radius/2+14*pacman.radius, pacman.radius, 11*pacman.radius);
+			context.fillRect(game.width-pacman.radius/2-pacman.radius,pacman.radius/2+14*pacman.radius, pacman.radius, 11*pacman.radius);
+			
+			// cage
+			context.fillRect(pacman.radius/2+14*pacman.radius,pacman.radius/2+8*pacman.radius, pacman.radius, pacman.radius);
+			context.fillRect(pacman.radius/2+12*pacman.radius,pacman.radius/2+10*pacman.radius, pacman.radius, 3*pacman.radius);
+			
+			context.fillRect(pacman.radius/2+20*pacman.radius,pacman.radius/2+8*pacman.radius, pacman.radius, pacman.radius);
+			context.fillRect(pacman.radius/2+22*pacman.radius,pacman.radius/2+10*pacman.radius, pacman.radius, 3*pacman.radius);
+			
+			context.fillRect(pacman.radius/2+12*pacman.radius,pacman.radius/2+12*pacman.radius, 11*pacman.radius, pacman.radius);
+			
+			
+			
+			/*context.moveTo(pacman.radius/2,pacman.radius/2);
+			context.lineTo(pacman.radius + pacman.radius/2,pacman.radius/2);
+			context.lineTo(pacman.radius + pacman.radius/2,pacman.radius + pacman.radius/2);
+			context.lineTo(pacman.radius/2,pacman.radius + pacman.radius/2);
+			context.closePath();*/
+			//context.fill();
 			
 			// Ghosts
 			pinky.draw(context);
