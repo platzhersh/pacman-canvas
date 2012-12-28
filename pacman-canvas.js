@@ -29,6 +29,8 @@
 			context.font = "20px 'Press Start 2P'";
 			context.fillText(text, this.canvas.width/2-200, this.canvas.height/2-10);
 			}
+		this.win = function () {}
+		this.gameover = function () {}
 	}
 	var game = new Game();
 	
