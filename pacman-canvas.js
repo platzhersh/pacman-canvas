@@ -18,10 +18,27 @@
 		this.pause = false;
 		this.score = new Score();
 		this.soundfx = 0;
-		this.map = $.getJSON(mapConfig, function(response){
+		this.map = $.ajax({
+			url: mapConfig,
+			beforeSend: function ( xhr ) {
+				xhr.overrideMimeType("application/json");
+			}
+			}).done(function ( data ) {
+			if( console && console.log ) {
+			console.log(data.posY[0].posX[0].type);
+			}
+			});
+			/*$.ajax({
+				url: mapConfig,
+				dataType: "json",
+				success: function (data) {
+					return data;
+				}
+			});*/
+		/*this.map = $.getJSON(mapConfig, function(response){
 			this.map = response;
-			alert(response);
-		})
+			alert(this.map.posY[0].posX[0].type);
+		})*/
 		this.whiteDots;
 		this.monsters;
 		this.canvas = $("#myCanvas").get(0);
