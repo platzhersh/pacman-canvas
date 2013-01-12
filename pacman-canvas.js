@@ -449,8 +449,8 @@
 			buildWall(context,6,6,6,1);
 			
 			// single blocks
-			buildWall(context,4,1,1,1);
-			buildWall(context,13,1,1,1);
+			buildWall(context,4,0,1,2);
+			buildWall(context,13,0,1,2);
 			
 			buildWall(context,2,2,1,2);
 			buildWall(context,6,2,2,1);
