@@ -10,6 +10,7 @@
 	
 -------------------------------------------------------------------*/
 	
+	var mapConfig = 'data/map.json';
 	
 	// Manages the whole game ("God Object")
 	function Game() {
@@ -17,6 +18,10 @@
 		this.pause = false;
 		this.score = new Score();
 		this.soundfx = 0;
+		this.map = $.getJSON(mapConfig, function(response){
+			this.map = response;
+			alert(response);
+		})
 		this.whiteDots;
 		this.monsters;
 		this.canvas = $("#myCanvas").get(0);
@@ -224,6 +229,8 @@
 		this.direction = right;
 		
 		this.checkCollisions = function () {
+		
+			// Check Whitedots
 			var key = (this.posX+this.radius).toString()+(this.posY+this.radius).toString();
 			var dot = whiteDotTable.get(key);
 			if (dot != null) {
@@ -231,6 +238,16 @@
 				whiteDotTable.remove(key);
 				score.add(10);
 				}
+			
+			// check Walls (todo: consider direction)
+			var gridX = this.posX / 30;
+			var gridY = this.posY / 30;
+			if (game.map.posY[gridY].posX[gridX].type == "wall") {
+				console.log("wall collision");
+				this.dirX != 0 ? this.dirX *= -1 : console.log("x direction unchanged");
+				this.dirY != 0 ? this.dirY *= -1 : console.log("y direction unchanged");
+			}
+			
 			}
 		this.checkDirectionChange = function() {
 			if (this.directionWatcher.get() != null) {
