@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Pacman 0.41 	10.12.2012
+# Pacman 0.6 	12.01.2013
 index.htm
 pacman-canvas.css
 http://platzh1rsch.ch/static/style.css
@@ -10,6 +10,8 @@ img/blinky.svg
 img/clyde.svg
 img/inky.svg
 img/pinky.svg
+img/icon-audio.png
+img/icon-audio-mute.png
 
 mp3/die.mp3
 mp3/eatghost.mp3
