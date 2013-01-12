@@ -16,11 +16,16 @@
 		this.running = true;
 		this.pause = false;
 		this.score = new Score();
+		this.soundfx = 0;
 		this.whiteDots;
 		this.monsters;
 		this.canvas = $("#myCanvas").get(0);
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
+		this.toggleSound = function() { 
+			this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0; 
+			$('#mute').toggle();
+			}
 		this.restart = function() {
 			}
 		this.initialize = function (context) {
@@ -51,8 +56,10 @@
 	// used to play sounds during the game
 	var Sound = new Object();
 	Sound.play = function (sound) {
-		var audio = document.getElementById(sound);
-		(audio != null) ? audio.play() : console.log(sound+" not found");
+		if (game.soundfx == 1) {
+			var audio = document.getElementById(sound);
+			(audio != null) ? audio.play() : console.log(sound+" not found");
+			}
 	}
 	
 	

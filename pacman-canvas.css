@@ -19,20 +19,40 @@ body, html { font-size: 15px; }
 div.audio {}
 audio {display: block; }
 
+.score { display: inline-block; }
+
 /* Controls */
 
 .controls { text-align: center; margin-top: 15px;}
 
+.controlSound { 
+	background: url('img/audio-icon.png');
+	width: 73px;
+	height: 50px;
+	position: relative;
+	bottom: 5px;
+	background-size: 100%;
+	height: 25px;
+	width: 36px;
+	float: right;
+	}
+	
+#mute { 
+	display: none; 
+	width: 36px; 
+	height: 25px;
+	}
+
 .controlButton {
 	display: inline-block;
-	width: 50px;
-	height: 50px;
+	width: 90px;
+	height: 90px;
 	margin: 5px;
 	background: #E01B1B;
-	line-height: 50px;
+	line-height: 70px;
 	border-radius: 50%;
 	font-weight: bold;
-	font-size: 200%;
+	font-size: 60px;
 }
 
 .controlButton:hover { background: #B01717;}
@@ -42,9 +62,11 @@ audio {display: block; }
 @media screen and (max-width: 1050px) {
 	html, body { background: rgb(0,0,0);}
 }
-@media screen and (max-width: 350px) {
-
+@media screen and (max-width: 650px) {
 	.game { width: 93%;}
+}
+
+@media screen and (max-width: 400px) {
 	
 	.nomobile {display: none; }
 	.mobile {display: block; }
@@ -57,6 +79,12 @@ audio {display: block; }
 	.main { margin: 10px auto; }
 	.content { min-height: 0; }
 	
+	.controlButton {
+		width: 50px;
+		height: 50px;
+		line-height: 30px;
+		font-size: 30px;
+	}
 	/*canvas#myCanvas { margin: 5px auto; }	*/
 
 }
