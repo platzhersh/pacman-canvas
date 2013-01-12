@@ -12,6 +12,13 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.6 - 12.01.2013*
+* small fixes for mobile view
+* app-cache reactivated
+* sound control (default: muted)
+* collision control for walls
+* json datastructure design for all game objects (pills, magic pills, walls)
+
 *Version 0.41 - 10.12.2012*
 * Mobile Design Fix
 * New Icon

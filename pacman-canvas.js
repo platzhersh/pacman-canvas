@@ -18,27 +18,21 @@
 		this.pause = false;
 		this.score = new Score();
 		this.soundfx = 0;
-		this.map = $.ajax({
-			url: mapConfig,
-			beforeSend: function ( xhr ) {
-				xhr.overrideMimeType("application/json");
-			}
-			}).done(function ( data ) {
-			if( console && console.log ) {
-			console.log(data.posY[0].posX[0].type);
-			}
-			});
-			/*$.ajax({
+		this.map;
+		/* Seems to have problem with this.map = data ..
+		this.mapInit = function() {
+				$.ajax({
 				url: mapConfig,
+				async: false,
+				 beforeSend: function(xhr){
+					if (xhr.overrideMimeType) xhr.overrideMimeType("application/json"); 
+				},
 				dataType: "json",
 				success: function (data) {
-					return data;
+					this.map =  data;
 				}
-			});*/
-		/*this.map = $.getJSON(mapConfig, function(response){
-			this.map = response;
-			alert(this.map.posY[0].posX[0].type);
-		})*/
+			})
+		}*/
 		this.whiteDots;
 		this.monsters;
 		this.canvas = $("#myCanvas").get(0);
@@ -106,6 +100,7 @@
 		this.dir = null;
 		this.set = function(dir) {
 			this.dir = dir;
+			
 		}
 		this.get = function() {
 			return this.dir;
@@ -195,14 +190,6 @@
 
 	var whiteDotTable = new whiteDotTable();
 	
-	// Walls
-	function Wall() {
-		this.posX;
-		this.posY;
-		this.aperture = pacman.radius;
-	
-	}
-	
 	// Super Class for Pacman & Ghosts
 	function Figure() {
 		this.posX;
@@ -233,42 +220,65 @@
 	
 	function pacman() {
 		this.radius = 15;
-		this.posX = 8*this.radius;
-		this.posY = 0;
+		this.posX = 0;
+		this.posY = 6*2*this.radius;
 		this.angle1 = 0.25;
 		this.angle2 = 1.75;
 		this.mouth = 1; /* Switches between 1 and -1, depending on mouth closing / opening */
 		this.dirX = right.dirX;
 		this.dirY = right.dirY;
 		this.lives = 3;
+		this.stuckX = 0;
+		this.stuckY = 0;
+		
 		this.directionWatcher = new directionWatcher();
 		
 		this.direction = right;
 		
 		this.checkCollisions = function () {
-		
-			// Check Whitedots
-			var key = (this.posX+this.radius).toString()+(this.posY+this.radius).toString();
-			var dot = whiteDotTable.get(key);
-			if (dot != null) {
-				//console.log("Collision at "+this.posX+","+this.posY+". (key: "+key+")");
-				whiteDotTable.remove(key);
-				score.add(10);
+			
+			if ((this.stuckX == 0) && (this.stuckY == 0)) {
+				// Check Whitedots
+				var key = (this.posX+this.radius).toString()+(this.posY+this.radius).toString();
+				var dot = whiteDotTable.get(key);
+				if (dot != null) {
+					//console.log("Collision at "+this.posX+","+this.posY+". (key: "+key+")");
+					whiteDotTable.remove(key);
+					score.add(10);
+					}
+				
+				// check Walls (todo: consider direction --> finetuning)
+
+				var gridX = this.getGridPosX();
+				var gridY = this.getGridPosY();
+				
+				if ((this.dirX == 1) && (gridX < 17)) gridX += 1;
+				if ((this.dirY == 1) && (gridY < 12)) gridY += 1;
+				
+				console.log(gridX+"."+gridY);
+				var field = game.map.posY[gridY].posX[gridX];
+				
+				if (field.type === "wall") {
+					this.stuckX = this.dirX;
+					this.stuckY = this.dirY;
+					pacman.stop();
+					// get out of the wall
+					if (this.stuckX == -1) this.posX += 5;
+					if (this.stuckY == -1) this.posY += 5;
 				}
-			
-			// check Walls (todo: consider direction)
-			var gridX = this.posX / 30;
-			var gridY = this.posY / 30;
-			if (game.map.posY[gridY].posX[gridX].type == "wall") {
-				console.log("wall collision");
-				this.dirX != 0 ? this.dirX *= -1 : console.log("x direction unchanged");
-				this.dirY != 0 ? this.dirY *= -1 : console.log("y direction unchanged");
+					
+				
 			}
-			
-			}
+		}
 		this.checkDirectionChange = function() {
 			if (this.directionWatcher.get() != null) {
 				//console.log("next Direction: "+directionWatcher.get().name);
+
+				// reset stuck events
+				this.stuckX = 0;
+				this.stuckY = 0;
+
+				// only allow direction changes inside the grid
 				if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
 				//console.log("changeDirection to "+directionWatcher.get().name);
 				this.setDirection(this.directionWatcher.get());
@@ -330,6 +340,12 @@
 			this.dirX = 1;
 			this.dirY = 0;
 			}
+		this.getGridPosX = function() {
+			return (this.posX - (this.posX % 30))/30;
+		}
+		this.getGridPosY = function() {
+			return (this.posY - (this.posY % 30))/30;
+		}
 	}
 		var pacman = new pacman();
 	
@@ -338,6 +354,28 @@
 	
 	$(document).ready(function() {
 
+		$.ajaxSetup({ mimeType: "application/json" });
+		
+		$.ajaxSetup({beforeSend: function(xhr){
+			if (xhr.overrideMimeType){
+				xhr.overrideMimeType("application/json");
+				console.log("mimetype set to json");
+				}
+			}
+		});
+		
+		// get Map
+		$.ajax({
+				url: mapConfig,
+				async: false,
+				 beforeSend: function(xhr){
+					if (xhr.overrideMimeType) xhr.overrideMimeType("application/json"); 
+				},
+				dataType: "json",
+				success: function (data) {
+					game.map =  data;
+				}
+			})
 		
 		window.addEventListener('keydown',doKeyDown,true);
 
@@ -468,7 +506,7 @@
 			pacman.move();
 			pacman.eat();
 			pacman.checkCollisions();
-			pacman.checkDirectionChange();	
+			pacman.checkDirectionChange();
 
 			inky.move();
 			pinky.move();			
