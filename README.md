@@ -12,6 +12,9 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.61 - 12.01.2013*
+* all walls defined (incl. collisions)
+
 *Version 0.6 - 12.01.2013*
 * small fixes for mobile view
 * sound control (default: muted)

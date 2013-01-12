@@ -12,6 +12,12 @@
 	
 	var mapConfig = 'data/map.json';
 	
+	function buildWall(context,gridX,gridY,width,height) {
+		width = width*2-1;
+		height = height*2-1;
+		context.fillRect(pacman.radius/2+gridX*2*pacman.radius,pacman.radius/2+gridY*2*pacman.radius, width*pacman.radius, height*pacman.radius);
+	}
+	
 	// Manages the whole game ("God Object")
 	function Game() {
 		this.running = true;
@@ -255,7 +261,7 @@
 				if ((this.dirX == 1) && (gridX < 17)) gridX += 1;
 				if ((this.dirY == 1) && (gridY < 12)) gridY += 1;
 				
-				console.log(gridX+"."+gridY);
+				//console.log(gridX+"."+gridY);
 				var field = game.map.posY[gridY].posX[gridX];
 				
 				if (field.type === "wall") {
@@ -263,6 +269,8 @@
 					this.stuckY = this.dirY;
 					pacman.stop();
 					// get out of the wall
+					if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 5;
+					if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 5;
 					if (this.stuckX == -1) this.posX += 5;
 					if (this.stuckY == -1) this.posY += 5;
 				}
@@ -424,27 +432,61 @@
 			context.strokeStyle = "Blue";
 			
 			//horizontal outer
-			context.fillRect(pacman.radius/2,pacman.radius/2, 35*pacman.radius, pacman.radius);
-			context.fillRect(pacman.radius/2,game.height-pacman.radius/2-pacman.radius, 35*pacman.radius, pacman.radius);
+			buildWall(context,0,0,18,1);
+			buildWall(context,0,12,18,1);
 			
 			// vertical outer
-			context.fillRect(pacman.radius/2,pacman.radius/2, pacman.radius, 11*pacman.radius);
-			context.fillRect(game.width-pacman.radius/2-pacman.radius,pacman.radius/2, pacman.radius, 11*pacman.radius);
-			
-			context.fillRect(pacman.radius/2,pacman.radius/2+14*pacman.radius, pacman.radius, 11*pacman.radius);
-			context.fillRect(game.width-pacman.radius/2-pacman.radius,pacman.radius/2+14*pacman.radius, pacman.radius, 11*pacman.radius);
+			buildWall(context,0,0,1,6);
+			buildWall(context,0,7,1,6);
+			buildWall(context,17,0,1,6);
+			buildWall(context,17,7,1,6);
 			
 			// cage
-			context.fillRect(pacman.radius/2+14*pacman.radius,pacman.radius/2+8*pacman.radius, pacman.radius, pacman.radius);
-			context.fillRect(pacman.radius/2+12*pacman.radius,pacman.radius/2+10*pacman.radius, pacman.radius, 3*pacman.radius);
+			buildWall(context,7,4,1,1);
+			buildWall(context,6,5,1,2);
+			buildWall(context,10,4,1,1);
+			buildWall(context,11,5,1,2);
+			buildWall(context,6,6,6,1);
 			
-			context.fillRect(pacman.radius/2+20*pacman.radius,pacman.radius/2+8*pacman.radius, pacman.radius, pacman.radius);
-			context.fillRect(pacman.radius/2+22*pacman.radius,pacman.radius/2+10*pacman.radius, pacman.radius, 3*pacman.radius);
+			// single blocks
+			buildWall(context,4,1,1,1);
+			buildWall(context,13,1,1,1);
 			
-			context.fillRect(pacman.radius/2+12*pacman.radius,pacman.radius/2+12*pacman.radius, 11*pacman.radius, pacman.radius);
+			buildWall(context,2,2,1,2);
+			buildWall(context,6,2,2,1);
+			buildWall(context,15,2,1,2);
+			buildWall(context,10,2,2,1);
 			
+			buildWall(context,2,3,2,1);
+			buildWall(context,14,3,2,1);
+			buildWall(context,5,3,1,1);
+			buildWall(context,12,3,1,1);
+			buildWall(context,3,3,1,3);
+			buildWall(context,14,3,1,3);
 			
+			buildWall(context,3,4,1,1);
+			buildWall(context,14,4,1,1);
 			
+			buildWall(context,0,5,2,1);
+			buildWall(context,3,5,2,1);
+			buildWall(context,16,5,2,1);
+			buildWall(context,13,5,2,1);
+			
+			buildWall(context,0,7,2,2);
+			buildWall(context,16,7,2,2);
+			buildWall(context,3,7,2,2);
+			buildWall(context,13,7,2,2);
+			
+			buildWall(context,4,8,2,2);
+			buildWall(context,12,8,2,2);
+			buildWall(context,5,8,3,1);
+			buildWall(context,10,8,3,1);
+			
+			buildWall(context,2,10,1,1);
+			buildWall(context,15,10,1,1);
+			buildWall(context,7,10,4,1);
+			buildWall(context,4,11,2,2);
+			buildWall(context,12,11,2,2);
 			/*context.moveTo(pacman.radius/2,pacman.radius/2);
 			context.lineTo(pacman.radius + pacman.radius/2,pacman.radius/2);
 			context.lineTo(pacman.radius + pacman.radius/2,pacman.radius + pacman.radius/2);
