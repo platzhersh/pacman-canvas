@@ -274,15 +274,20 @@
 			if (this.directionWatcher.get() != null) {
 				//console.log("next Direction: "+directionWatcher.get().name);
 
-				// reset stuck events
-				this.stuckX = 0;
-				this.stuckY = 0;
+				if ((this.stuckX == 1) && this.directionWatcher.get() == right) this.directionWatcher.set(null);
+				else if ((this.stuckY == 1) && this.directionWatcher.get() == down) this.directionWatcher.set(null);
+				else {
+					// reset stuck events
+					this.stuckX = 0;
+					this.stuckY = 0;
+					
 
-				// only allow direction changes inside the grid
-				if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
-				//console.log("changeDirection to "+directionWatcher.get().name);
-				this.setDirection(this.directionWatcher.get());
-				this.directionWatcher.set(null);
+					// only allow direction changes inside the grid
+					if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
+					//console.log("changeDirection to "+directionWatcher.get().name);
+					this.setDirection(this.directionWatcher.get());
+					this.directionWatcher.set(null);
+					}
 				}
 			}
 		}
