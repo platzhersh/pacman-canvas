@@ -12,49 +12,9 @@
 	
 	<!-- Script -->
 	<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js" type="text/javascript"></script>
-	<script src="js/jgestures/jgestures.js"  type="text/javascript"></script>
 	
 	<!-- Google Webfonts -->
 	<link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
-
-	<script type="text/javascript">
-	
-	function changeDirection(event_, obj) {
-	// ignore bubbled handlers
-	//		if ( obj.originalEvent.currentTarget !== obj.originalEvent.target ) { return; }
-		obj.originalEvent.preventDefault();
-		
-		// {TYPE *}:{TOUCHES 1|2|3|4}:{X-AXIS 'right'|'left'|'steady'}:{Y-AXIS 'down'|'up'|'steady'} e.g. "swipe:1:left:steady"
-		var description = obj.description.split(":");
-		switch (description[2]) {
-			case "left":
-				pacman.directionWatcher.set(left);
-				break;
-			case "right":
-				pacman.directionWatcher.set(right);
-				break;
-			case "steady":
-				switch (description[3]) {
-					case "down":
-						pacman.directionWatcher.set(down);
-						break;
-					case "up":
-						pacman.directionWatcher.set(up);
-						break;
-				}
-		}
-		
-	}
-	
-	$(document).ready(function() {
-
-		// jgestures
-			
-		$('.container').bind('swipeone',changeDirection);
-
-		
-	});
-	</script>
 	
 </head>
 
