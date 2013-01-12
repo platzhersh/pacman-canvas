@@ -14,7 +14,6 @@ changes
 
 *Version 0.6 - 12.01.2013*
 * small fixes for mobile view
-* app-cache reactivated
 * sound control (default: muted)
 * collision control for walls
 * json datastructure design for all game objects (pills, magic pills, walls)
