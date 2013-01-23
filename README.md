@@ -12,6 +12,10 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.62 - 23.01.2013*
+* disable zoom on Mobile
+* change name to Pacman Canvas (Alpha)
+
 *Version 0.61 - 12.01.2013*
 * all walls defined (incl. collisions)
 
