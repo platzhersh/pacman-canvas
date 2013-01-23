@@ -416,7 +416,28 @@ window.addEventListener('load', function(e)
 				}
 			})
 		
+		// --------------- Controls
+		
+		// Keyboard
 		window.addEventListener('keydown',doKeyDown,true);
+		
+		// Mobile Buttons
+		$(document).on('touchend','.controlButton#up',function(event) {
+		    event.preventDefault();
+			pacman.directionWatcher.set(up);
+		});
+		$(document).on('touchend','.controlButton#down',function(event) {
+		    event.preventDefault();
+			pacman.directionWatcher.set(down);
+		});
+		$(document).on('touchend','.controlButton#left',function(event) {
+		    event.preventDefault();
+			pacman.directionWatcher.set(left);
+		});
+		$(document).on('touchend','.controlButton#right',function(event) {
+		    event.preventDefault();
+			pacman.directionWatcher.set(right);
+		});
 		
 		checkAppCache();
 		
