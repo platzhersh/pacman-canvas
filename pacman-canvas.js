@@ -179,6 +179,58 @@
 		this.getCenterY = function () {
 			return this.posY+this.radius;
 		}
+	
+		this.checkCollision = function() {
+			if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
+				if ((Math.floor((Math.random()*10)+1)%6) == 3) this.setRandomDirection();
+				}
+			
+			// Get the Grid Position of Pac
+			var gridAheadX = this.getGridPosX();
+			var gridAheadY = this.getGridPosY();
+			
+			// get the field 1 ahead to check wall collisions
+			if ((this.dirX == 1) && (gridAheadX < 17)) gridAheadX += 1;
+			if ((this.dirY == 1) && (gridAheadY < 12)) gridAheadY += 1;
+			var fieldAhead = game.map.posY[gridAheadY].posX[gridAheadX];
+			
+			
+			/*	Check Wall Collision			*/
+			if (fieldAhead.type === "wall") {
+				this.stuckX = this.dirX;
+				this.stuckY = this.dirY;
+				this.stop=true;
+				// get out of the wall
+				if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 5;
+				if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 5;
+				if (this.stuckX == -1) this.posX += 5;
+				if (this.stuckY == -1) this.posY += 5;
+				this.setRandomDirection();
+				this.stop=false;
+			}
+		}
+		this.setRandomDirection = function() {
+			 var dir = Math.floor((Math.random()*10)+1)%5; 
+
+			 switch(dir) {
+				case 1:	
+					this.setDirection(up);
+					break;
+				case 2:	
+					this.setDirection(down);
+					break;
+				case 3: 	
+					this.setDirection(right);
+					break;
+				case 4:		
+					this.setDirection(left);
+					break;
+				default: 	
+					this.setDirection(right);
+					break;
+			 }
+		}
+		
 	}
 	
 	Ghost.prototype = new Figure();
@@ -193,7 +245,6 @@
 		this.direction;
 		this.stop = true;
 		this.directionWatcher = new directionWatcher();
-		this.checkCollisions = function() {}
 		this.checkDirectionChange = function() {}
 		this.move = function() {
 		
@@ -210,6 +261,20 @@
 			}
 		this.stop = function() { this.stop = true;}
 		this.start = function() { this.stop = false;}
+		
+		this.getGridPosX = function() {
+			return (this.posX - (this.posX % 30))/30;
+		}
+		this.getGridPosY = function() {
+			return (this.posY - (this.posY % 30))/30;
+		}
+		this.setDirection = function(dir) {			
+			this.dirX = dir.dirX;
+			this.dirY = dir.dirY;
+			this.angle1 = dir.angle1;
+			this.angle2 = dir.angle2;
+			this.direction = dir;
+		}
 	}
 	
 	function pacman() {
@@ -637,9 +702,13 @@ window.addEventListener('load', function(e)
 			pacman.checkCollisions();		// has to be the LAST method called on pacman
 
 			inky.move();
+			inky.checkCollision();
 			pinky.move();			
+			pinky.checkCollision();
 			blinky.move();
+			blinky.checkCollision();
 			clyde.move();
+			clyde.checkCollision();
 			
 			
 			// All dots collected?
