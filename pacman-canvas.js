@@ -92,7 +92,7 @@
 			}
 		this.check = function() {
 		if ((game.pillCount == 0) && game.running) {
-				alert("You definitely have a lot of time.");
+				alert("You made it!\nFinal Score: "+game.score.score);
 				game.running = false;
 			}
 		}
