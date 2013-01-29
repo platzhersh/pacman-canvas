@@ -12,6 +12,9 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.64 - 29.01.2013*
+* Powerpills & Beastmode
+
 *Version 0.63 - 29.01.2013*
 * Pills now get loaded over external json file (map.json)
 * ghost collisions implemented -> dying

@@ -167,11 +167,14 @@
 		this.posY = posY;
 		this.image = new Image();
 		this.image.src = image;
+		this.dazzle = false;
+		this.dazzleImg = new Image();
+		this.dazzleImg.src = 'img/dazzled.svg';
 		this.direction = right;
 		this.radius = pacman.radius;
 		this.draw = function (context) {					
-		// Monster Draft
-		context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
+		if (this.dazzle)	context.drawImage(this.dazzleImg, this.posX, this.posY, 2*this.radius, 2*this.radius);
+		else context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
 		}
 		this.getCenterX = function () {
 			return this.posX+this.radius;
@@ -299,6 +302,9 @@
 		
 		this.direction = right;
 		
+		this.beastMode = false;
+		this.beastModeTimer = 0;
+		
 		this.checkCollisions = function () {
 			
 			if ((this.stuckX == 0) && (this.stuckY == 0)) {				
@@ -331,6 +337,7 @@
 							if (field.type === "powerpill") {
 								Sound.play("powerpill");
 								s = 50;
+								this.enableBeastMode();
 								}
 							else {
 								Sound.play("waka");
@@ -366,7 +373,8 @@
 					&& (between(this.getCenterY(), clyde.getCenterY()-10, clyde.getCenterY()+10)))
 					)
 					{
-						this.die();
+						if (this.beastMode == false) this.die();
+						else console.log("Can't kill a beast ;)");
 					}
 				
 			}
@@ -399,8 +407,31 @@
 			this.angle2 = dir.angle2;
 			this.direction = dir;
 		}
-
+		this.enableBeastMode = function() {
+			this.beastMode = true;
+			this.beastModeTimer = 240;
+			console.log("Beast Mode activated!");
+			inky.dazzle = true;
+			pinky.dazzle = true;
+			blinky.dazzle = true;
+			clyde.dazzle = true;
+		};
+		this.disableBeastMode = function() { 
+			this.beastMode = false; 
+			console.log("Beast Mode is over!");
+			inky.dazzle = false;
+			pinky.dazzle = false;
+			blinky.dazzle = false;
+			clyde.dazzle = false;
+			};
 		this.move = function() {
+		
+			if (this.beastModeTimer > 0) {
+				this.beastModeTimer--;
+				//console.log("Beast Mode: "+this.beastModeTimer);
+				}
+			if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
+			
 			this.posX += 5 * this.dirX;
 			this.posY += 5 * this.dirY;
 			
