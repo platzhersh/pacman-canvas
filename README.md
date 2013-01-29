@@ -12,6 +12,11 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.63 - 29.01.2013*
+* Pills now get loaded over external json file (map.json)
+* ghost collisions implemented -> dying
+* tried to clean up the code a bit
+
 *Version 0.62 - 23.01.2013*
 * disable zoom on Mobile
 * change name to Pacman Canvas (Alpha)
