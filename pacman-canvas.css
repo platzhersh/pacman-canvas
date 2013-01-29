@@ -19,7 +19,8 @@ body, html { font-size: 15px; }
 div.audio {}
 audio {display: block; }
 
-.score { display: inline-block; }
+.score { width: 160px; }
+.score, .lives { display: inline-block; }
 
 /* Controls */
 

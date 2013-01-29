@@ -9,6 +9,13 @@
 	author: platzh1rsch		(www.platzh1rsch.ch)
 	
 -------------------------------------------------------------------*/
+
+
+/* ----- Global Variables ---------------------------------------- */
+	var canvas;
+	var context;
+	var game;
+	var inky, blinky, clyde, pinky;
 	
 	var mapConfig = 'data/map.json';
 	
@@ -18,6 +25,10 @@
 		context.fillRect(pacman.radius/2+gridX*2*pacman.radius,pacman.radius/2+gridY*2*pacman.radius, width*pacman.radius, height*pacman.radius);
 	}
 	
+	function between (x, min, max) {
+		return x >= min && x <= max;
+		}
+	
 	// Manages the whole game ("God Object")
 	function Game() {
 		this.running = true;
@@ -25,21 +36,7 @@
 		this.score = new Score();
 		this.soundfx = 0;
 		this.map;
-		/* Seems to have problem with this.map = data ..
-		this.mapInit = function() {
-				$.ajax({
-				url: mapConfig,
-				async: false,
-				 beforeSend: function(xhr){
-					if (xhr.overrideMimeType) xhr.overrideMimeType("application/json"); 
-				},
-				dataType: "json",
-				success: function (data) {
-					this.map =  data;
-				}
-			})
-		}*/
-		this.whiteDots;
+		this.pillCount;	// # of pills
 		this.monsters;
 		this.canvas = $("#myCanvas").get(0);
 		this.width = this.canvas.width;
@@ -48,19 +45,68 @@
 			this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0; 
 			$('#mute').toggle();
 			}
-		this.restart = function() {
+		this.reset = function() {
 			}
-		this.initialize = function (context) {
-			var text = "Insert Coin to Play!";
+		this.init = function (context) {
+			// get Level Map
+			$.ajax({
+				url: mapConfig,
+				async: false,
+				 beforeSend: function(xhr){
+					if (xhr.overrideMimeType) xhr.overrideMimeType("application/json"); 
+				},
+				dataType: "json",
+				success: function (data) {
+					game.map =  data;
+				}
+			});
+		
+			var temp = 0;
+			$.each(this.map.posY, function(i, item) {
+			   $.each(this.posX, function() { 
+				   if (this.type == "pill") {
+					temp++;
+					//console.log("Pill Count++. temp="+temp+". PillCount="+this.pillCount+".");
+					}
+				});
+			});
+			
+			this.pillCount = temp;
+			$(".lives").html("Lives: "+pacman.lives);	
+			/*var text = "Insert Coin to Play!";
 			context.fillStyle = "#FFF";
 			context.font = "20px 'Press Start 2P'";
 			context.fillText(text, this.canvas.width/2-200, this.canvas.height/2-10);
+			*/
+			
+			this.score.score = 0;
+			this.score.refresh(".score");
+			pacman.lives = 3;
+			
+					// initalize Ghosts
+			pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
+			inky = new Ghost(16*pacman.radius,10*pacman.radius,'img/inky.svg');
+			blinky = new Ghost(18*pacman.radius,10*pacman.radius,'img/blinky.svg');
+			clyde = new Ghost(20*pacman.radius,10*pacman.radius,'img/clyde.svg');
+		
 			}
+		this.check = function() {
+		if ((game.pillCount == 0) && game.running) {
+				alert("You definitely have a lot of time.");
+				game.running = false;
+			}
+		}
 		this.win = function () {}
 		this.gameover = function () {}
+		this.toPixelPos = function (gridPos) {
+			return gridPos*30;
+		}
+		this.toGridPos = function (pixelPos) {
+			return ((pixelPos % 30)/30);
+		}
 	}
-	var game = new Game();
-	
+
+	game = new Game();
 	
 	function Score() {
 		this.score = 0;
@@ -72,7 +118,7 @@
 		}
 		
 	}
-	var score = new Score();
+	
 	
 	
 	// used to play sounds during the game
@@ -127,74 +173,16 @@
 		// Monster Draft
 		context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
 		}
+		this.getCenterX = function () {
+			return this.posX+this.radius;
+		}
+		this.getCenterY = function () {
+			return this.posY+this.radius;
+		}
 	}
 	
 	Ghost.prototype = new Figure();
 	
-	
-	// whiteDot object in Constructor notation
-	function whiteDot(posX, posY) {
-		this.posX = posX;
-		this.posY = posY;
-		this.radius = pacman.radius / 5;
-		this.color = "White";
-		
-		// IMPORTANT: create new whiteDot instances with new whiteDot(..)
-		whiteDotTable.add(this);
-	}
-	
-	whiteDot.prototype.paint = function (context) {
-		context.beginPath();
-		context.fillStyle = "White";
-		context.strokeStyle = "White";
-		context.arc(this.posX,this.posY,this.radius,0*Math.PI,2*Math.PI);
-		context.lineTo(this.PosX, this.PosY);
-	}
-	
-	// Monitors all the white Dots
-	function whiteDotTable() {
-		this.hash = new Object();
-		this.add = function (whiteDot) {
-			var key = whiteDot.posX.toString()+whiteDot.posY.toString();
-			this.hash[key] = whiteDot;
-		}
-		this.getAll = function () {
-			for (var k in this.hash) {
-				console.log("key is: "+k + ", value is: "+this.hash[k]);
-			}
-		}
-		this.get = function(key) {
-			return this.hash[key] !== null ? this.hash[key] : false;
-		}
-		this.paint = function(context) {
-			for (var k in whiteDotTable.hash) {
-				whiteDotTable.hash[k].paint(context);
-				context.stroke();
-				context.fill();
-			}
-		}
-		this.removeAll = function() {
-			this.hash = new Object();
-		}
-		this.remove = function(key) {
-
-			delete this.hash[key]
-			//console.log("nom nom "+key);
-			Sound.play("waka");
-		}
-		this.size = function () {
-			var count = 0;
-			for (var k in this.hash) {
-				count++;
-			}
-			return count;
-		}
-		this.empty = function() {
-			return (this.size() == 0);
-		}
-	}
-
-	var whiteDotTable = new whiteDotTable();
 	
 	// Super Class for Pacman & Ghosts
 	function Figure() {
@@ -236,35 +224,61 @@
 		this.lives = 3;
 		this.stuckX = 0;
 		this.stuckY = 0;
-		
+		this.getCenterX = function () {
+			return this.posX+this.radius;
+		}
+		this.getCenterY = function () {
+			return this.posY+this.radius;
+		}
 		this.directionWatcher = new directionWatcher();
 		
 		this.direction = right;
 		
 		this.checkCollisions = function () {
 			
-			if ((this.stuckX == 0) && (this.stuckY == 0)) {
-				// Check Whitedots
-				var key = (this.posX+this.radius).toString()+(this.posY+this.radius).toString();
-				var dot = whiteDotTable.get(key);
-				if (dot != null) {
-					//console.log("Collision at "+this.posX+","+this.posY+". (key: "+key+")");
-					whiteDotTable.remove(key);
-					score.add(10);
-					}
+			if ((this.stuckX == 0) && (this.stuckY == 0)) {				
 				
-				// check Walls (todo: consider direction --> finetuning)
-
+				// Get the Grid Position of Pac
 				var gridX = this.getGridPosX();
 				var gridY = this.getGridPosY();
+				var gridAheadX = gridX;
+				var gridAheadY = gridY;
 				
-				if ((this.dirX == 1) && (gridX < 17)) gridX += 1;
-				if ((this.dirY == 1) && (gridY < 12)) gridY += 1;
-				
-				//console.log(gridX+"."+gridY);
 				var field = game.map.posY[gridY].posX[gridX];
+
+				// get the field 1 ahead to check wall collisions
+				if ((this.dirX == 1) && (gridAheadX < 17)) gridAheadX += 1;
+				if ((this.dirY == 1) && (gridAheadY < 12)) gridAheadY += 1;
+				var fieldAhead = game.map.posY[gridAheadY].posX[gridAheadX];
+
 				
-				if (field.type === "wall") {
+				/*	Check Pill Collision			*/
+				if ((field.type === "pill") || (field.type === "powerpill")) {
+					//console.log("Pill found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
+					if (
+						((this.dirX == 1) && (between(this.posX, game.toPixelPos(gridX)+this.radius-5, game.toPixelPos(gridX+1))))
+						|| ((this.dirX == -1) && (between(this.posX, game.toPixelPos(gridX), game.toPixelPos(gridX)+5)))
+						|| ((this.dirY == 1) && (between(this.posY, game.toPixelPos(gridY)+this.radius-5, game.toPixelPos(gridY+1))))
+						|| ((this.dirY == -1) && (between(this.posY, game.toPixelPos(gridY), game.toPixelPos(gridY)+5)))
+						|| (fieldAhead.type === "wall")
+						)
+						{	var s;
+							if (field.type === "powerpill") {
+								Sound.play("powerpill");
+								s = 50;
+								}
+							else {
+								Sound.play("waka");
+								s = 10;
+								game.pillCount--;
+								}
+							game.map.posY[gridY].posX[gridX].type = "null";
+							game.score.add(s);
+						}
+				}
+				
+				/*	Check Wall Collision			*/
+				if (fieldAhead.type === "wall") {
 					this.stuckX = this.dirX;
 					this.stuckY = this.dirY;
 					pacman.stop();
@@ -274,7 +288,21 @@
 					if (this.stuckX == -1) this.posX += 5;
 					if (this.stuckY == -1) this.posY += 5;
 				}
-					
+
+				/* Check Ghost Collision			*/
+				if (
+					((between(this.getCenterX(), pinky.getCenterX()-10, pinky.getCenterX()+10)) 
+					&& (between(this.getCenterY(), pinky.getCenterY()-10, pinky.getCenterY()+10)))
+					|| ((between(this.getCenterX(), inky.getCenterX()-10, inky.getCenterX()+10)) 
+					&& (between(this.getCenterY(), inky.getCenterY()-10, inky.getCenterY()+10)))
+					|| ((between(this.getCenterX(), blinky.getCenterX()-10, blinky.getCenterX()+10)) 
+					&& (between(this.getCenterY(), blinky.getCenterY()-10, blinky.getCenterY()+10)))
+					|| ((between(this.getCenterX(), clyde.getCenterX()-10, clyde.getCenterX()+10)) 
+					&& (between(this.getCenterY(), clyde.getCenterY()-10, clyde.getCenterY()+10)))
+					)
+					{
+						this.die();
+					}
 				
 			}
 		}
@@ -346,7 +374,14 @@
 		
 		this.die = function() {
 			this.stop();
-			this.lives > 0 ? --this.lives : alert("Game over!");
+			this.posX = 0;
+			this.posY = 6*2*this.radius;
+			this.lives--;
+			if (this.lives == 0) {
+				alert("Game over!\nTotal Score: "+game.score.score);
+				game.init();
+				}
+			$(".lives").html("Lives: "+this.lives);	
 			Sound.play("die");
 			}
 		this.reset = function() {
@@ -403,18 +438,6 @@ window.addEventListener('load', function(e)
 			}
 		});
 		
-		// get Map
-		$.ajax({
-				url: mapConfig,
-				async: false,
-				 beforeSend: function(xhr){
-					if (xhr.overrideMimeType) xhr.overrideMimeType("application/json"); 
-				},
-				dataType: "json",
-				success: function (data) {
-					game.map =  data;
-				}
-			})
 		
 		// --------------- Controls
 		
@@ -441,8 +464,8 @@ window.addEventListener('load', function(e)
 		
 		checkAppCache();
 		
-		var canvas = $("#myCanvas").get(0);
-		var context = canvas.getContext("2d");
+		canvas = $("#myCanvas").get(0);
+		context = canvas.getContext("2d");
         
             
  
@@ -452,29 +475,39 @@ window.addEventListener('load', function(e)
 		
 		-------------------------------------------------------------------------- */
 		
-		// Whitedots vorbereiten
-		for (var i = pacman.radius; i < canvas.width; i +=2*pacman.radius) {
-			for (var j = pacman.radius; j < canvas.height; j+= 2*pacman.radius) {
-			var dot = new whiteDot(i,j);
-			}
-		}
+		game.init();
 		
-		// initalize Ghosts
-		var pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
-		var inky = new Ghost(16*pacman.radius,10*pacman.radius,'img/inky.svg');
-		var blinky = new Ghost(18*pacman.radius,10*pacman.radius,'img/blinky.svg');
-		var clyde = new Ghost(20*pacman.radius,10*pacman.radius,'img/clyde.svg');
-
+		animationLoop();
+			
+		});
+		
 		function renderContent()
 		{
 			//context.save()
 			
 			// Refresh Score
-			score.refresh(".score");
+			game.score.refresh(".score");
+						
+			// Pills
+			context.beginPath();
+			context.fillStyle = "White";
+			context.strokeStyle = "White";
 			
-			// Whitedots
-			whiteDotTable.paint(context);
-			
+			var dotPosY;		
+			$.each(game.map.posY, function(i, item) {
+				dotPosY = this.row;
+			   $.each(this.posX, function() { 
+				   if (this.type == "pill") {
+					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,pacman.radius/5,0*Math.PI,2*Math.PI);
+					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
+				   }
+				   else if (this.type == "powerpill") {
+					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,pacman.radius/3,0*Math.PI,2*Math.PI);
+					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
+				   }
+			   }); 
+			});
+			context.fill();
 			
 			//context.beginPath();
 			context.fillStyle = "Blue";
@@ -596,33 +629,29 @@ window.addEventListener('load', function(e)
 			canvas.width = canvas.width;
 			//renderGrid(pacman.radius, "red");
 			renderContent();
-			//game.initialize(context);
 			
 			// Make changes before next loop
 			pacman.move();
 			pacman.eat();
-			pacman.checkCollisions();
 			pacman.checkDirectionChange();
+			pacman.checkCollisions();		// has to be the LAST method called on pacman
 
 			inky.move();
 			pinky.move();			
 			blinky.move();
 			clyde.move();
 			
+			
 			// All dots collected?
-			if ((whiteDotTable.empty()) && game.running) {
-				alert("You definitely have a lot of time.");
-				game.running = false;
-			}
+			game.check();
+			
 			
 			setTimeout(animationLoop, 33);
 			
 			
 		}
 
-        animationLoop();
-			
-		});
+
 	
 	function doKeyDown(evt){
 	
