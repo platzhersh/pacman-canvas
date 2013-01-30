@@ -12,6 +12,9 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.71 - 30.01.2013*
+* Ghosts can die too
+
 *Version 0.7 - 29.01.2013*
 * Powerpills & Beastmode
 
