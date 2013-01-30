@@ -13,6 +13,10 @@ changes
 ======
 
 *Version 0.71 - 30.01.2013*
+* Ghost Base Door
+* Reset Game after winning
+
+*Version 0.71 - 30.01.2013*
 * Ghosts can die too
 
 *Version 0.7 - 29.01.2013*

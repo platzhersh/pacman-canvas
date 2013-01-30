@@ -93,7 +93,8 @@
 		this.check = function() {
 		if ((game.pillCount == 0) && game.running) {
 				alert("You made it!\nFinal Score: "+game.score.score);
-				game.running = false;
+				pacman.die();
+				game.init();
 			}
 		}
 		this.win = function () {}
@@ -371,7 +372,7 @@
 				}
 				
 				/*	Check Wall Collision			*/
-				if (fieldAhead.type === "wall") {
+				if ((fieldAhead.type === "wall") || (fieldAhead.type === "door")) {
 					this.stuckX = this.dirX;
 					this.stuckY = this.dirY;
 					pacman.stop();
@@ -624,12 +625,15 @@ window.addEventListener('load', function(e)
 			buildWall(context,17,0,1,6);
 			buildWall(context,17,7,1,6);
 			
-			// cage
+			// ghost base
 			buildWall(context,7,4,1,1);
 			buildWall(context,6,5,1,2);
 			buildWall(context,10,4,1,1);
 			buildWall(context,11,5,1,2);
 			buildWall(context,6,6,6,1);
+			
+			// ghost base door
+			context.fillRect(8*2*pacman.radius,pacman.radius/2+4*2*pacman.radius+5, 4*pacman.radius, 1);
 			
 			// single blocks
 			buildWall(context,4,0,1,2);
