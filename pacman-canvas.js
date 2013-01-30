@@ -84,16 +84,27 @@
 			pacman.lives = 3;
 			pacman.reset();
 			
-					// initalize Ghosts
-			pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
-			inky = new Ghost(16*pacman.radius,10*pacman.radius,'img/inky.svg');
-			blinky = new Ghost(18*pacman.radius,10*pacman.radius,'img/blinky.svg');
-			clyde = new Ghost(20*pacman.radius,10*pacman.radius,'img/clyde.svg');
+			// initalize Ghosts, avoid memory flooding
+			if (pinky == null) {
+				pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
+				inky = new Ghost(16*pacman.radius,10*pacman.radius,'img/inky.svg');
+				blinky = new Ghost(18*pacman.radius,10*pacman.radius,'img/blinky.svg');
+				clyde = new Ghost(20*pacman.radius,10*pacman.radius,'img/clyde.svg');
+			}
+			else {
+				//console.log("ghosts reset");
+				pinky.setPosition(14*pacman.radius,10*pacman.radius);
+				inky.setPosition(16*pacman.radius,10*pacman.radius);
+				blinky.setPosition(18*pacman.radius,10*pacman.radius);
+				clyde.setPosition(20*pacman.radius,10*pacman.radius);
+			}
 		
 			}
 		this.check = function() {
 		if ((game.pillCount == 0) && game.running) {
 				alert("You made it!\nFinal Score: "+game.score.score+"\nRemaining Lives: "+pacman.lives);
+				this.stop();
+				this.reset();
 				game.init();
 			}
 		}
@@ -187,9 +198,13 @@
 			return this.posY+this.radius;
 		}
 		
-		this.die = function() {
+		this.reset = function() {
 			this.posX = 14*pacman.radius;
 			this.posY = 10*pacman.radius;
+		}
+		
+		this.die = function() {
+			this.reset();
 		}
 	
 		this.checkCollision = function() {
@@ -299,6 +314,10 @@
 			this.angle1 = dir.angle1;
 			this.angle2 = dir.angle2;
 			this.direction = dir;
+		}
+		this.setPosition = function(x, y) {
+			this.posX = x;
+			this.posY = y;
 		}
 	}
 	
