@@ -48,6 +48,9 @@
 		this.reset = function() {
 			}
 		this.init = function (context) {
+			
+			console.log("init game");
+			
 			// get Level Map
 			$.ajax({
 				url: mapConfig,
@@ -101,11 +104,9 @@
 		
 			}
 		this.check = function() {
-		if ((game.pillCount == 0) && game.running) {
+		if ((this.pillCount == 0) && game.running) {
 				alert("You made it!\nFinal Score: "+game.score.score+"\nRemaining Lives: "+pacman.lives);
-				this.stop();
-				this.reset();
-				game.init();
+				this.init();
 			}
 		}
 		this.win = function () {}
@@ -497,6 +498,9 @@
 			this.posY = 6*2*this.radius;
 			this.setDirection(right);
 			this.stop();
+			this.stuckX = 0;
+			this.stuckY = 0;
+			console.log("reset pacman");
 		}
 		this.die = function() {
 			this.stop();
