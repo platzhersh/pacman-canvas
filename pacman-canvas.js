@@ -82,6 +82,7 @@
 			this.score.set(0);
 			this.score.refresh(".score");
 			pacman.lives = 3;
+			pacman.resetPos();
 			
 					// initalize Ghosts
 			pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
@@ -92,8 +93,7 @@
 			}
 		this.check = function() {
 		if ((game.pillCount == 0) && game.running) {
-				alert("You made it!\nFinal Score: "+game.score.score);
-				pacman.die();
+				alert("You made it!\nFinal Score: "+game.score.score+"\nRemaining Lives: "+pacman.lives);
 				game.init();
 			}
 		}
@@ -473,11 +473,13 @@
 			this.dirX = 0;
 			this.dirY = 0;
 		}
-		
-		this.die = function() {
-			this.stop();
+		this.resetPos = function() {
 			this.posX = 0;
 			this.posY = 6*2*this.radius;
+		}
+		this.die = function() {
+			this.stop();
+			this.resetPos();
 			this.lives--;
 			if (this.lives == 0) {
 				alert("Game over!\nTotal Score: "+game.score.score);
