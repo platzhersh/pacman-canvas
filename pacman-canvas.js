@@ -79,7 +79,7 @@
 			context.fillText(text, this.canvas.width/2-200, this.canvas.height/2-10);
 			*/
 			
-			this.score.score = 0;
+			this.score.set(0);
 			this.score.refresh(".score");
 			pacman.lives = 3;
 			
@@ -110,6 +110,9 @@
 	
 	function Score() {
 		this.score = 0;
+		this.set = function(i) {
+			this.score = i;
+		}
 		this.add = function(i) {
 			this.score += i;
 		}
@@ -182,6 +185,11 @@
 		this.getCenterY = function () {
 			return this.posY+this.radius;
 		}
+		
+		this.die = function() {
+			this.posX = 14*pacman.radius;
+			this.posY = 10*pacman.radius;
+		}
 	
 		this.checkCollision = function() {
 			if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
@@ -211,6 +219,19 @@
 				this.setRandomDirection();
 				this.stop=false;
 			}
+			/* Check Ghost / Pacman Collision			*/
+			if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
+				&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
+			{
+				if (pacman.beastMode == false) {
+					pacman.die();
+					}
+				else {
+					this.die();
+					game.score.add(100);
+					}
+			}
+			
 		}
 		this.setRandomDirection = function() {
 			 var dir = Math.floor((Math.random()*10)+1)%5; 
@@ -360,22 +381,6 @@
 					if (this.stuckX == -1) this.posX += 5;
 					if (this.stuckY == -1) this.posY += 5;
 				}
-
-				/* Check Ghost Collision			*/
-				if (
-					((between(this.getCenterX(), pinky.getCenterX()-10, pinky.getCenterX()+10)) 
-					&& (between(this.getCenterY(), pinky.getCenterY()-10, pinky.getCenterY()+10)))
-					|| ((between(this.getCenterX(), inky.getCenterX()-10, inky.getCenterX()+10)) 
-					&& (between(this.getCenterY(), inky.getCenterY()-10, inky.getCenterY()+10)))
-					|| ((between(this.getCenterX(), blinky.getCenterX()-10, blinky.getCenterX()+10)) 
-					&& (between(this.getCenterY(), blinky.getCenterY()-10, blinky.getCenterY()+10)))
-					|| ((between(this.getCenterX(), clyde.getCenterX()-10, clyde.getCenterX()+10)) 
-					&& (between(this.getCenterY(), clyde.getCenterY()-10, clyde.getCenterY()+10)))
-					)
-					{
-						if (this.beastMode == false) this.die();
-						else console.log("Can't kill a beast ;)");
-					}
 				
 			}
 		}
