@@ -41,6 +41,7 @@
 		this.canvas = $("#myCanvas").get(0);
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
+		this.dieAnimation = 0;
 		this.toggleSound = function() { 
 			this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0; 
 			$('#mute').toggle();
@@ -470,23 +471,25 @@
 		
 		this.eat = function () {
 		
-			this.angle1 -= this.mouth*0.07;
-			this.angle2 += this.mouth*0.07;
+			if (this.dirX == this.dirY == 0) {
 			
-			var limitMax1 = this.direction.angle1;
-			var limitMax2 = this.direction.angle2;
-			var limitMin1 = this.direction.angle1 - 0.21;
-			var limitMin2 = this.direction.angle2 + 0.21;
+				this.angle1 -= this.mouth*0.07;
+				this.angle2 += this.mouth*0.07;
 				
-			if (this.angle1 < limitMin1 || this.angle2 > limitMin2)
-			{
-				this.mouth = -1;
+				var limitMax1 = this.direction.angle1;
+				var limitMax2 = this.direction.angle2;
+				var limitMin1 = this.direction.angle1 - 0.21;
+				var limitMin2 = this.direction.angle2 + 0.21;
+					
+				if (this.angle1 < limitMin1 || this.angle2 > limitMin2)
+				{
+					this.mouth = -1;
+				}
+				if (this.angle1 >= limitMax1 || this.angle2 <= limitMax2)
+				{
+					this.mouth = 1;
+				}
 			}
-			if (this.angle1 >= limitMax1 || this.angle2 <= limitMax2)
-			{
-				this.mouth = 1;
-			}
-		
 		}
 		
 		this.stop = function() {
@@ -502,8 +505,18 @@
 			this.stuckY = 0;
 			console.log("reset pacman");
 		}
+		this.dieAnimationCount = 0;
+		this.dieAnimation = function() {
+			this.dieAnimationCount--;
+			this.angle1 -= this.mouth*0.07;
+			this.angle2 += this.mouth*0.07;
+			if (this.dieAnimationCount == 0) game.dieAnimation = 0; game.pause = false;
+		}
 		this.die = function() {
 			this.stop();
+			game.pause = true;
+			this.dieAnimationCount = 120;
+			game.dieAnimation = 1;
 			this.reset();
 			this.lives--;
 			if (this.lives == 0) {
@@ -758,21 +771,23 @@ window.addEventListener('load', function(e)
 			//renderGrid(pacman.radius, "red");
 			renderContent();
 			
-			// Make changes before next loop
-			pacman.move();
-			pacman.eat();
-			pacman.checkDirectionChange();
-			pacman.checkCollisions();		// has to be the LAST method called on pacman
+			if (game.dieAnimation == 1) pacman.dieAnimation();
+			if (game.pause != true){
+				// Make changes before next loop
+				pacman.move();
+				pacman.eat();
+				pacman.checkDirectionChange();
+				pacman.checkCollisions();		// has to be the LAST method called on pacman
 
-			inky.move();
-			inky.checkCollision();
-			pinky.move();			
-			pinky.checkCollision();
-			blinky.move();
-			blinky.checkCollision();
-			clyde.move();
-			clyde.checkCollision();
-			
+				inky.move();
+				inky.checkCollision();
+				pinky.move();			
+				pinky.checkCollision();
+				blinky.move();
+				blinky.checkCollision();
+				clyde.move();
+				clyde.checkCollision();
+			}
 			
 			// All dots collected?
 			game.check();
