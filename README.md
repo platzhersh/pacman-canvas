@@ -12,7 +12,11 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
-*Version 0.71 - 30.01.2013*
+*Version 0.73 - 17.04.2013*
+* You can play on until you lost all your 3 lives
+* Ghosts state gets reset everytime they get eaten or new level starts
+
+*Version 0.72 - 30.01.2013*
 * Ghost Base Door
 * Reset Game after winning
 

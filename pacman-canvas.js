@@ -38,17 +38,21 @@
 		this.map;
 		this.pillCount;	// # of pills
 		this.monsters;
+		this.level = 1;
 		this.canvas = $("#myCanvas").get(0);
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
-		this.dieAnimation = 0;
 		this.toggleSound = function() { 
 			this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0; 
 			$('#mute').toggle();
 			}
 		this.reset = function() {
 			}
-		this.init = function (context) {
+		this.nextLevel = function() {
+			this.level++;
+			this.init(1);
+		}
+		this.init = function (state) {
 			
 			console.log("init game");
 			
@@ -83,9 +87,11 @@
 			context.fillText(text, this.canvas.width/2-200, this.canvas.height/2-10);
 			*/
 			
-			this.score.set(0);
-			this.score.refresh(".score");
-			pacman.lives = 3;
+			if (state == 0) {
+				this.score.set(0);
+				this.score.refresh(".score");
+				pacman.lives = 3;
+				}
 			pacman.reset();
 			
 			// initalize Ghosts, avoid memory flooding
@@ -98,16 +104,20 @@
 			else {
 				//console.log("ghosts reset");
 				pinky.setPosition(14*pacman.radius,10*pacman.radius);
+				pinky.dazzle = false;
 				inky.setPosition(16*pacman.radius,10*pacman.radius);
+				inky.dazzle = false;
 				blinky.setPosition(18*pacman.radius,10*pacman.radius);
+				blinky.dazzle = false;
 				clyde.setPosition(20*pacman.radius,10*pacman.radius);
+				clyde.dazzle = false;
 			}
 		
 			}
 		this.check = function() {
 		if ((this.pillCount == 0) && game.running) {
-				alert("You made it!\nFinal Score: "+game.score.score+"\nRemaining Lives: "+pacman.lives);
-				this.init();
+				alert("Level "+game.level+" complete!\nScore: "+game.score.score+"\nRemaining Lives: "+pacman.lives+"\nClick OK to proceed to start the next level.");
+				this.nextLevel();
 			}
 		}
 		this.win = function () {}
@@ -203,6 +213,7 @@
 		this.reset = function() {
 			this.posX = 14*pacman.radius;
 			this.posY = 10*pacman.radius;
+			this.dazzle = false;
 		}
 		
 		this.die = function() {
@@ -505,23 +516,24 @@
 			this.stuckY = 0;
 			console.log("reset pacman");
 		}
+		/*
 		this.dieAnimationCount = 0;
 		this.dieAnimation = function() {
 			this.dieAnimationCount--;
 			this.angle1 -= this.mouth*0.07;
 			this.angle2 += this.mouth*0.07;
 			if (this.dieAnimationCount == 0) game.dieAnimation = 0; game.pause = false;
-		}
+		}*/
 		this.die = function() {
-			this.stop();
-			game.pause = true;
-			this.dieAnimationCount = 120;
-			game.dieAnimation = 1;
 			this.reset();
+			pinky.reset();
+			inky.reset();
+			blinky.reset();
+			clyde.reset();
 			this.lives--;
 			if (this.lives == 0) {
 				alert("Game over!\nTotal Score: "+game.score.score);
-				game.init();
+				game.init(0);
 				}
 			$(".lives").html("Lives: "+this.lives);	
 			Sound.play("die");
@@ -613,7 +625,7 @@ window.addEventListener('load', function(e)
 		
 		-------------------------------------------------------------------------- */
 		
-		game.init();
+		game.init(0);
 		
 		animationLoop();
 			
