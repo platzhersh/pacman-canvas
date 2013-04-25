@@ -52,6 +52,14 @@
 			this.level++;
 			this.init(1);
 		}
+		this.drawHearts = function (count) {
+			var html = "";
+			for (i = 0; i<count; i++) {
+				html += " <img src='img/heart.png'>";
+				}
+			$(".lives").html("Lives: "+html);
+			
+		}
 		this.showMessage = function(title, text) {
 			this.pause = true;
 			$('#canvas-overlay-container').show();
@@ -101,7 +109,8 @@
 			});
 			
 			this.pillCount = temp;
-			$(".lives").html("Lives: "+pacman.lives);	
+
+			game.drawHearts(pacman.lives);	
 			/*var text = "Insert Coin to Play!";
 			context.fillStyle = "#FFF";
 			context.font = "20px 'Press Start 2P'";
@@ -556,7 +565,7 @@
 				game.showMessage("Game over","Total Score: "+game.score.score);
 				game.init(0);
 				}
-			$(".lives").html("Lives: "+this.lives);	
+			game.drawHearts(this.lives);
 			Sound.play("die");
 			}
 		this.getGridPosX = function() {
