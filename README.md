@@ -12,6 +12,10 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.74 - 25.04.2013*
+* You can pause / resume the game by pressing ESC or clicking into canvas
+* Swipe Gestures using hammerjs
+
 *Version 0.73 - 17.04.2013*
 * You can play on until you lost all your 3 lives
 * Ghosts state gets reset everytime they get eaten or new level starts
