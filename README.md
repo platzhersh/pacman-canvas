@@ -15,6 +15,7 @@ changes
 *Version 0.74 - 25.04.2013*
 * You can pause / resume the game by pressing ESC or clicking into canvas
 * Swipe Gestures using hammerjs
+* replaced alerts by nice html overlay messages
 
 *Version 0.73 - 17.04.2013*
 * You can play on until you lost all your 3 lives
