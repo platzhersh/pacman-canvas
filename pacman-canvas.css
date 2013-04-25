@@ -4,6 +4,29 @@ body {
 	font-family: 'Press Start 2P', cursive;
 }
 #myCanvas { border: none; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
+#canvas-container { position: relative;}
+#canvas-overlay-container {
+	position: absolute;
+	background: rgba(0,0,0,0.7);
+	height: 100%; 
+	width: 540px;
+	max-width: 100%;
+}
+#canvas-overlay-content { 
+	position: absolute; 
+	top: 33%; 	
+	left: 0; 
+	margin-top: 0;
+	max-width: 100%; 
+	text-align: center;
+	width: 540px;
+	max-width: 100%;
+	}
+#canvas-overlay-content #title {
+	text-transform: uppercase;
+	font-size: 150%;
+}
+
 .canvas { position:absolute; padding-top: 20px;}
 .main {width: auto; max-width: 700px; margin: 10px auto; position: static; left: auto;}
 .content { width: auto; text-align: left; margin: 0;}
@@ -54,9 +77,8 @@ audio {display: block; }
 	border-radius: 50%;
 	font-weight: bold;
 	font-size: 60px;
+	cursor:pointer;
 }
-
-.controlButton:hover { background: #B01717;}
 
 .description { display: none; }
 

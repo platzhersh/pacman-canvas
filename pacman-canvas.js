@@ -32,7 +32,7 @@
 	// Manages the whole game ("God Object")
 	function Game() {
 		this.running = true;
-		this.pause = false;
+		this.pause = true;
 		this.score = new Score();
 		this.soundfx = 0;
 		this.map;
@@ -52,12 +52,20 @@
 			this.level++;
 			this.init(1);
 		}
+		this.showMessage = function(title, text) {
+			this.pause = true;
+			$('#canvas-overlay-container').show();
+			$('#canvas-overlay-content #title').text(title);
+			$('#canvas-overlay-content #text').text(text);
+		}
 		this.pauseResume = function () {
 			if (this.pause) {
 				this.pause = false;
-				console.log("pause game");
+				$('#canvas-overlay-container').hide();
 				}
-			else this.pause = true;
+			else {
+				this.showMessage("Pause","Click to Resume");
+				}
 			}
 		this.init = function (state) {
 			
@@ -123,7 +131,7 @@
 			}
 		this.check = function() {
 		if ((this.pillCount == 0) && game.running) {
-				alert("Level "+game.level+" complete!\nScore: "+game.score.score+"\nRemaining Lives: "+pacman.lives+"\nClick OK to proceed to start the next level.");
+				game.showMessage("Level "+game.level,"Level up! Click to continue!");
 				this.nextLevel();
 			}
 		}
@@ -539,7 +547,7 @@
 			clyde.reset();
 			this.lives--;
 			if (this.lives == 0) {
-				alert("Game over!\nTotal Score: "+game.score.score);
+				game.showMessage("Game over","Total Score: "+game.score.score);
 				game.init(0);
 				}
 			$(".lives").html("Lives: "+this.lives);	
@@ -602,7 +610,7 @@ window.addEventListener('load', function(e)
 		window.addEventListener('keydown',doKeyDown,true);
 		
 		// Hammerjs Touch Events
-		Hammer('#myCanvas').on("tap", function(event) {
+		Hammer('#canvas-container').on("tap", function(event) {
 			game.pauseResume();
 		});
 		Hammer('body').on("swiperight", function(event) {
