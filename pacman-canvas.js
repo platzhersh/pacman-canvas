@@ -52,6 +52,13 @@
 			this.level++;
 			this.init(1);
 		}
+		this.pauseResume = function () {
+			if (this.pause) {
+				this.pause = false;
+				console.log("pause game");
+				}
+			else this.pause = true;
+			}
 		this.init = function (state) {
 			
 			console.log("init game");
@@ -594,6 +601,26 @@ window.addEventListener('load', function(e)
 		// Keyboard
 		window.addEventListener('keydown',doKeyDown,true);
 		
+		// Hammerjs Touch Events
+		Hammer('#myCanvas').on("tap", function(event) {
+			game.pauseResume();
+		});
+		Hammer('body').on("swiperight", function(event) {
+			event.gesture.preventDefault()
+			pacman.directionWatcher.set(right);
+		});
+		Hammer('body').on("swipeleft", function(event) {
+			event.gesture.preventDefault()
+			pacman.directionWatcher.set(left);
+		});
+		Hammer('body').on("swipeup", function(event) {
+			event.gesture.preventDefault()
+			pacman.directionWatcher.set(up);
+		});
+		Hammer('body').on("swipedown", function(event) {
+			event.gesture.preventDefault()
+			pacman.directionWatcher.set(down);
+		});
 		// Mobile Buttons
 		$(document).on('touchend','.controlButton#up',function(event) {
 		    event.preventDefault();
@@ -611,6 +638,7 @@ window.addEventListener('load', function(e)
 		    event.preventDefault();
 			pacman.directionWatcher.set(right);
 		});
+		
 		
 		checkAppCache();
 		
@@ -829,6 +857,10 @@ window.addEventListener('load', function(e)
 			case 68:	// D pressed
 				pacman.directionWatcher.set(right);
 				break;
+			case 27:	// ESC pressed -> pause Game
+				game.pauseResume();
+				break;
 			}
-	}
+		}
+	
 

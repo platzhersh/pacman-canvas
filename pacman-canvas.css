@@ -3,7 +3,7 @@ body {
 	color: white;
 	font-family: 'Press Start 2P', cursive;
 }
-#myCanvas { border: 1px solid white; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
+#myCanvas { border: none; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
 .canvas { position:absolute; padding-top: 20px;}
 .main {width: auto; max-width: 700px; margin: 10px auto; position: static; left: auto;}
 .content { width: auto; text-align: left; margin: 0;}
