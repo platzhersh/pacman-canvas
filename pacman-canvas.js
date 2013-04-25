@@ -31,7 +31,7 @@
 	
 	// Manages the whole game ("God Object")
 	function Game() {
-		this.running = true;
+		this.running = false;
 		this.pause = true;
 		this.score = new Score();
 		this.soundfx = 0;
@@ -59,7 +59,13 @@
 			$('#canvas-overlay-content #text').text(text);
 		}
 		this.pauseResume = function () {
-			if (this.pause) {
+			if (!this.running) {
+				this.pause = false;
+				this.running = true;
+				$('#canvas-overlay-container').hide();
+				animationLoop();
+			}
+			else if (this.pause) {
 				this.pause = false;
 				$('#canvas-overlay-container').hide();
 				}
@@ -648,7 +654,7 @@ window.addEventListener('load', function(e)
 		});
 		
 		
-		checkAppCache();
+		// checkAppCache();
 		
 		canvas = $("#myCanvas").get(0);
 		context = canvas.getContext("2d");
@@ -663,8 +669,7 @@ window.addEventListener('load', function(e)
 		
 		game.init(0);
 		
-		animationLoop();
-			
+		renderContent();
 		});
 		
 		function renderContent()
@@ -765,23 +770,24 @@ window.addEventListener('load', function(e)
 			context.closePath();*/
 			//context.fill();
 			
-			// Ghosts
-			pinky.draw(context);
-			blinky.draw(context);
-			inky.draw(context);
-			clyde.draw(context);             
+			if (game.running == true) {
+				// Ghosts
+				pinky.draw(context);
+				blinky.draw(context);
+				inky.draw(context);
+				clyde.draw(context);
+				
+				
+				// Pac Man
+				context.beginPath();
+				context.fillStyle = "Yellow";
+				context.strokeStyle = "Yellow";
+				context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
+				context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
+				context.stroke();
+				context.fill();
+			}
 			
-			
-			// Pac Man
-			context.beginPath();
-			context.fillStyle = "Yellow";
-			context.strokeStyle = "Yellow";
-			context.arc(pacman.posX+pacman.radius,pacman.posY+pacman.radius,pacman.radius,pacman.angle1*Math.PI,pacman.angle2*Math.PI);
-			context.lineTo(pacman.posX+pacman.radius, pacman.posY+pacman.radius);
-			context.stroke();
-			context.fill();
-			
-			//context.restore();
 		}
 		
 		function renderGrid(gridPixelSize, color)
