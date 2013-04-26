@@ -282,7 +282,7 @@
 			if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
 				&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
 			{
-				if (pacman.beastMode == false) {
+				if (this.dazzle == false) {
 					pacman.die();
 					}
 				else {
