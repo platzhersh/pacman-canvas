@@ -39,7 +39,7 @@ body {
 .content { width: 100%; max-width: 540px; text-align: left; margin: 0;}
 .container {text-align: center; margin:0; padding: 0;}
 .wrapper { padding:0;}
-.game  { max-width: 540px;}
+.game  { max-width: 540px; margin: auto; }
 
 .about { font-size: 10px; margin-top: 20px; text-align: center; display: none;}
 
@@ -105,6 +105,7 @@ audio {display: block; }
 }
 @media screen and (max-width: 650px) {
 	.game { width: 93%;}
+	.content { max-width: none; }
 }
 
 @media screen and (max-width: 400px) {
