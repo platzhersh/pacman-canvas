@@ -4,6 +4,8 @@ body {
 	font-family: 'Press Start 2P', cursive;
 }
 
+* { box-shadow: none !important; }
+
 .content#text-content {
 	display: none;
 }

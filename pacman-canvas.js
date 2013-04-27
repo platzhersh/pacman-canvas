@@ -64,25 +64,27 @@
 		this.showMessage = function(title, text) {
 			this.pause = true;
 			$('#canvas-overlay-container').fadeIn(200);
+			$('.controls').toggle();
 			$('#canvas-overlay-content #title').text(title);
 			$('#canvas-overlay-content #text').text(text);
+		}
+		this.closeMessage = function() {
+			$('#canvas-overlay-container').fadeOut(200);
+			$('.controls').toggle();
 		}
 		this.pauseResume = function () {
 			if (!this.running) {
 				this.pause = false;
 				this.running = true;
-				$('#canvas-overlay-container').fadeOut(200);
-				$('.controls').toggle();
+				this.closeMessage();
 				animationLoop();
 			}
 			else if (this.pause) {
 				this.pause = false;
-				$('#canvas-overlay-container').hide();
-				$('.controls').toggle();
+				this.closeMessage();
 				}
 			else {
 				this.showMessage("Pause","Click to Resume");
-				$('.controls').toggle();
 				}
 			}
 		this.init = function (state) {
@@ -631,19 +633,19 @@ window.addEventListener('load', function(e)
 		Hammer('#canvas-container').on("tap", function(event) {
 			game.pauseResume();
 		});
-		Hammer('body').on("swiperight", function(event) {
+		Hammer('#game-content').on("swiperight", function(event) {
 			event.gesture.preventDefault()
 			pacman.directionWatcher.set(right);
 		});
-		Hammer('body').on("swipeleft", function(event) {
+		Hammer('#game-content').on("swipeleft", function(event) {
 			event.gesture.preventDefault()
 			pacman.directionWatcher.set(left);
 		});
-		Hammer('body').on("swipeup", function(event) {
+		Hammer('#game-content').on("swipeup", function(event) {
 			event.gesture.preventDefault()
 			pacman.directionWatcher.set(up);
 		});
-		Hammer('body').on("swipedown", function(event) {
+		Hammer('#game-content').on("swipedown", function(event) {
 			event.gesture.preventDefault()
 			pacman.directionWatcher.set(down);
 		});
