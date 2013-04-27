@@ -45,11 +45,18 @@
 <body>
 <div class="container">
 <div class="main">
-<div class="content">
+
+<div class="content" id="text-content">
+<div onClick="$('.content').toggle();">back</div>
+#text-content
+</div>
+<!-- main game content -->
+<div class="content" id="game-content">
+
 
 	
 	
-	<!--<h1 class="nomobile">Pacman in HTML5 Canvas</h1>-->
+	<!-- main game content -->
 	<div class="game wrapper">
 		<div class="score">Score:</div>
 		<div class="lives">Lives: </div>
@@ -70,9 +77,11 @@
 			</canvas>
 		</div>
 		
-		
-		<div class="controls">
+		<!-- inGame Controls -->
+		<div class="controls" id="game-buttons">
+		<!-- Will be moved to Instructions 
 		<p class="nomobile">Use W-A-S-D keys to navigate Pac-Man</p>
+		-->
 			<div>
 				<span id="up" class="controlButton" onclick="pacman.directionWatcher.set(up);">&uarr;</span>
 			</div>
@@ -83,6 +92,20 @@
 			</div>
 			
 		</div>
+		<!-- inGame Controls End -->
+		
+		<!-- Game Menu -->		
+		<div class="controls" id="menu-buttons">
+			<ul>
+				<li onclick="$('.content').toggle();">New Game</li>
+				<li>Highscore</li>
+				<li>Instructions</li>
+				<li>Credits</li>
+			</ul>
+			
+		</div>
+		<!-- Game Menu End -->
+		
 	</div>
 		
 	<div class="description nomobile">

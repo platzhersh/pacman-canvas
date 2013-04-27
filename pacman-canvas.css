@@ -3,6 +3,11 @@ body {
 	color: white;
 	font-family: 'Press Start 2P', cursive;
 }
+
+.content#text-content {
+	display: none;
+}
+
 #myCanvas { border: none; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
 #canvas-container { position: relative;}
 #canvas-overlay-container {
@@ -28,13 +33,13 @@ body {
 }
 
 .canvas { position:absolute; padding-top: 20px;}
-.main {width: auto; max-width: 700px; margin: 10px auto; position: static; left: auto;}
-.content { width: auto; text-align: left; margin: 0;}
+.main {width: 100%; max-width: 660px; margin: 10px auto; position: static; left: auto;}
+.content { width: 100%; max-width: 540px; text-align: left; margin: 0;}
 .container {text-align: center; margin:0; padding: 0;}
 .wrapper { padding:0;}
 .game  { max-width: 540px;}
 
-.about { font-size: 10px; margin-top: 20px; text-align: center;}
+.about { font-size: 10px; margin-top: 20px; text-align: center; display: none;}
 
 
 body, html { font-size: 15px; }
@@ -45,9 +50,20 @@ audio {display: block; }
 .score { width: 180px; }
 .score, .lives { display: inline-block; }
 
-/* Controls */
+/* ---------- Controls ------------------------*/
 
 .controls { text-align: center; margin-top: 15px;}
+
+/* Arrow Keys - only displayed when game isn't paused */
+#game-buttons { display: none;}
+
+/* Game Menu - displayed when game is paused */
+#menu-buttons ul, .controls#menu-buttons ul li{ list-style: none; padding: 0;}
+#menu-buttons ul li { 
+	height: 40px;
+	line-height: 40px;
+	font-size: 120%;
+	}
 
 .controlSound { 
 	background: url('img/audio-icon.png');
@@ -72,7 +88,7 @@ audio {display: block; }
 	width: 90px;
 	height: 90px;
 	margin: 5px;
-	background: #E01B1B;
+	background: #c80a0a;
 	line-height: 70px;
 	border-radius: 50%;
 	font-weight: bold;

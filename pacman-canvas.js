@@ -50,6 +50,7 @@
 			}
 		this.nextLevel = function() {
 			this.level++;
+			game.showMessage("Level "+game.level,"Level up! Click to continue!");
 			this.init(1);
 		}
 		this.drawHearts = function (count) {
@@ -62,7 +63,7 @@
 		}
 		this.showMessage = function(title, text) {
 			this.pause = true;
-			$('#canvas-overlay-container').show();
+			$('#canvas-overlay-container').fadeIn(200);
 			$('#canvas-overlay-content #title').text(title);
 			$('#canvas-overlay-content #text').text(text);
 		}
@@ -70,15 +71,18 @@
 			if (!this.running) {
 				this.pause = false;
 				this.running = true;
-				$('#canvas-overlay-container').hide();
+				$('#canvas-overlay-container').fadeOut(200);
+				$('.controls').toggle();
 				animationLoop();
 			}
 			else if (this.pause) {
 				this.pause = false;
 				$('#canvas-overlay-container').hide();
+				$('.controls').toggle();
 				}
 			else {
 				this.showMessage("Pause","Click to Resume");
+				$('.controls').toggle();
 				}
 			}
 		this.init = function (state) {
@@ -146,7 +150,6 @@
 			}
 		this.check = function() {
 		if ((this.pillCount == 0) && game.running) {
-				game.showMessage("Level "+game.level,"Level up! Click to continue!");
 				this.nextLevel();
 			}
 		}
