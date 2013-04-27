@@ -64,13 +64,13 @@
 		this.showMessage = function(title, text) {
 			this.pause = true;
 			$('#canvas-overlay-container').fadeIn(200);
-			$('.controls').toggle();
+			$('.controls').slideToggle(200);
 			$('#canvas-overlay-content #title').text(title);
 			$('#canvas-overlay-content #text').text(text);
 		}
 		this.closeMessage = function() {
 			$('#canvas-overlay-container').fadeOut(200);
-			$('.controls').toggle();
+			$('.controls').slideToggle(200);
 		}
 		this.pauseResume = function () {
 			if (!this.running) {
@@ -885,6 +885,7 @@ window.addEventListener('load', function(e)
 			case 68:	// D pressed
 				pacman.directionWatcher.set(right);
 				break;
+			case 32:		// SPACE pressed -> pause Game
 			case 27:	// ESC pressed -> pause Game
 				game.pauseResume();
 				break;
