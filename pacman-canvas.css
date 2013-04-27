@@ -116,6 +116,9 @@ audio {display: block; }
 @media screen and (max-width: 650px) {
 	.game { width: 93%;}
 	.content { max-width: none; }
+	.button { background: rgba(255,255,255,0.1); }
+	.button:hover { background: rgba(255,255,255,0.3); }
+	.button#back { top: 0; }
 }
 
 @media screen and (max-width: 400px) {
