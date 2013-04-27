@@ -6,8 +6,18 @@ body {
 
 * { box-shadow: none !important; }
 
-.content#text-content {
-	display: none;
+.content, h1, h2, h3, p, div { 
+	font-family: 'Press Start 2P', cursive; 
+	font-weight: normal;
+	}
+.content[id*=-content]:not(#game-content) {	display: none;}
+.button {	background: rgba(0,0,0,0.4); cursor: pointer;}
+.button:hover {	background: rgba(255,255,255,0.2); }
+.button#back {
+	position: relative;
+	top: -25px;
+	display: inline-block;
+	padding: 5px;
 }
 
 #myCanvas { border: none; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}

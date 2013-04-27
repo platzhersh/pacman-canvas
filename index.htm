@@ -46,12 +46,61 @@
 <div class="container">
 <div class="main">
 
-<div class="content" id="text-content">
-	<div onClick="$('.content').toggle();">back</div>
+<!-- Highscore -->
+<div class="content" id="highscore-content">
+	<div class="button" id="back" onClick="game.showContent('game-content');">back</div>
 	<div>
-		#text-content
+		<h1>Highscore</h1>
+		<p>
+			<ol>
+				<li>UNNAMED<span style="float:right">4200</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+				<li>-----------------------<span style="float:right">----</span></li>
+			</ol>
+		</p>
 	</div>
 </div>
+
+<!-- INSTRUCTIONS -->
+<div class="content" id="instructions-content">
+	<div class="button" id="back" onClick="game.showContent('game-content');">back</div>
+	<div>
+		<h1>Instructions</h1>
+		<div class="nomobile">
+			<h2>Controls</h2>
+			<p>Use W,A,S,D keys to navigate pacman.</p>
+			<p>To pause / resume the game press SPACE or ESC or just click into the game area.</p>
+		</div>
+		<div class="mobile">
+			<h2>Controls</h2>
+			<p>Use swipe gestures to navigate pacman.</p>
+			<p>Alternatively use the Arrow Buttons underneath the game area to navigate pacman.</p>
+			<p>To pause / resume the game, touch the game area once.</p>
+		</div>
+	</div>
+</div>
+
+<!-- CREDITS -->
+<div class="content" id="credits-content">
+	<div class="button" id="back" onClick="game.showContent('game-content');">back</div>
+	<div>
+		<h1>Credits</h1>
+		<p>Current Version: 0.74</p>
+		<p>Written by <a href="http://platzh1rsch.ch">platzh1rsch</a></p>
+		<p><a href="https://github.com/platzhersh/pacman-canvas" target="_blank">get the code on github</a>
+		</p>
+	</div>
+</div>
+
+
+
 <!-- main game content -->
 <div class="content" id="game-content">
 
@@ -99,10 +148,10 @@
 		<!-- Game Menu -->		
 		<div class="controls" id="menu-buttons">
 			<ul>
-				<li onclick="$('.content').toggle();">New Game</li>
-				<li>Highscore</li>
-				<li>Instructions</li>
-				<li>Credits</li>
+				<li class="button" onClick="game.newGame();">New Game</li>
+				<li class="button" onclick="game.showContent('highscore-content')">Highscore</li>
+				<li class="button" onclick="game.showContent('instructions-content')">Instructions</li>
+				<li class="button" onclick="game.showContent('credits-content')">Credits</li>
 			</ul>
 			
 		</div>
@@ -137,10 +186,6 @@
 		
 	</div>
 
-	<div class="about">
-		written by <a href="http://platzh1rsch.ch">platzh1rsch</a> | 
-		<a href="https://github.com/platzhersh/pacman-canvas" target="_blank">view Project on github</a>
-	</div>
 </div>
 </div>
 </div>

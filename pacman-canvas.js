@@ -48,6 +48,11 @@
 			}
 		this.reset = function() {
 			}
+		this.newGame = function() {
+			this.closeMessage();
+			this.showMessage("Pacman Canvas","Click to play");
+			this.init(0);
+		}
 		this.nextLevel = function() {
 			this.level++;
 			game.showMessage("Level "+game.level,"Level up! Click to continue!");
@@ -60,6 +65,10 @@
 				}
 			$(".lives").html("Lives: "+html);
 			
+		}
+		this.showContent = function (id) {
+			$('.content').hide();
+			$('#'+id).show();
 		}
 		this.showMessage = function(title, text) {
 			this.pause = true;
@@ -115,20 +124,15 @@
 			});
 			
 			this.pillCount = temp;
-
-			game.drawHearts(pacman.lives);	
-			/*var text = "Insert Coin to Play!";
-			context.fillStyle = "#FFF";
-			context.font = "20px 'Press Start 2P'";
-			context.fillText(text, this.canvas.width/2-200, this.canvas.height/2-10);
-			*/
-			
+	
 			if (state == 0) {
 				this.score.set(0);
 				this.score.refresh(".score");
 				pacman.lives = 3;
 				}
 			pacman.reset();
+			
+			game.drawHearts(pacman.lives);	
 			
 			// initalize Ghosts, avoid memory flooding
 			if (pinky == null) {
@@ -885,8 +889,11 @@ window.addEventListener('load', function(e)
 			case 68:	// D pressed
 				pacman.directionWatcher.set(right);
 				break;
-			case 32:		// SPACE pressed -> pause Game
+			case 8:		// Backspace pressed -> show Game Content
 			case 27:	// ESC pressed -> pause Game
+				game.showContent('game-content');
+				break;
+			case 32:	// SPACE pressed -> pause Game
 				game.pauseResume();
 				break;
 			}
