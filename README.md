@@ -12,11 +12,12 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
-*Version 0.75 - ??*
+*Version 0.75 - 28.04.2013*
 * You can pause / resume the game by pressing SPACE
 * ESC is no longer used to pause / resume, but to go back to the main view
 * Game Menu only showing while game is paused
 * some css tweaks
+* Simple Highscore implemented using Ajax, Json and Sqlite3
 
 *Version 0.74 - 25.04.2013*
 * You can pause / resume the game by pressing ESC or clicking into canvas
