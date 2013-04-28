@@ -22,11 +22,13 @@
 	
 	/* AJAX stuff */
 	function ajax_get() {
+	date = new Date().getTime();
 		$.ajax({
 		   datatype: "json",
 		   type: "GET",
 		   url: "data/db-handler.php",
 		   data: {
+			 timestamp: date;
 			 action: 'get'
 			 },
 		   success: function(msg){
