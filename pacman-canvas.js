@@ -19,6 +19,40 @@
 	
 	var mapConfig = 'data/map.json';
 	
+	
+	/* AJAX stuff */
+	function ajax_get() {
+		$.ajax({
+		   datatype: "json",
+		   type: "GET",
+		   url: "data/db-handler.php",
+		   data: {
+			 action: 'get'
+			 },
+		   success: function(msg){
+			 $("#highscore-list").text("");
+			 for (var i = 0; i < msg.length; i++) {
+				$("#highscore-list").append("<li>"+msg[i]['name']+"<span id='score'>"+msg[i]['score']+"</span></li>");
+			 }
+		   } 
+		});
+	}
+	function ajax_add(n, s) {
+
+		$.ajax({
+		   type: "POST",
+		   url: "data/db-handler.php",
+		   data: {
+			 action: 'add',
+			 name: n,
+			 score: s
+			 },
+		   success: function(msg){
+			 alert( "Data Saved: " + msg );
+		   } 
+		});
+	}
+	
 	function buildWall(context,gridX,gridY,width,height) {
 		width = width*2-1;
 		height = height*2-1;
@@ -898,5 +932,3 @@ window.addEventListener('load', function(e)
 				break;
 			}
 		}
-	
-

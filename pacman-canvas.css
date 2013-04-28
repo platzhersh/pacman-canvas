@@ -20,6 +20,9 @@ body {
 	padding: 5px;
 }
 
+#highscore-list {}
+#score { float: right; }
+
 #myCanvas { border: none; display: block; background: rgb(0,0,0); width: 100%;  height: auto;}
 #canvas-container { position: relative;}
 #canvas-overlay-container {
