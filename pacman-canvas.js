@@ -28,7 +28,7 @@
 		   type: "GET",
 		   url: "data/db-handler.php",
 		   data: {
-			 timestamp: date;
+			 timestamp: date,
 			 action: 'get'
 			 },
 		   success: function(msg){
