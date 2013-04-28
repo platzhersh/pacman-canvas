@@ -21,6 +21,9 @@
 	
 	
 	/* AJAX stuff */
+	function getHighscore() {
+		ajax_get();
+	}
 	function ajax_get() {
 	date = new Date().getTime();
 		$.ajax({
@@ -56,7 +59,7 @@
 	}
 	function addHighscore() {
 			ajax_add($("input[type=text]").val(),game.score.score);
-			$("#highscore-form").html('<span class="button" onClick="showContent(\"highscore-content\");">view highscore</span>');
+			$("#highscore-form").html('<span class="button" onClick="showContent(\'highscore-content\');">view highscore</span>');
 	}
 	
 	function buildWall(context,gridX,gridY,width,height) {
