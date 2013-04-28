@@ -21,7 +21,7 @@ if (isset($_POST['action'])) {
 function getHighscore() {
 
 	$db = new SQLite3('pacman.db');
-
+	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME)');
 	$results = $db->query('SELECT * FROM highscore LIMIT 10');
 	while ($row = $results->fetchArray()) {
 		$tmp["name"] = $row['name'];
@@ -36,6 +36,7 @@ function addHighscore($name,$score) {
 
 	$db = new SQLite3('pacman.db');
 	$date = date('Y-m-d h:i:s', time());
+	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME)');
 	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '")');
 	echo $name . ' added';
 }
@@ -44,7 +45,7 @@ function resetHighscore() {
 	$db = new SQLite3('pacman.db');
 	$date = date('Y-m-d h:i:s', time());
 	$db->exec('DROP TABLE IF EXISTS highscore');
-	$db->exec('CREATE TABLE highscore(name VARCHAR(60),score INT, date DATETIME)');
+	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME)');
 	echo 'table reset';
 }
 
