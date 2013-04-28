@@ -22,7 +22,7 @@
 	
 	/* AJAX stuff */
 	function getHighscore() {
-		setTimeout(30,ajax_get());
+		setTimeout(ajax_get,30);
 	}
 	function ajax_get() {
 	date = new Date().getTime();
@@ -51,10 +51,7 @@
 			 action: 'add',
 			 name: n,
 			 score: s
-			 },
-		   success: function(msg){
-			 alert( "Data Saved: " + msg );
-		   } 
+			 }
 		});
 	}
 	function addHighscore() {
