@@ -54,6 +54,10 @@
 		   } 
 		});
 	}
+	function addHighscore() {
+			ajax_add($("input[type=text]").val(),game.score.score);
+			$("#highscore-form").html('<span class="button" onClick="showContent(\"highscore-content\");">view highscore</span>');
+	}
 	
 	function buildWall(context,gridX,gridY,width,height) {
 		width = width*2-1;
@@ -75,6 +79,7 @@
 		this.pillCount;	// # of pills
 		this.monsters;
 		this.level = 1;
+		this.gameOver = false;
 		this.canvas = $("#myCanvas").get(0);
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
@@ -111,7 +116,7 @@
 			$('#canvas-overlay-container').fadeIn(200);
 			$('.controls').slideToggle(200);
 			$('#canvas-overlay-content #title').text(title);
-			$('#canvas-overlay-content #text').text(text);
+			$('#canvas-overlay-content #text').html(text);
 		}
 		this.closeMessage = function() {
 			$('#canvas-overlay-container').fadeOut(200);
@@ -134,7 +139,7 @@
 			}
 		this.init = function (state) {
 			
-			console.log("init game");
+			//console.log("init game");
 			
 			// get Level Map
 			$.ajax({
@@ -165,6 +170,8 @@
 				this.score.set(0);
 				this.score.refresh(".score");
 				pacman.lives = 3;
+				game.level = 1;
+				game.gameOver = false;
 				}
 			pacman.reset();
 			
@@ -523,7 +530,7 @@
 		this.enableBeastMode = function() {
 			this.beastMode = true;
 			this.beastModeTimer = 240;
-			console.log("Beast Mode activated!");
+			//console.log("Beast Mode activated!");
 			inky.dazzle = true;
 			pinky.dazzle = true;
 			blinky.dazzle = true;
@@ -531,7 +538,7 @@
 		};
 		this.disableBeastMode = function() { 
 			this.beastMode = false; 
-			console.log("Beast Mode is over!");
+			//console.log("Beast Mode is over!");
 			inky.dazzle = false;
 			pinky.dazzle = false;
 			blinky.dazzle = false;
@@ -589,7 +596,7 @@
 			this.stop();
 			this.stuckX = 0;
 			this.stuckY = 0;
-			console.log("reset pacman");
+			//console.log("reset pacman");
 		}
 		/*
 		this.dieAnimationCount = 0;
@@ -606,9 +613,10 @@
 			blinky.reset();
 			clyde.reset();
 			this.lives--;
-			if (this.lives == 0) {
-				game.showMessage("Game over","Total Score: "+game.score.score);
-				game.init(0);
+			if (this.lives <= 0) {
+				var input = "<div id='highscore-form'><input type='text' /><span class='button' id='score-submit' onClick='addHighscore();'>save</span></div>";
+				game.showMessage("Game over","Total Score: "+game.score.score+input);
+				game.gameOver = true;
 				}
 			game.drawHearts(this.lives);
 			Sound.play("die");
@@ -658,7 +666,7 @@ window.addEventListener('load', function(e)
 		$.ajaxSetup({beforeSend: function(xhr){
 			if (xhr.overrideMimeType){
 				xhr.overrideMimeType("application/json");
-				console.log("mimetype set to json");
+				//console.log("mimetype set to json");
 				}
 			}
 		});
@@ -671,7 +679,7 @@ window.addEventListener('load', function(e)
 		
 		// Hammerjs Touch Events
 		Hammer('#canvas-container').on("tap", function(event) {
-			game.pauseResume();
+			if (!(game.gameOver == true))	game.pauseResume();
 		});
 		Hammer('#game-content').on("swiperight", function(event) {
 			event.gesture.preventDefault()
@@ -689,7 +697,9 @@ window.addEventListener('load', function(e)
 			event.gesture.preventDefault()
 			pacman.directionWatcher.set(down);
 		});
+		
 		// Mobile Buttons
+		
 		$(document).on('touchend','.controlButton#up',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(up);
