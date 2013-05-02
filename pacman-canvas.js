@@ -940,7 +940,9 @@ window.addEventListener('load', function(e)
 				game.showContent('game-content');
 				break;
 			case 32:	// SPACE pressed -> pause Game
-				game.pauseResume();
+				if (!(game.gameOver == true) 
+					&& $('#game-content').is(':visible')
+					)	game.pauseResume();
 				break;
 			}
 		}
