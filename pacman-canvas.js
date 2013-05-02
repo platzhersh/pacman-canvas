@@ -944,5 +944,7 @@ window.addEventListener('load', function(e)
 					&& $('#game-content').is(':visible')
 					)	game.pauseResume();
 				break;
+			case 13: 	// ENTER pressed
+				if ($('#game-content').is(':visible')) addHighscore();
 			}
 		}
