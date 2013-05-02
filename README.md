@@ -12,6 +12,10 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.76 - 02.05.2013*
+* You can now use the usual arrow keys to control pacman
+* fixed 2 small bugs regarding KeyEvents
+
 *Version 0.75 - 28.04.2013*
 * You can pause / resume the game by pressing SPACE
 * ESC is no longer used to pause / resume, but to go back to the main view
