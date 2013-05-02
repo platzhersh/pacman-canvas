@@ -682,19 +682,19 @@ window.addEventListener('load', function(e)
 			if (!(game.gameOver == true))	game.pauseResume();
 		});
 		Hammer('#game-content').on("swiperight", function(event) {
-			event.gesture.preventDefault()
+			event.gesture.preventDefault();
 			pacman.directionWatcher.set(right);
 		});
 		Hammer('#game-content').on("swipeleft", function(event) {
-			event.gesture.preventDefault()
+			event.gesture.preventDefault();
 			pacman.directionWatcher.set(left);
 		});
 		Hammer('#game-content').on("swipeup", function(event) {
-			event.gesture.preventDefault()
+			event.gesture.preventDefault();
 			pacman.directionWatcher.set(up);
 		});
 		Hammer('#game-content').on("swipedown", function(event) {
-			event.gesture.preventDefault()
+			event.gesture.preventDefault();
 			pacman.directionWatcher.set(down);
 		});
 		
@@ -922,16 +922,23 @@ window.addEventListener('load', function(e)
 	
 		switch (evt.keyCode)
 			{
+			case 38:	// UP Arrow Key pressed
+				evt.preventDefault();
 			case 87:	// W pressed
 				pacman.directionWatcher.set(up);
 				break;
+			case 40:	// DOWN Arrow Key pressed
+				evt.preventDefault();
 			case 83:	// S pressed 
 				pacman.directionWatcher.set(down);
 				break;
+			case 37:	// LEFT Arrow Key pressed
+				evt.preventDefault();
 			case 65:	// A pressed
 				pacman.directionWatcher.set(left);
 				break;
-
+			case 39:	// RIGHT Arrow Key pressed
+				evt.preventDefault();
 			case 68:	// D pressed
 				pacman.directionWatcher.set(right);
 				break;
