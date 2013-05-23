@@ -187,13 +187,13 @@
 			else {
 				//console.log("ghosts reset");
 				pinky.setPosition(14*pacman.radius,10*pacman.radius);
-				pinky.dazzle = false;
+				pinky.undazzle();
 				inky.setPosition(16*pacman.radius,10*pacman.radius);
-				inky.dazzle = false;
+				inky.undazzle();
 				blinky.setPosition(18*pacman.radius,10*pacman.radius);
-				blinky.dazzle = false;
+				blinky.undazzle();
 				clyde.setPosition(20*pacman.radius,10*pacman.radius);
-				clyde.dazzle = false;
+				clyde.undazzle();
 			}
 		
 			}
@@ -274,15 +274,38 @@
 	function Ghost(posX, posY, image) {
 		this.posX = posX;
 		this.posY = posY;
+		this.speed = 5;
 		this.image = new Image();
 		this.image.src = image;
-		this.dazzle = false;
+		this.dazzled = false;
+		this.dazzle = function() {
+			this.speed = 3;
+			// ensure ghost doesnt leave grid
+			if (this.posX > 0) this.posX = this.posX - this.posX % this.speed;
+			if (this.posY > 0) this.posY = this.posY - this.posY % this.speed;
+			this.dazzled = true;
+		}
+		this.undazzle = function() {
+			this.speed = 5;
+			// ensure ghost doesnt leave grid
+			if (this.posX > 0) this.posX = this.posX - this.posX % this.speed;
+			if (this.posY > 0) this.posY = this.posY - this.posY % this.speed;
+			this.dazzled = false;
+		}
 		this.dazzleImg = new Image();
 		this.dazzleImg.src = 'img/dazzled.svg';
+		this.dazzleImg2 = new Image();
+		this.dazzleImg2.src = 'img/dazzled2.svg';
 		this.direction = right;
 		this.radius = pacman.radius;
 		this.draw = function (context) {					
-		if (this.dazzle)	context.drawImage(this.dazzleImg, this.posX, this.posY, 2*this.radius, 2*this.radius);
+		if (this.dazzled) {
+			if (pacman.beastModeTimer < 50 && pacman.beastModeTimer % 8 > 1) {
+				context.drawImage(this.dazzleImg2, this.posX, this.posY, 2*this.radius, 2*this.radius);
+			} else {
+				context.drawImage(this.dazzleImg, this.posX, this.posY, 2*this.radius, 2*this.radius);
+			}
+		}
 		else context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
 		}
 		this.getCenterX = function () {
@@ -295,7 +318,7 @@
 		this.reset = function() {
 			this.posX = 14*pacman.radius;
 			this.posY = 10*pacman.radius;
-			this.dazzle = false;
+			this.undazzle();
 		}
 		
 		this.die = function() {
@@ -323,10 +346,10 @@
 				this.stuckY = this.dirY;
 				this.stop=true;
 				// get out of the wall
-				if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= 5;
-				if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= 5;
-				if (this.stuckX == -1) this.posX += 5;
-				if (this.stuckY == -1) this.posY += 5;
+				if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= this.speed;
+				if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= this.speed;
+				if (this.stuckX == -1) this.posX += this.speed;
+				if (this.stuckY == -1) this.posY += this.speed;
 				this.setRandomDirection();
 				this.stop=false;
 			}
@@ -334,7 +357,7 @@
 			if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
 				&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
 			{
-				if (this.dazzle == false) {
+				if (this.dazzled == false) {
 					pacman.die();
 					}
 				else {
@@ -375,6 +398,7 @@
 	function Figure() {
 		this.posX;
 		this.posY;
+		this.speed;
 		this.dirX = right.dirX;
 		this.dirY = right.dirY;
 		this.direction;
@@ -384,14 +408,14 @@
 		this.move = function() {
 		
 			if (!this.stop) {
-				this.posX += 5 * this.dirX;
-				this.posY += 5 * this.dirY;
+				this.posX += this.speed * this.dirX;
+				this.posY += this.speed * this.dirY;
 				
 				// Check if out of canvas
-				if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
-				if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
-				if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
-				if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
+				if (this.posX >= game.width-this.radius) this.posX = this.speed-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = game.width-this.speed-this.radius;
+				if (this.posY >= game.height-this.radius) this.posY = this.speed-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = game.height-this.speed-this.radius;
 				}
 			}
 		this.stop = function() { this.stop = true;}
@@ -428,6 +452,13 @@
 		this.lives = 3;
 		this.stuckX = 0;
 		this.stuckY = 0;
+		this.frozen = false;		// used to play die Animation
+		this.freeze = function () {
+			this.frozen = true;
+		}
+		this.unfreeze = function() {
+			this.frozen = false;
+		}
 		this.getCenterX = function () {
 			return this.posX+this.radius;
 		}
@@ -443,7 +474,7 @@
 		
 		this.checkCollisions = function () {
 			
-			if ((this.stuckX == 0) && (this.stuckY == 0)) {				
+			if ((this.stuckX == 0) && (this.stuckY == 0) && this.frozen == false) {
 				
 				// Get the Grid Position of Pac
 				var gridX = this.getGridPosX();
@@ -520,76 +551,83 @@
 				}
 			}
 		}
-		this.setDirection = function(dir) {			
-			this.dirX = dir.dirX;
-			this.dirY = dir.dirY;
-			this.angle1 = dir.angle1;
-			this.angle2 = dir.angle2;
-			this.direction = dir;
+		this.setDirection = function(dir) {
+			if (!this.frozen) {
+				this.dirX = dir.dirX;
+				this.dirY = dir.dirY;
+				this.angle1 = dir.angle1;
+				this.angle2 = dir.angle2;
+				this.direction = dir;
+			}
 		}
 		this.enableBeastMode = function() {
 			this.beastMode = true;
 			this.beastModeTimer = 240;
 			//console.log("Beast Mode activated!");
-			inky.dazzle = true;
-			pinky.dazzle = true;
-			blinky.dazzle = true;
-			clyde.dazzle = true;
+			inky.dazzle();
+			pinky.dazzle();
+			blinky.dazzle();
+			clyde.dazzle();
 		};
 		this.disableBeastMode = function() { 
 			this.beastMode = false; 
 			//console.log("Beast Mode is over!");
-			inky.dazzle = false;
-			pinky.dazzle = false;
-			blinky.dazzle = false;
-			clyde.dazzle = false;
+			inky.undazzle();
+			pinky.undazzle();
+			blinky.undazzle();
+			clyde.undazzle();
 			};
 		this.move = function() {
 		
-			if (this.beastModeTimer > 0) {
-				this.beastModeTimer--;
-				//console.log("Beast Mode: "+this.beastModeTimer);
-				}
-			if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
-			
-			this.posX += 5 * this.dirX;
-			this.posY += 5 * this.dirY;
-			
-			// Check if out of canvas
-			if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
-			if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
-			if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
-			if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
+			if (!this.frozen) {
+				if (this.beastModeTimer > 0) {
+					this.beastModeTimer--;
+					//console.log("Beast Mode: "+this.beastModeTimer);
+					}
+				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
+				
+				this.posX += 5 * this.dirX;
+				this.posY += 5 * this.dirY;
+				
+				// Check if out of canvas
+				if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = game.width-5-this.radius;
+				if (this.posY >= game.height-this.radius) this.posY = 5-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = game.height-5-this.radius;
 			}
+			else this.dieAnimation();
+		}
 		
 		this.eat = function () {
 		
-			if (this.dirX == this.dirY == 0) {
-			
-				this.angle1 -= this.mouth*0.07;
-				this.angle2 += this.mouth*0.07;
+			if (!this.frozen) {
+				if (this.dirX == this.dirY == 0) {
 				
-				var limitMax1 = this.direction.angle1;
-				var limitMax2 = this.direction.angle2;
-				var limitMin1 = this.direction.angle1 - 0.21;
-				var limitMin2 = this.direction.angle2 + 0.21;
+					this.angle1 -= this.mouth*0.07;
+					this.angle2 += this.mouth*0.07;
 					
-				if (this.angle1 < limitMin1 || this.angle2 > limitMin2)
-				{
-					this.mouth = -1;
-				}
-				if (this.angle1 >= limitMax1 || this.angle2 <= limitMax2)
-				{
-					this.mouth = 1;
+					var limitMax1 = this.direction.angle1;
+					var limitMax2 = this.direction.angle2;
+					var limitMin1 = this.direction.angle1 - 0.21;
+					var limitMin2 = this.direction.angle2 + 0.21;
+						
+					if (this.angle1 < limitMin1 || this.angle2 > limitMin2)
+					{
+						this.mouth = -1;
+					}
+					if (this.angle1 >= limitMax1 || this.angle2 <= limitMax2)
+					{
+						this.mouth = 1;
+					}
 				}
 			}
 		}
-		
 		this.stop = function() {
 			this.dirX = 0;
 			this.dirY = 0;
 		}
 		this.reset = function() {
+			this.unfreeze();
 			this.posX = 0;
 			this.posY = 6*2*this.radius;
 			this.setDirection(right);
@@ -598,15 +636,33 @@
 			this.stuckY = 0;
 			//console.log("reset pacman");
 		}
-		/*
-		this.dieAnimationCount = 0;
 		this.dieAnimation = function() {
-			this.dieAnimationCount--;
-			this.angle1 -= this.mouth*0.07;
-			this.angle2 += this.mouth*0.07;
-			if (this.dieAnimationCount == 0) game.dieAnimation = 0; game.pause = false;
-		}*/
+			console.log("dieAnimation, angle1 = "+this.angle1+", angle2 = "+this.angle2);
+			this.angle1 += 0.05;
+			this.angle2 -= 0.05;
+			/*switch (this.direction.name) {
+				case "up":
+					break;
+				case "left":
+					this.angle1 += 0.07;
+					this.angle2 -= 0.07;
+					break;
+				case "down":
+					break;
+				case "right":
+					break;
+			}*/
+			if (this.angle1 >= this.direction.angle1+0.7 || this.angle2 <= this.direction.angle2-0.7) {
+				console.log("dieFinal()");
+				this.dieFinal();
+				}
+		}
 		this.die = function() {
+			Sound.play("die");
+			this.freeze();
+			this.dieAnimation();
+			}
+		this.dieFinal = function() {
 			this.reset();
 			pinky.reset();
 			inky.reset();
@@ -619,8 +675,7 @@
 				game.gameOver = true;
 				}
 			game.drawHearts(this.lives);
-			Sound.play("die");
-			}
+		}
 		this.getGridPosX = function() {
 			return (this.posX - (this.posX % 30))/30;
 		}
