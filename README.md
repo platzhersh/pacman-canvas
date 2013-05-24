@@ -12,6 +12,10 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.77 - 24.05.2013*
+* Ghosts start to blink before to undazzle
+* Pacman now dies with style
+
 *Version 0.76 - 02.05.2013*
 * You can now use the usual arrow keys to control pacman
 * fixed 2 small bugs regarding KeyEvents
