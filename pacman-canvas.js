@@ -71,6 +71,7 @@
 	
 	// Manages the whole game ("God Object")
 	function Game() {
+		this.refreshRate = 33;
 		this.running = false;
 		this.pause = true;
 		this.score = new Score();
@@ -966,7 +967,7 @@ window.addEventListener('load', function(e)
 			game.check();
 			
 			
-			setTimeout(animationLoop, 33);
+			setTimeout(animationLoop, game.refreshRate);
 			
 			
 		}

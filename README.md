@@ -12,6 +12,10 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.78 - 05.11.2013*
+* navigation via buttons should be less delayed by using onMouseDown event instead of onClick
+* refreshRate is now a game attribute and could be changed easily during the game (not yet implemented in frontend)
+
 *Version 0.77 - 24.05.2013*
 * Ghosts start to blink before to undazzle
 * Pacman now dies with style

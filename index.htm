@@ -85,10 +85,11 @@
 	<div class="button" id="back" onClick="game.showContent('game-content');">back</div>
 	<div>
 		<h1>Credits</h1>
-		<img src="http://www.platzh1rsch.ch/static/platzh1rsch-headonly.png">
-		<p>Current Version: 0.78</p>
-		<p>Written by <a href="http://platzh1rsch.ch">platzh1rsch</a></p>
-		<p>get the code <a href="https://github.com/platzhersh/pacman-canvas" target="_blank">on github</a></p>
+		<p>Current Version: 0.78 (<a href="README.md">Changelog</a>)</p>
+		<img src="img/platzh1rsch-logo.png">
+		<p>Pacman Canvas is Open Source, written by <a href="http://platzh1rsch.ch">platzh1rsch</a>. You can get the code on <a target="_blank" href="https://github.com/platzhersh/pacman-canvas" target="_blank">github</a>.</p>
+		<p>If you have any suggestions how to make this app better, please post your suggestion / request on <a target="_blank" href="https://platzh1rsch.uservoice.com/">uservoice</a>.</p>
+		<p>
 	</div>
 </div>
 
@@ -105,7 +106,7 @@
 		<div class="score">Score:</div>
 		<div class="lives">Lives: </div>
 		
-		<div class="controlSound" onClick="game.toggleSound()">
+		<div class="controlSound" onMouseDown="game.toggleSound()">
 			<img src="img/audio-icon-mute.png" id="mute">
 		</div>
 		<!-- canvas is splitted into 18x13 fields -->
@@ -127,12 +128,12 @@
 		<p class="nomobile">Use W-A-S-D keys to navigate Pac-Man</p>
 		-->
 			<div>
-				<span id="up" class="controlButton" onclick="pacman.directionWatcher.set(up);">&uarr;</span>
+				<span id="up" class="controlButton" onMouseDown="pacman.directionWatcher.set(up);">&uarr;</span>
 			</div>
 			<div>
-				<span id="left" class="controlButton" onclick="pacman.directionWatcher.set(left);">&larr;</span>
-				<span id="down" class="controlButton" onclick="pacman.directionWatcher.set(down);">&darr;</span>
-				<span id="right" class="controlButton" onclick="pacman.directionWatcher.set(right);">&rarr;</span>
+				<span id="left" class="controlButton" onMouseDown="pacman.directionWatcher.set(left);">&larr;</span>
+				<span id="down" class="controlButton" onMouseDown="pacman.directionWatcher.set(down);">&darr;</span>
+				<span id="right" class="controlButton" onMouseDown="pacman.directionWatcher.set(right);">&rarr;</span>
 			</div>
 			
 		</div>
