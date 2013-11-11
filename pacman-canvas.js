@@ -716,6 +716,12 @@ window.addEventListener('load', function(e)
 	// Action starts here:
 	
 	$(document).ready(function() {
+	
+		// Hide address bar
+		setTimeout(function(){
+			// Hide the address bar!
+			window.scrollTo(0, 1);
+		}, 0);
 
 		$.ajaxSetup({ mimeType: "application/json" });
 		
