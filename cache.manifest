@@ -10,8 +10,11 @@ pacman-canvas.css
 # external resources
 http://platzh1rsch.ch/static/style.css
 http://platzh1rsch.ch/static/bg-pattern-black.png
-http://themes.googleusercontent.com/static/fonts/pressstart2p/v1/8Lg6LX8-ntOHUQnvQ0E7o3dD2UuwsmbX3BOp4SL_VwM.woff
-#http://fonts.googleapis.com/css?family=Press+Start+2P
+
+# fonts
+fonts/PressStart2Play.eot
+fonts/PressStart2Play.woff
+fonts/PressStart2Play.ttf
 
 # JavaScript
 pacman-canvas.js
