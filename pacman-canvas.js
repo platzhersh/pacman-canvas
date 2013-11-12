@@ -717,12 +717,6 @@ window.addEventListener('load', function(e)
 	
 	$(document).ready(function() {
 	
-		// Hide address bar
-		setTimeout(function(){
-			// Hide the address bar!
-			window.scrollTo(0, 1);
-		}, 0);
-
 		$.ajaxSetup({ mimeType: "application/json" });
 		
 		$.ajaxSetup({beforeSend: function(xhr){
@@ -796,6 +790,9 @@ window.addEventListener('load', function(e)
 		game.init(0);
 		
 		renderContent();
+		
+		// Hide address bar
+		$('body').scrollTop(1);
 		});
 		
 		function renderContent()
