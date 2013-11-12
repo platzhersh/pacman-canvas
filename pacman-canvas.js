@@ -702,7 +702,7 @@ window.addEventListener('load', function(e)
 			}
 
 		} else {
-		// Manifest didn't changed. Nothing new to server.
+		// Manifest didn't change. Nothing new to server.
 		}
 
 	}, false);
@@ -727,6 +727,9 @@ window.addEventListener('load', function(e)
 			}
 		});
 		
+		// Hide address bar
+		$("html").scrollTop(1);
+		$("body").scrollTop(1);
 		
 		// --------------- Controls
 		
@@ -790,11 +793,6 @@ window.addEventListener('load', function(e)
 		game.init(0);
 		
 		renderContent();
-		
-		// Hide address bar
-		console.log("before scrolltop");
-		console.log($('body').scrollTop(1));
-		console.log("after scrolltop");
 		});
 		
 		function renderContent()
