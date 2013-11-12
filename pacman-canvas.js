@@ -773,7 +773,6 @@ function checkAppCache() {
 		});
 		
 		// Mobile Buttons
-		/*
 		$(document).on('touchend','.controlButton#up',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(up);
@@ -790,7 +789,7 @@ function checkAppCache() {
 		    event.preventDefault();
 			pacman.directionWatcher.set(right);
 		});
-		*/
+		
 		
 		// checkAppCache();
 		
