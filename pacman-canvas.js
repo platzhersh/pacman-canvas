@@ -789,8 +789,8 @@ function checkAppCache() {
 		$(document).on('touchend','.button#instructions',function(event) {
 		    game.showContent('instructions-content');
 		});
-		$(document).on('touchend','.button#credits',function(event) {
-		    game.showContent('credits-content'); 
+		$(document).on('touchend','.button#info',function(event) {
+		    game.showContent('info-content'); 
 			window.applicationCache.update();
 		});
 		// back button
