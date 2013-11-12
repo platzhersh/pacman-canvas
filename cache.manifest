@@ -1,24 +1,46 @@
 CACHE MANIFEST
-# Pacman 0.78 	12.11.2013
+# Pacman 0.780 	12.11.2013
+
+# HTML
 index.htm
+
+# CSS
 pacman-canvas.css
+
+# external resources
 http://platzh1rsch.ch/static/style.css
 http://platzh1rsch.ch/static/bg-pattern-black.png
+http://themes.googleusercontent.com/static/fonts/pressstart2p/v1/8Lg6LX8-ntOHUQnvQ0E7o3dD2UuwsmbX3BOp4SL_VwM.woff
+#http://fonts.googleapis.com/css?family=Press+Start+2P
+
+# JavaScript
 pacman-canvas.js
-http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.7.1.min.js
+js/jquery-1.10.2.min.js
+js/jquery.hammer.min.js
+
+# data
+data/map.json
+
+# images
 img/blinky.svg
 img/clyde.svg
 img/inky.svg
 img/pinky.svg
+img/dazzled.svg
+img/dazzled2.svg
+img/heart.png
 img/audio-icon.png
 img/audio-icon-mute.png
+img/platzh1rsch-logo.png
 
+# MP3
 mp3/die.mp3
 mp3/eatghost.mp3
 mp3/powerpill.mp3
 mp3/theme.mp3
 mp3/waka.mp3
 
+# WAV
 wav/die.wav
 wav/eatghost.wav
 wav/powerpill.wav

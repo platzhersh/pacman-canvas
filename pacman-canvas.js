@@ -706,7 +706,7 @@ function checkAppCache() {
 		}
 
 	}, false);
-
+    window.applicationCache.update();
 }
 	
 	// Action starts here:
