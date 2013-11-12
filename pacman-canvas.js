@@ -747,10 +747,14 @@ function checkAppCache() {
 		// Keyboard
 		window.addEventListener('keydown',doKeyDown,true);
 		
-		// Hammerjs Touch Events
-		Hammer('#canvas-container').on("tap", function(event) {
+		$('#canvas-container').click(function() {
 			if (!(game.gameOver == true))	game.pauseResume();
 		});
+		
+		// Hammerjs Touch Events
+		/*Hammer('#canvas-container').on("tap", function(event) {
+			if (!(game.gameOver == true))	game.pauseResume();
+		});*/
 		Hammer('#game-content').on("swiperight", function(event) {
 			event.gesture.preventDefault();
 			pacman.directionWatcher.set(right);
@@ -769,7 +773,7 @@ function checkAppCache() {
 		});
 		
 		// Mobile Buttons
-		
+		/*
 		$(document).on('touchend','.controlButton#up',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(up);
@@ -786,7 +790,7 @@ function checkAppCache() {
 		    event.preventDefault();
 			pacman.directionWatcher.set(right);
 		});
-		
+		*/
 		
 		// checkAppCache();
 		
