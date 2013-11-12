@@ -792,7 +792,9 @@ window.addEventListener('load', function(e)
 		renderContent();
 		
 		// Hide address bar
-		$('body').scrollTop(1);
+		console.log("before scrolltop");
+		console.log($('body').scrollTop(1));
+		console.log("after scrolltop");
 		});
 		
 		function renderContent()
