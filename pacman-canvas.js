@@ -1000,10 +1000,12 @@ function checkAppCache() {
 				pacman.directionWatcher.set(right);
 				break;
 			case 8:		// Backspace pressed -> show Game Content
-			case 27:	// ESC pressed -> pause Game
+			case 27:	// ESC pressed -> show Game Content
+                evt.preventDefault();
 				game.showContent('game-content');
 				break;
 			case 32:	// SPACE pressed -> pause Game
+                evt.preventDefault();
 				if (!(game.gameOver == true) 
 					&& $('#game-content').is(':visible')
 					)	game.pauseResume();
