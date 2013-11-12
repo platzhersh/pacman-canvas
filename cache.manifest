@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Pacman 0.78 	12.11.2013
+# Pacman 0.78 	12.11.2013 dev
 
 # HTML
 index.htm
@@ -49,3 +49,6 @@ wav/eatghost.wav
 wav/powerpill.wav
 wav/theme.wav
 wav/waka.wav
+
+NETWORK:
+*
