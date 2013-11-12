@@ -91,12 +91,13 @@
 		this.reset = function() {
 			}
 		this.newGame = function() {
-			this.closeMessage();
-			this.showMessage("Pacman Canvas","Click to play");
-			this.init(0);
+			console.log("new Game");
+            this.init(0);
+            this.pauseResume();
 		}
 		this.nextLevel = function() {
 			this.level++;
+            console.log("Level "+game.level);
 			game.showMessage("Level "+game.level,"Level up! Click to continue!");
 			this.init(1);
 		}
@@ -115,7 +116,7 @@
 		this.showMessage = function(title, text) {
 			this.pause = true;
 			$('#canvas-overlay-container').fadeIn(200);
-			$('.controls').slideToggle(200);
+			if ($('.controls').css('display') != "none") $('.controls').slideToggle(200);
 			$('#canvas-overlay-content #title').text(title);
 			$('#canvas-overlay-content #text').html(text);
 		}
@@ -638,23 +639,9 @@
 			//console.log("reset pacman");
 		}
 		this.dieAnimation = function() {
-			console.log("dieAnimation, angle1 = "+this.angle1+", angle2 = "+this.angle2);
 			this.angle1 += 0.05;
 			this.angle2 -= 0.05;
-			/*switch (this.direction.name) {
-				case "up":
-					break;
-				case "left":
-					this.angle1 += 0.07;
-					this.angle2 -= 0.07;
-					break;
-				case "down":
-					break;
-				case "right":
-					break;
-			}*/
 			if (this.angle1 >= this.direction.angle1+0.7 || this.angle2 <= this.direction.angle2-0.7) {
-				console.log("dieFinal()");
 				this.dieFinal();
 				}
 		}
@@ -669,8 +656,9 @@
 			inky.reset();
 			blinky.reset();
 			clyde.reset();
-			this.lives--;
-			if (this.lives <= 0) {
+    		this.lives--;
+	        console.log("pacman died, "+this.lives+" lives left");
+	    	if (this.lives <= 0) {
 				var input = "<div id='highscore-form'><input type='text' /><span class='button' id='score-submit' onClick='addHighscore();'>save</span></div>";
 				game.showMessage("Game over","Total Score: "+game.score.score+input);
 				game.gameOver = true;
