@@ -761,44 +761,44 @@ function checkAppCache() {
 		});
 		
 		// Mobile Control Buttons
-		$(document).on('touchend','.controlButton#up',function(event) {
+		$(document).on('touchend mousedown','.controlButton#up',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(up);
 		});
-		$(document).on('touchend','.controlButton#down',function(event) {
+		$(document).on('touchend mousedown','.controlButton#down',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(down);
 		});
-		$(document).on('touchend','.controlButton#left',function(event) {
+		$(document).on('touchend mousedown','.controlButton#left',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(left);
 		});
-		$(document).on('touchend','.controlButton#right',function(event) {
+		$(document).on('touchend mousedown','.controlButton#right',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(right);
 		});
 		
 		// Menu
-		$(document).on('touchend','.button#newGame',function(event) {
+		$(document).on('click','.button#newGame',function(event) {
 			game.newGame();
 		});
-		$(document).on('touchend','.button#highscore',function(event) {
+		$(document).on('click','.button#highscore',function(event) {
 		    game.showContent('highscore-content'); 
 			getHighscore();
 		});
-		$(document).on('touchend','.button#instructions',function(event) {
+		$(document).on('click','.button#instructions',function(event) {
 		    game.showContent('instructions-content');
 		});
-		$(document).on('touchend','.button#info',function(event) {
+		$(document).on('click','.button#info',function(event) {
 		    game.showContent('info-content'); 
 			window.applicationCache.update();
 		});
 		// back button
-		$(document).on('touchend','.button#back',function(event) {
+		$(document).on('click','.button#back',function(event) {
 			game.showContent('game-content');
 		});
 		// toggleSound
-		$(document).on('touchend','.controlSound',function(event) {
+		$(document).on('click','.controlSound',function(event) {
 			game.toggleSound();
 		});
 		
