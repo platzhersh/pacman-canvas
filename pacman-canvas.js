@@ -729,7 +729,20 @@ function checkAppCache() {
 		
 		checkAppCache();
 		
+		/* -------------------- EVENT LISTENERS -------------------------- */
+		
+		// Listen for resize changes
+		window.addEventListener("resize", function() {
+			// Get screen size (inner/outerWidth, inner/outerHeight)
+			if ((window.outerHeight < window.outerWidth) && (window.outerHeight < 720)) {
+			game.showMessage("Rotate Device","Your screen is too small to play in landscape view.");
+			console.log("rotate your device to portrait!");
+			}
+		}, false);
+		
+		
 		// --------------- Controls
+		
 		
 		// Keyboard
 		window.addEventListener('keydown',doKeyDown,true);
