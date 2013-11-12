@@ -688,10 +688,10 @@
 	
 // Check if a new cache is available on page load.	 
 function checkAppCache() {
-window.addEventListener('load', function(e) 
-{
+	console.log('check AppCache');
 	window.applicationCache.addEventListener('updateready', function(e) 
 	{
+		console.log("AppCache: updateready");
 		if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
 
 			// Browser downloaded a new app cache.
@@ -706,10 +706,6 @@ window.addEventListener('load', function(e)
 		}
 
 	}, false);
-
-	 
-
-}, false);
 
 }
 	
@@ -730,6 +726,8 @@ window.addEventListener('load', function(e)
 		// Hide address bar
 		$("html").scrollTop(1);
 		$("body").scrollTop(1);
+		
+		checkAppCache();
 		
 		// --------------- Controls
 		
