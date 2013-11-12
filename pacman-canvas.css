@@ -3,10 +3,10 @@
   font-family: 'Press Start 2P';
   font-style: normal;
   font-weight: 400;
-  src: url('PressStart2Play.eot');
-  src: url('PressStart2Play.eot?iefix') format('eot'),
-       url('PressStart2Play.woff') format('woff'),
-       url('PressStart2Play.ttf') format('truetype');
+  src: url('fonts/PressStart2Play.eot');
+  src: url('fonts/PressStart2Play.eot?iefix') format('eot'),
+       url('fonts/PressStart2Play.woff') format('woff'),
+       url('fonts/PressStart2Play.ttf') format('truetype');
 }
 
 /* ---------------- */
