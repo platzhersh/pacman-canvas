@@ -51,7 +51,7 @@ dev branch
 <div class="main">
 <!-- Highscore -->
 <div class="content" id="highscore-content">
-	<div class="button" id="back" onClick="game.showContent('game-content');">back</div>
+	<div class="button" id="back">back</div>
 	<div>
 		<h1>Highscore</h1>
 		<p>
@@ -64,7 +64,7 @@ dev branch
 
 <!-- INSTRUCTIONS -->
 <div class="content" id="instructions-content">
-	<div class="button" id="back" onClick="game.showContent('game-content');">back</div>
+	<div class="button" id="back">back</div>
 	<div>
 		<h1>Instructions</h1>
 		<div class="nomobile">
@@ -83,7 +83,7 @@ dev branch
 
 <!-- CREDITS -->
 <div class="content" id="credits-content">
-	<div class="button" id="back" onClick="game.showContent('game-content');">back</div>
+	<div class="button" id="back">back</div>
 	<div>
 		<h1>Credits</h1>
 		<p>Current Version: 0.78 (<a href="README.md">Changelog</a>)</p>
@@ -107,7 +107,7 @@ dev branch
 		<div class="score">Score:</div>
 		<div class="lives">Lives: </div>
 		
-		<div class="controlSound" onMouseDown="game.toggleSound()">
+		<div class="controlSound">
 			<img src="img/audio-icon-mute.png" id="mute">
 		</div>
 		<!-- canvas is splitted into 18x13 fields -->
@@ -129,7 +129,7 @@ dev branch
 		<p class="nomobile">Use W-A-S-D keys to navigate Pac-Man</p>
 		-->
 			<div>
-				<span id="up" class="controlButton" onMouseDown="pacman.directionWatcher.set(up);">&uarr;</span>
+				<span id="up" class="controlButton">&uarr;</span>
 			</div>
 			<div>
 				<span id="left" class="controlButton">&larr;</span>
@@ -143,10 +143,10 @@ dev branch
 		<!-- Game Menu -->		
 		<div class="controls" id="menu-buttons">
 			<ul>
-				<li class="button" onClick="game.newGame();">New Game</li>
-				<li class="button" onclick="game.showContent('highscore-content'); getHighscore();">Highscore</li>
-				<li class="button" onclick="game.showContent('instructions-content');">Instructions</li>
-				<li class="button" onclick="game.showContent('credits-content');">Credits</li>
+				<li class="button" id="newGame">New Game</li>
+				<li class="button" id="highscore">Highscore</li>
+				<li class="button" id="instructions">Instructions</li>
+				<li class="button" id="Credits">Credits</li>
 			</ul>
 			
 		</div>

@@ -760,7 +760,7 @@ function checkAppCache() {
 			pacman.directionWatcher.set(down);
 		});
 		
-		// Mobile Buttons
+		// Mobile Control Buttons
 		$(document).on('touchend','.controlButton#up',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(up);
@@ -778,6 +778,29 @@ function checkAppCache() {
 			pacman.directionWatcher.set(right);
 		});
 		
+		// Menu
+		$(document).on('touchend','.button#newGame',function(event) {
+			game.newGame();
+		});
+		$(document).on('touchend','.button#highscore',function(event) {
+		    game.showContent('highscore-content'); 
+			getHighscore();
+		});
+		$(document).on('touchend','.button#instructions',function(event) {
+		    game.showContent('instructions-content');
+		});
+		$(document).on('touchend','.button#credits',function(event) {
+		    game.showContent('credits-content'); 
+			window.applicationCache.update();
+		});
+		// back button
+		$(document).on('touchend','.button#back',function(event) {
+			game.showContent('game-content');
+		});
+		// toggleSound
+		$(document).on('touchend','.controlSound',function(event) {
+			game.toggleSound();
+		});
 		
 		// checkAppCache();
 		
