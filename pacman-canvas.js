@@ -91,8 +91,11 @@
 		this.reset = function() {
 			}
 		this.newGame = function() {
-			console.log("new Game");
-            this.init(0);
+		    var r = confirm("Are you sure you want to restart?");
+            if (r) {
+        	    console.log("new Game");
+                this.init(0);
+            }
             this.pauseResume();
 		}
 		this.nextLevel = function() {
