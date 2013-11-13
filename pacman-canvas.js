@@ -715,7 +715,7 @@ function checkAppCache() {
 		$("html").scrollTop(1);
 		$("body").scrollTop(1);
 		
-		checkAppCache();
+		if (window.applicationCache != null) checkAppCache();
 		
 		/* -------------------- EVENT LISTENERS -------------------------- */
 		
@@ -791,7 +791,6 @@ function checkAppCache() {
 		});
 		$(document).on('click','.button#info',function(event) {
 		    game.showContent('info-content'); 
-			window.applicationCache.update();
 		});
 		// back button
 		$(document).on('click','.button#back',function(event) {
@@ -800,6 +799,11 @@ function checkAppCache() {
 		// toggleSound
 		$(document).on('click','.controlSound',function(event) {
 			game.toggleSound();
+		});
+		// get latest
+		$(document).on('click', '#updateCode', function(event) {
+			event.preventDefault();
+			window.applicationCache.update(); 
 		});
 		
 		// checkAppCache();

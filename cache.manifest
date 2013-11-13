@@ -1,5 +1,7 @@
 CACHE MANIFEST
-# Pacman 0.78 	12.11.2013 dev
+# Pacman 0.8 	13.11.2013
+
+CACHE:
 
 # HTML
 index.htm

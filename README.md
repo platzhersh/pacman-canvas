@@ -12,6 +12,12 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.8 - 13.11.2013*
+* lots of small changes in the backend
+* when you go in landscape mode and your screen is too small to display the whole site, you get notified to rotate your phone into portrait mode
+* all onClick and onMousedown in HTML removed and replaced by EventListeners in JavaScript
+* Pacman Canvas now uses ApplicationCache to cache its content, so you can play the game offline!
+
 *Version 0.78 - 05.11.2013*
 * navigation via buttons should be less delayed by using onMouseDown event instead of onClick
 * refreshRate is now a game attribute and could be changed easily during the game (not yet implemented in frontend)
