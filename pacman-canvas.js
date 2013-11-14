@@ -1,5 +1,4 @@
-/* -----------------------------------------------------------------
-
+/*-------------------------------------------------------------------
 	___________    ____   _____ _____    ____  
 	\____ \__  \ _/ ___\ /     \\__  \  /    \ 
 	|  |_> > __ \\  \___|  Y Y  \/ __ \|   |  \
@@ -71,19 +70,76 @@
 	
 	// Manages the whole game ("God Object")
 	function Game() {
-		this.refreshRate = 33;
+		this.refreshRate = 33;		// speed of the game, will increase in higher levels
 		this.running = false;
 		this.pause = true;
 		this.score = new Score();
 		this.soundfx = 0;
 		this.map;
-		this.pillCount;	// # of pills
+		this.pillCount;				// number of pills
 		this.monsters;
 		this.level = 1;
 		this.gameOver = false;
 		this.canvas = $("#myCanvas").get(0);
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
+		
+		this.ghostFrightened = false;
+		this.ghostFrightenedTimer = 240;
+		this.ghostMode = 0;			// 0 = Scatter, 1 = Chase
+		this.ghostModeTimer = 200;	// decrements each animationLoop execution
+		
+		/* Game Functions */
+		this.startGhostFrightened = function() {
+			console.log("ghost frigthened");
+			this.ghostFrightened = true;
+			this.ghostFrightenedTimer = 240;
+			inky.dazzle();	
+			pinky.dazzle();	
+			blinky.dazzle();	
+			clyde.dazzle();
+		}
+		this.endGhostFrightened = function() {
+			console.log("ghost frigthened end");		
+			this.ghostFrightened = false;
+			inky.undazzle();
+			pinky.undazzle();
+			blinky.undazzle();
+			clyde.undazzle();
+			};
+		
+			
+		this.checkGhostMode = function() {
+			if (this.ghostFrightened) {
+				
+				this.ghostFrightenedTimer--;
+				if (this.ghostFrightenedTimer == 0) {
+					this.endGhostFrightened();
+					this.ghostFrigthenedTimer = 240;
+					inky.reverseDirection();
+					pinky.reverseDirection();
+					clyde.reverseDirection();
+					blinky.reverseDirection();
+				}
+			}
+			else {
+				this.ghostModeTimer--;
+				if (this.ghostModeTimer == 0) {
+					console.log("ghostMode="+this.ghostMode);
+					this.ghostMode ^= 1;
+					this.ghostModeTimer = 200 + this.ghostMode * 450;
+					inky.reverseDirection();
+					pinky.reverseDirection();
+					clyde.reverseDirection();
+					blinky.reverseDirection();
+					}
+			}
+		}
+		
+		this.getMapContent = function (x, y) {
+			return this.map.posY[y].posX[x].type;
+		}
+		
 		this.toggleSound = function() { 
 			this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0; 
 			$('#mute').toggle();
@@ -329,7 +385,7 @@
 		this.die = function() {
 			this.reset();
 		}
-	
+		
 		this.checkCollision = function() {
 			if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
 				if ((Math.floor((Math.random()*10)+1)%6) == 3) this.setRandomDirection();
@@ -342,11 +398,11 @@
 			// get the field 1 ahead to check wall collisions
 			if ((this.dirX == 1) && (gridAheadX < 17)) gridAheadX += 1;
 			if ((this.dirY == 1) && (gridAheadY < 12)) gridAheadY += 1;
-			var fieldAhead = game.map.posY[gridAheadY].posX[gridAheadX];
+			var fieldAhead = game.getMapContent(gridAheadX, gridAheadY);
 			
 			
 			/*	Check Wall Collision			*/
-			if (fieldAhead.type === "wall") {
+			if (fieldAhead === "wall") {
 				this.stuckX = this.dirX;
 				this.stuckY = this.dirY;
 				this.stop=true;
@@ -372,6 +428,40 @@
 			}
 			
 		}
+		
+		/* Pathfinding */
+		this.getNextDirection = function() {
+			// get next field
+			var pX = this.direction.dirX != 0 ? this.getGridPosX() + this.direction.dirX : this.getGridPosX();
+			var pY = this.direction.dirY != 0 ? this.getGridPosY() + this.direction.dirY : this.getGridPosY();
+			game.getMapContent(pX,pY);
+			var u, d, r, l; 			// option up, down, right, left
+			
+			var pacX = pacman.getGridPosX();
+			var pacY = pacman.getGridPosY();
+			
+			var dirs = [{},{},{},{}];		
+			dirs[0].field = game.getMapContent(pX,pY-1);
+			dirs[0].dir = "up";
+			dirs[0].distance = Math.sqrt(Math.pow((pX-pacX),2) + Math.pow((pY -1 - pacY),2));
+			console.log("pX: "+pX+", pY:"+pY+", pacX: "+pacX+", pacY: "+pacY);
+			
+			dirs[1].field = game.getMapContent(pX,pY+1);
+			dirs[1].dir = "down";
+			dirs[1].distance = Math.sqrt(Math.pow((pX-pacX),2) + Math.pow((pY+1 - pacY),2));
+			
+			dirs[2].field = game.getMapContent(pX+1,pY);
+			dirs[2].dir = "right";
+			dirs[2].distance = Math.sqrt(Math.pow((pX+1-pacX),2) + Math.pow((pY - pacY),2));
+			
+			dirs[3].field = game.getMapContent(pX-1,pY);
+			dirs[3].dir = "left";
+			dirs[3].distance = Math.sqrt(Math.pow((pX-1-pacX),2) + Math.pow((pY - pacY),2));
+			
+			return dirs;
+			
+			
+		}
 		this.setRandomDirection = function() {
 			 var dir = Math.floor((Math.random()*10)+1)%5; 
 
@@ -392,6 +482,22 @@
 					this.setDirection(right);
 					break;
 			 }
+		}
+		this.reverseDirection = function() {
+			switch (this.direction) {
+				case left:
+					this.setDirection(right);
+					break;
+				case right:
+					this.setDirection(left);
+					break;
+				case up:
+					this.setDirection(down);
+					break;
+				case down:
+					this.setDirection(up);
+					break;
+				}
 		}
 		
 	}
@@ -487,29 +593,30 @@
 				var gridAheadX = gridX;
 				var gridAheadY = gridY;
 				
-				var field = game.map.posY[gridY].posX[gridX];
+				var field = game.getMapContent(gridX, gridY);
 
 				// get the field 1 ahead to check wall collisions
 				if ((this.dirX == 1) && (gridAheadX < 17)) gridAheadX += 1;
 				if ((this.dirY == 1) && (gridAheadY < 12)) gridAheadY += 1;
-				var fieldAhead = game.map.posY[gridAheadY].posX[gridAheadX];
+				var fieldAhead = game.getMapContent(gridAheadX, gridAheadY);
 
 				
 				/*	Check Pill Collision			*/
-				if ((field.type === "pill") || (field.type === "powerpill")) {
+				if ((field === "pill") || (field === "powerpill")) {
 					//console.log("Pill found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
 					if (
 						((this.dirX == 1) && (between(this.posX, game.toPixelPos(gridX)+this.radius-5, game.toPixelPos(gridX+1))))
 						|| ((this.dirX == -1) && (between(this.posX, game.toPixelPos(gridX), game.toPixelPos(gridX)+5)))
 						|| ((this.dirY == 1) && (between(this.posY, game.toPixelPos(gridY)+this.radius-5, game.toPixelPos(gridY+1))))
 						|| ((this.dirY == -1) && (between(this.posY, game.toPixelPos(gridY), game.toPixelPos(gridY)+5)))
-						|| (fieldAhead.type === "wall")
+						|| (fieldAhead === "wall")
 						)
 						{	var s;
-							if (field.type === "powerpill") {
+							if (field === "powerpill") {
 								Sound.play("powerpill");
 								s = 50;
 								this.enableBeastMode();
+								game.startGhostFrightened();
 								}
 							else {
 								Sound.play("waka");
@@ -522,7 +629,7 @@
 				}
 				
 				/*	Check Wall Collision			*/
-				if ((fieldAhead.type === "wall") || (fieldAhead.type === "door")) {
+				if ((fieldAhead === "wall") || (fieldAhead === "door")) {
 					this.stuckX = this.dirX;
 					this.stuckY = this.dirY;
 					pacman.stop();
@@ -718,7 +825,7 @@ function checkAppCache() {
 		$("html").scrollTop(1);
 		$("body").scrollTop(1);
 		
-		if (window.applicationCache != null) checkAppCache();
+		//if (window.applicationCache != null) checkAppCache();
 		
 		/* -------------------- EVENT LISTENERS -------------------------- */
 		
@@ -996,6 +1103,8 @@ function checkAppCache() {
 				blinky.checkCollision();
 				clyde.move();
 				clyde.checkCollision();
+				
+				game.checkGhostMode();
 			}
 			
 			// All dots collected?
