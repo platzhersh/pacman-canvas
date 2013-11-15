@@ -246,10 +246,10 @@
 			
 			// initalize Ghosts, avoid memory flooding
 			if (pinky == null) {
-				pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
-				inky = new Ghost(16*pacman.radius,10*pacman.radius,'img/inky.svg');
-				blinky = new Ghost(18*pacman.radius,10*pacman.radius,'img/blinky.svg');
-				clyde = new Ghost(20*pacman.radius,10*pacman.radius,'img/clyde.svg');
+				pinky = new Ghost(7,5,'img/pinky.svg');
+				inky = new Ghost(8,5,'img/inky.svg');
+				blinky = new Ghost(9,5,'img/blinky.svg');
+				clyde = new Ghost(10,5,'img/clyde.svg');
 			}
 			else {
 				//console.log("ghosts reset");
@@ -258,7 +258,7 @@
 				blinky.reset();
 				clyde.reset();
 			}
-		
+			blinky.start();	// blinky is the first to leave ghostHouse
 			}
 		this.check = function() {
 		if ((this.pillCount == 0) && game.running) {
@@ -342,9 +342,11 @@
 	//var directionWatcher = new directionWatcher();
 	
 	// Ghost object in Constructor notation
-	function Ghost(posX, posY, image) {
-		this.posX = posX;
-		this.posY = posY;
+	function Ghost(gridPosX, gridPosY, image) {
+		this.posX = gridPosX * 30;
+		this.posY = gridPosY * 30;
+		this.startPosX = gridPosX * 30;
+		this.startPosY = gridPosY * 30;
 		this.speed = 5;
 		this.image = new Image();
 		this.image.src = image;
@@ -388,8 +390,8 @@
 		}
 		
 		this.reset = function() {
-			this.posX = 14*pacman.radius;
-			this.posY = 10*pacman.radius;
+			this.posX = this.startPosX;
+			this.posY = this.startPosY;
 			this.ghostHouse = true;
 			this.undazzle();
 		}
@@ -1174,17 +1176,18 @@ function checkAppCache() {
 				pacman.checkCollisions();		// has to be the LAST method called on pacman
 
 				inky.move();
-				inky.checkDirectionChange();
 				inky.checkCollision();
+
 				pinky.move();			
 				pinky.checkCollision();
-				pinky.getNextDirection();
+
 				blinky.move();
+				blinky.checkDirectionChange();
 				blinky.checkCollision();
-				blinky.getNextDirection();
+
 				clyde.move();
 				clyde.checkCollision();
-				clyde.getNextDirection();
+
 				
 				game.checkGhostMode();
 			}
