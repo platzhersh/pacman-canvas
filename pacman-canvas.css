@@ -17,6 +17,13 @@ body {
 	font-family: 'Press Start 2P', cursive;
 }
 
+
+/* Links */
+.main a, .main a:link, .main a:active, .main a:visited {
+    padding: 5px;
+	background: #c80a0a;
+    color: rgb(255, 255, 255);
+}
 * { box-shadow: none !important; }
 
 .content, h1, h2, h3, p, div { 
@@ -24,19 +31,23 @@ body {
 	font-weight: normal;
 	}
 .content[id*=-content]:not(#game-content) {	display: none;}
-.button {	background: rgba(0,0,0,0.4); cursor: pointer;}
-.button:hover {	background: rgba(255,255,255,0.2); }
+.button {
+	background: #c80a0a; 
+	cursor: pointer;
+	padding: 8px;
+	}
+#menu-buttons .button { background: rgba(0,0,0,0.4); }
+#menu-buttons .button:hover, .button:hover {	background: rgba(255,255,255,0.2); }
 .button#back {
 	position: relative;
 	top: -25px;
 	display: inline-block;
-	padding: 5px;
 }
 .button#score-submit {
-	padding: 5px;
-	vertical-align: center;
+	vertical-align: middle;
 }
 
+#highscore-form { margin-top: 8px; }
 #highscore-list {}
 #score { float: right; }
 
@@ -136,7 +147,7 @@ audio {display: block; }
 @media screen and (max-width: 650px) {
 	.game { width: 93%;}
 	.content { max-width: none; }
-	.button { background: rgba(255,255,255,0.1); }
+	#menu-buttons .button { background: rgba(255,255,255,0.1); }
 	.button:hover { background: rgba(255,255,255,0.3); }
 	.button#back { top: 0; }
 }
