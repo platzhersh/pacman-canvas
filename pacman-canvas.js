@@ -310,6 +310,9 @@
 		this.angle2 = angle2;
 		this.dirX = dirX;
 		this.dirY = dirY;
+		this.equals = function(dir) {
+			return  JSON.stringify(this) ==  JSON.stringify(dir);
+		}
 	}
 	
 	// Direction Objects
@@ -447,7 +450,7 @@
 				if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= this.speed;
 				if (this.stuckX == -1) this.posX += this.speed;
 				if (this.stuckY == -1) this.posY += this.speed;
-				this.setRandomDirection();
+				//this.setRandomDirection();
 				//console.log("collision");
 				this.stop=false;
 			}
@@ -469,8 +472,10 @@
 		/* Pathfinding */
 		this.getNextDirection = function() {
 			// get next field
-			var pX = this.direction.dirX != 0 ? this.getGridPosX() + this.direction.dirX : this.getGridPosX();
-			var pY = this.direction.dirY != 0 ? this.getGridPosY() + this.direction.dirY : this.getGridPosY();
+			//var pX = this.direction.dirX != 0 ? this.getGridPosX() + this.direction.dirX : this.getGridPosX();
+			//var pY = this.direction.dirY != 0 ? this.getGridPosY() + this.direction.dirY : this.getGridPosY();
+			var pX = this.getGridPosX();
+			var pY= this.getGridPosY();
 			game.getMapContent(pX,pY);
 			var u, d, r, l; 			// option up, down, right, left
 			
@@ -504,13 +509,14 @@
 				return 1;
 			  return 0;
 			}
-			dirs.sort(compare);
+			var dirs2 = dirs.sort(compare);
 			
-			for (var i = 0; i < dirs.length; i++) {
-				
+			var r = this.dir;
+			for (var i = dirs2.length-1; i >= 0; i--) {
+				if ((dirs2[i].field != "wall") && (dirs2[i].field != "door") && !(dirs2[i].dir.equals(this.getOppositeDirection()))) r = dirs2[i].dir;
 			}
 			
-			return dirs;
+			this.directionWatcher.set(r);
 			
 		}
 		this.setRandomDirection = function() {
@@ -518,23 +524,20 @@
 				
 			 switch(dir) {
 				case 1:	
-					if (this.getOppositeDirection() == up) this.setDirection(down);
+					if (this.getOppositeDirection().equals(up)) this.setDirection(down);
 					else this.setDirection(up);
 					break;
 				case 2:	
-					if (this.getOppositeDirection() == down) this.setDirection(up);
+					if (this.getOppositeDirection().equals(down)) this.setDirection(up);
 					else this.setDirection(down);
 					break;
 				case 3: 
-					if (this.getOppositeDirection() == right) this.setDirection(left);				
+					if (this.getOppositeDirection().equals(right)) this.setDirection(left);				
 					else this.setDirection(right);
 					break;
 				case 4:		
-					if (this.getOppositeDirection() == left) this.setDirection(right);				
+					if (this.getOppositeDirection().equals(left)) this.setDirection(right);				
 					else this.setDirection(left);
-					break;
-				default: 	
-					this.setDirection(right);
 					break;
 			 }
 		}
@@ -570,9 +573,11 @@
 		this.direction;
 		this.stop = true;
 		this.directionWatcher = new directionWatcher();
+		this.getNextDirection = function() {};
 		this.checkDirectionChange = function() {
+			this.getNextDirection();
 			if ((this.directionWatcher.get() != null) && this.inGrid()) {
-				console.log("changeDirection to "+directionWatcher.get().name);
+				console.log("changeDirection to "+this.directionWatcher.get().name);
 				this.setDirection(this.directionWatcher.get());
 				this.directionWatcher.set(null);
 			}
@@ -1169,7 +1174,7 @@ function checkAppCache() {
 				pacman.checkCollisions();		// has to be the LAST method called on pacman
 
 				inky.move();
-				inky.getNextDirection();
+				inky.checkDirectionChange();
 				inky.checkCollision();
 				pinky.move();			
 				pinky.checkCollision();
