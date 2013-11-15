@@ -571,7 +571,7 @@
 		this.stop = true;
 		this.directionWatcher = new directionWatcher();
 		this.checkDirectionChange = function() {
-			if ((this.directionWatcher.get() != null) && (this.inGrid()) {
+			if ((this.directionWatcher.get() != null) && this.inGrid()) {
 				console.log("changeDirection to "+directionWatcher.get().name);
 				this.setDirection(this.directionWatcher.get());
 				this.directionWatcher.set(null);
