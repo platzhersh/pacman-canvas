@@ -1,4 +1,5 @@
 /*-------------------------------------------------------------------
+
 	___________    ____   _____ _____    ____  
 	\____ \__  \ _/ ___\ /     \\__  \  /    \ 
 	|  |_> > __ \\  \___|  Y Y  \/ __ \|   |  \
@@ -145,6 +146,9 @@
 			if (y > maxY) y = y-maxY;
 			return this.map.posY[y].posX[x].type;
 		}
+		this.setMapContent = function (x,y,val) {
+			this.map.posY[y].posX[x].type = val;
+		}
 		
 		this.toggleSound = function() { 
 			this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0; 
@@ -246,10 +250,10 @@
 			
 			// initalize Ghosts, avoid memory flooding
 			if (pinky == null) {
-				pinky = new Ghost(7,5,'img/pinky.svg');
-				inky = new Ghost(8,5,'img/inky.svg');
-				blinky = new Ghost(9,5,'img/blinky.svg');
-				clyde = new Ghost(10,5,'img/clyde.svg');
+				pinky = new Ghost(7,5,'img/pinky.svg',2,2);
+				inky = new Ghost(8,5,'img/inky.svg',13,11);
+				blinky = new Ghost(9,5,'img/blinky.svg',13,0);
+				clyde = new Ghost(10,5,'img/clyde.svg',2,11);
 			}
 			else {
 				//console.log("ghosts reset");
@@ -342,11 +346,13 @@
 	//var directionWatcher = new directionWatcher();
 	
 	// Ghost object in Constructor notation
-	function Ghost(gridPosX, gridPosY, image) {
+	function Ghost(gridPosX, gridPosY, image, gridBaseX, gridBaseY) {
 		this.posX = gridPosX * 30;
 		this.posY = gridPosY * 30;
 		this.startPosX = gridPosX * 30;
 		this.startPosY = gridPosY * 30;
+		this.gridBaseX = gridBaseX;
+		this.gridBaseY = gridBaseY;
 		this.speed = 5;
 		this.image = new Image();
 		this.image.src = image;
@@ -481,27 +487,34 @@
 			game.getMapContent(pX,pY);
 			var u, d, r, l; 			// option up, down, right, left
 			
-			var pacX = pacman.getGridPosX();
-			var pacY = pacman.getGridPosY();
+			// get target
+			if (game.ghostMode == 1) {			// Chase Mode
+				var tX = pacman.getGridPosX();
+				var tY = pacman.getGridPosY();
+				}
+			else if (game.ghostMode == 0) {			// Scatter Mode
+				var tX = this.gridBaseX;
+				var tY = this.gridBaseY;
+			}
 			
 			var oppDir = this.getOppositeDirection();	// ghosts are not allowed to change direction 180°
 			
 			var dirs = [{},{},{},{}];		
 			dirs[0].field = game.getMapContent(pX,pY-1);
 			dirs[0].dir = up;
-			dirs[0].distance = Math.sqrt(Math.pow((pX-pacX),2) + Math.pow((pY -1 - pacY),2));
+			dirs[0].distance = Math.sqrt(Math.pow((pX-tX),2) + Math.pow((pY -1 - tY),2));
 			
 			dirs[1].field = game.getMapContent(pX,pY+1);
 			dirs[1].dir = down;
-			dirs[1].distance = Math.sqrt(Math.pow((pX-pacX),2) + Math.pow((pY+1 - pacY),2));
+			dirs[1].distance = Math.sqrt(Math.pow((pX-tX),2) + Math.pow((pY+1 - tY),2));
 			
 			dirs[2].field = game.getMapContent(pX+1,pY);
 			dirs[2].dir = right;
-			dirs[2].distance = Math.sqrt(Math.pow((pX+1-pacX),2) + Math.pow((pY - pacY),2));
+			dirs[2].distance = Math.sqrt(Math.pow((pX+1-tX),2) + Math.pow((pY - tY),2));
 			
 			dirs[3].field = game.getMapContent(pX-1,pY);
 			dirs[3].dir = left;
-			dirs[3].distance = Math.sqrt(Math.pow((pX-1-pacX),2) + Math.pow((pY - pacY),2));
+			dirs[3].distance = Math.sqrt(Math.pow((pX-1-tX),2) + Math.pow((pY - tY),2));
 			
 			// Sort possible directions by distance
 			function compare(a,b) {
@@ -544,20 +557,8 @@
 			 }
 		}
 		this.reverseDirection = function() {
-			switch (this.direction) {
-				case left:
-					this.setDirection(right);
-					break;
-				case right:
-					this.setDirection(left);
-					break;
-				case up:
-					this.setDirection(down);
-					break;
-				case down:
-					this.setDirection(up);
-					break;
-				}
+			console.log("reverseDirection: "+this.direction.name+" to "+this.getOppositeDirection().name);
+			this.directionWatcher.set(this.getOppositeDirection());
 		}
 		
 	}
@@ -579,7 +580,7 @@
 		this.checkDirectionChange = function() {
 			this.getNextDirection();
 			if ((this.directionWatcher.get() != null) && this.inGrid()) {
-				console.log("changeDirection to "+this.directionWatcher.get().name);
+				//console.log("changeDirection to "+this.directionWatcher.get().name);
 				this.setDirection(this.directionWatcher.get());
 				this.directionWatcher.set(null);
 			}
@@ -591,10 +592,10 @@
 			return false;
 		}
 		this.getOppositeDirection = function() {
-			if (this.direction == up) return down;
-			else if (this.direction == down) return up;
-			else if (this.direction == right) return left;
-			else if (this.direction == left) return right;
+			if (this.direction.equals(up)) return down;
+			else if (this.direction.equals(down)) return up;
+			else if (this.direction.equals(right)) return left;
+			else if (this.direction.equals(left)) return right;
 		}
 		this.move = function() {
 		
@@ -848,9 +849,10 @@
     		this.lives--;
 	        console.log("pacman died, "+this.lives+" lives left");
 	    	if (this.lives <= 0) {
-				var input = "<div id='highscore-form'><input type='text' /><span class='button' id='score-submit' onClick='addHighscore();'>save</span></div>";
+				var input = "<div id='highscore-form'><input type='text' id='playerName'/><span class='button' id='score-submit' onClick='addHighscore();'>save</span></div>";
 				game.showMessage("Game over","Total Score: "+game.score.score+input);
 				game.gameOver = true;
+				$('#playerName').focus();
 				}
 			game.drawHearts(this.lives);
 		}
@@ -1176,9 +1178,11 @@ function checkAppCache() {
 				pacman.checkCollisions();		// has to be the LAST method called on pacman
 
 				inky.move();
+				inky.checkDirectionChange();
 				inky.checkCollision();
 
-				pinky.move();			
+				pinky.move();	
+				pinky.checkDirectionChange();				
 				pinky.checkCollision();
 
 				blinky.move();
@@ -1186,6 +1190,7 @@ function checkAppCache() {
 				blinky.checkCollision();
 
 				clyde.move();
+				clyde.checkDirectionChange();
 				clyde.checkCollision();
 
 				
@@ -1227,10 +1232,16 @@ function checkAppCache() {
 			case 68:	// D pressed
 				pacman.directionWatcher.set(right);
 				break;
+			case 78:	// N pressed
+				game.pause = 1;
+				game.newGame();
+				break;
 			case 8:		// Backspace pressed -> show Game Content
 			case 27:	// ESC pressed -> show Game Content
-                evt.preventDefault();
-				game.showContent('game-content');
+				if (!$('#playerName').is(':focus')) {
+					evt.preventDefault();
+					game.showContent('game-content');
+					}
 				break;
 			case 32:	// SPACE pressed -> pause Game
                 evt.preventDefault();
