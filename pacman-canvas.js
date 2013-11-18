@@ -263,9 +263,9 @@
 				clyde.reset();
 			}
 			blinky.start();	// blinky is the first to leave ghostHouse
-			/*inky.start();
+			inky.start();
 			pinky.start();
-			clyde.start();*/
+			clyde.start();
 			}
 		this.check = function() {
 		if ((this.pillCount == 0) && game.running) {
@@ -439,6 +439,9 @@
 		
 		this.move = function() {
 		
+			this.checkDirectionChange();
+			this.checkCollision();
+		
 			// leave Ghost House
 			if (this.ghostHouse == true) {
 				if ((this.getGridPosY() == 5) && this.inGrid()) {
@@ -453,6 +456,7 @@
 					}
 			}
 			
+			// Move
 			if (!this.stop) {
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
@@ -469,27 +473,25 @@
 		
 			/* Check Back to Home */
 			if (this.dead && (this.getGridPosX() == this.startPosX /30) && (this.getGridPosY() == this.startPosY / 30)) this.reset();
-			
-			/* Check Ghost / Pacman Collision			*/
-			if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
-				&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
-			{
-				if ((!this.dazzled) && (!this.dead)) {
-					pacman.die();
-					}
-				else {
-					this.die();
-					game.score.add(100);
-					}
+			else {
+				/* Check Ghost / Pacman Collision			*/
+				if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
+					&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
+				{
+					if ((!this.dazzled)) {
+						pacman.die();
+						}
+					else {
+						this.die();
+						game.score.add(100);
+						}
+				}
 			}
-			
 		}
 		
 		/* Pathfinding */
 		this.getNextDirection = function() {
 			// get next field
-			//var pX = this.direction.dirX != 0 ? this.getGridPosX() + this.direction.dirX : this.getGridPosX();
-			//var pY = this.direction.dirY != 0 ? this.getGridPosY() + this.direction.dirY : this.getGridPosY();
 			var pX = this.getGridPosX();
 			var pY= this.getGridPosY();
 			game.getMapContent(pX,pY);
@@ -545,7 +547,6 @@
 				for (var i = dirs2.length-1; i >= 0; i--) {
 					if ((dirs2[i].field != "wall") && !(dirs2[i].dir.equals(this.getOppositeDirection()))) {
 					r = dirs2[i].dir;
-					j = i;
 					}
 				}
 			}
@@ -553,11 +554,9 @@
 				for (var i = dirs2.length-1; i >= 0; i--) {
 					if ((dirs2[i].field != "wall") && (dirs2[i].field != "door") && !(dirs2[i].dir.equals(this.getOppositeDirection()))) {
 						r = dirs2[i].dir;
-						j = i;
 						}
 				}		
 			}
-			if (dirs2[j].field == "wall") alert("gonna hit a wall");
 			this.directionWatcher.set(r);
 			return r;
 		}
@@ -612,12 +611,13 @@
 		this.directionWatcher = new directionWatcher();
 		this.getNextDirection = function() { console.log("Figure getNextDirection");};
 		this.checkDirectionChange = function() {
-			if (this.directionWatcher.get() == null) this.getNextDirection();
+			if (this.inGrid() && (this.directionWatcher.get() == null)) this.getNextDirection();
 			if ((this.directionWatcher.get() != null) && this.inGrid()) {
-				//console.log("changeDirection to "+this.directionWatcher.get().name);
+				console.log("changeDirection to "+this.directionWatcher.get().name);
 				this.setDirection(this.directionWatcher.get());
 				this.directionWatcher.set(null);
 			}
+			
 		}
 	
 		
@@ -1212,10 +1212,11 @@ function checkAppCache() {
 				pacman.checkCollisions();		// has to be the LAST method called on pacman
 
 				
-				blinky.checkDirectionChange();
-				blinky.move();
-				blinky.checkCollision();
 				
+				blinky.move();
+				inky.move();
+				pinky.move();
+				clyde.move();
 				/*
 				inky.checkDirectionChange();
 				inky.checkCollision();
