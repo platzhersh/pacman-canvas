@@ -917,15 +917,9 @@ function checkAppCache() {
 		}
 	}, false);
 	
-	window.applicationCache.addEventListener('noupdate', function(e) 
+	window.applicationCache.addEventListener('cached', function(e) 
 	{
-		console.log("AppCache: noupdate");
-			// Browser downloaded a new app cache.
-			// Swap it in and reload the page to get the new hotness.
-			window.applicationCache.swapCache();
-			if (confirm('First time app has been opened, you need to reload.')) {
-				window.location.reload();
-			
+		console.log("AppCache: cached");
 	}, false);
     
 }
