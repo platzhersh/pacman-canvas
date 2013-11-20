@@ -692,10 +692,15 @@ function checkAppCache() {
 		} else {
 		// Manifest didn't change. Nothing new to server.
 		}
-
 	}, false);
-    window.applicationCache.update();
+	
+	window.applicationCache.addEventListener('cached', function(e) 
+	{
+		console.log("AppCache: cached");
+	}, false);
+    
 }
+
 	
 	// Action starts here:
 	
