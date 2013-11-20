@@ -210,7 +210,7 @@
 			}
 		this.init = function (state) {
 			
-			//console.log("init game");
+			console.log("init game "+state);
 			
 			// get Level Map
 			$.ajax({
@@ -247,6 +247,11 @@
 			pacman.reset();
 			
 			game.drawHearts(pacman.lives);	
+			
+			this.ghostFrightened = false;
+			this.ghostFrightenedTimer = 240;
+			this.ghostMode = 0;			// 0 = Scatter, 1 = Chase
+			this.ghostModeTimer = 200;	// decrements each animationLoop execution
 			
 			// initalize Ghosts, avoid memory flooding
 			if (pinky == null) {
@@ -435,6 +440,7 @@
 		this.die = function() {
 			//this.reset();
 			this.dead = true;
+			this.speed = 9;
 		}
 		
 		this.move = function() {
@@ -613,7 +619,7 @@
 		this.checkDirectionChange = function() {
 			if (this.inGrid() && (this.directionWatcher.get() == null)) this.getNextDirection();
 			if ((this.directionWatcher.get() != null) && this.inGrid()) {
-				console.log("changeDirection to "+this.directionWatcher.get().name);
+				//console.log("changeDirection to "+this.directionWatcher.get().name);
 				this.setDirection(this.directionWatcher.get());
 				this.directionWatcher.set(null);
 			}
@@ -925,6 +931,12 @@ function checkAppCache() {
 	
 	// Action starts here:
 	
+	function hideAdressbar() {
+		console.log("hide adressbar");
+		$("html").scrollTop(1);
+		$("body").scrollTop(1);
+	}
+	
 	$(document).ready(function() {
 	
 		$.ajaxSetup({ mimeType: "application/json" });
@@ -938,8 +950,7 @@ function checkAppCache() {
 		});
 		
 		// Hide address bar
-		$("html").scrollTop(1);
-		$("body").scrollTop(1);
+		hideAdressbar();
 		
 		//if (window.applicationCache != null) checkAppCache();
 		
