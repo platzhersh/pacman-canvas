@@ -440,7 +440,6 @@
 		this.die = function() {
 			//this.reset();
 			this.dead = true;
-			this.speed = 9;
 		}
 		
 		this.move = function() {
@@ -596,14 +595,6 @@
 	}
 	
 	Ghost.prototype = new Figure();
-	
-	// Test for Blinky
-	function Blinky() {
-		this.test = function () { alert("voll geil ey") };
-	}
-	
-	Blinky.prototype = new Ghost(9,5,'img/blinky.svg',13,0);
-	Blinky.prototype.constructor = Blinky;
 	
 	// Super Class for Pacman & Ghosts
 	function Figure() {
@@ -924,9 +915,19 @@ function checkAppCache() {
 		} else {
 		// Manifest didn't change. Nothing new to server.
 		}
-
 	}, false);
-    window.applicationCache.update();
+	
+	window.applicationCache.addEventListener('noupdate', function(e) 
+	{
+		console.log("AppCache: noupdate");
+			// Browser downloaded a new app cache.
+			// Swap it in and reload the page to get the new hotness.
+			window.applicationCache.swapCache();
+			if (confirm('First time app has been opened, you need to reload.')) {
+				window.location.reload();
+			
+	}, false);
+    
 }
 	
 	// Action starts here:
@@ -952,7 +953,7 @@ function checkAppCache() {
 		// Hide address bar
 		hideAdressbar();
 		
-		//if (window.applicationCache != null) checkAppCache();
+		if (window.applicationCache != null) checkAppCache();
 		
 		/* -------------------- EVENT LISTENERS -------------------------- */
 		
