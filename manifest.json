@@ -15,5 +15,10 @@
       "web_url": "http://pacman.platzh1rsch.ch"
     }
 	
-	}
+	},
+
+  "verification_key" : "eca78f4d-14f3-4fe7-8b44-3e0006a9a9c7",
+  "type" : "web",
+  "last_update" : "2013-12-09 19:20:34+0000"
+	
 }
