@@ -26,7 +26,7 @@ function getHighscore() {
 	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME)');
 	$results = $db->query('SELECT * FROM highscore ORDER BY score DESC LIMIT 10');
 	while ($row = $results->fetchArray()) {
-		$tmp["name"] = $row['name'];
+		$tmp["name"] = htmlspecialchars($row['name']);
 		$tmp["score"] = strval($row['score']);
 		$response[] = $tmp;		
 	}
