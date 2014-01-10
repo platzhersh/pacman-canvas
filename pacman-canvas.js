@@ -388,7 +388,7 @@
 		this.ghostHouse = true;
 		this.dazzled = false;
 		this.dazzle = function() {
-			this.speed = 3;
+			this.speed = 5;
 			// ensure ghost doesnt leave grid
 			if (this.posX > 0) this.posX = this.posX - this.posX % this.speed;
 			if (this.posY > 0) this.posY = this.posY - this.posY % this.speed;
@@ -449,8 +449,19 @@
 		
 			// leave Ghost House
 			if (this.ghostHouse == true) {
+			
+				// Clyde does not start chasing before 2/3 of all pills are eaten
+				if (this.name == "clyde") {
+					if ((game.pillCount > 104/3)) this.stop = true;
+					else this.stop = false;
+				}
+				// Inky starts after 30 pills
+				if (this.name == "inky") {
+					if ((game.pillCount > 104-30)) this.stop = true;
+					else this.stop = false;
+				}
+				
 				if ((this.getGridPosY() == 5) && this.inGrid()) {
-					if (this.name === "blinky") console.log(this.name +": set direction (ghostHouse)");
 					if ((this.getGridPosX() == 7)) this.setDirection(right);
 					if ((this.getGridPosX() == 8) || this.getGridPosX() == 9) this.setDirection(up);
 					if ((this.getGridPosX() == 10)) this.setDirection(left);
@@ -461,8 +472,8 @@
 					}
 			}
 			
-			// Move
 			if (!this.stop) {
+			// Move
 				this.posX += this.speed * this.dirX;
 				this.posY += this.speed * this.dirY;
 				
@@ -483,7 +494,7 @@
 				if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
 					&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
 				{
-					if ((!this.dazzled)) {
+					if ((!this.dazzled) && (!this.dead)) {
 						pacman.die();
 						}
 					else {
@@ -511,8 +522,48 @@
 				var tX = this.gridBaseX;
 				var tY = this.gridBaseY;
 			} else if (game.ghostMode == 1) {			// Chase Mode
-				var tX = pacman.getGridPosX();
-				var tY = pacman.getGridPosY();
+				
+				switch (this.name) {
+				
+				// target: 4 ahead and 4 left of pacman
+				case "pinky":
+					var pdir = pacman.direction;
+					var pdirX = pdir.dirX == 0 ? - pdir.dirY : pdir.dirX;
+					var pdirY = pdir.dirY == 0 ? - pdir.dirX : pdir.dirY;
+					
+					var tX = (pacman.getGridPosX() + pdirX*4) % (game.width / pacman.radius +1);
+					var tY = (pacman.getGridPosY() + pdirY*4) % (game.height / pacman.radius +1);
+					break;
+				
+				// target: pacman
+				case "blinky":
+					var tX = pacman.getGridPosX();
+					var tY = pacman.getGridPosY();
+					break;
+				
+				// target: 
+				case "inky":
+					var tX = pacman.getGridPosX() + 2*pacman.direction.dirX;
+					var tY = pacman.getGridPosY() + 2*pacman.direction.dirY;
+					var vX = tX - blinky.getGridPosX();
+					var vY = tY - blinky.getGridPosY();
+					tX = Math.abs(blinky.getGridPosX() + vX*2);
+					tY = Math.abs(blinky.getGridPosY() + vY*2);
+					break;
+				
+				// target: 
+				case "clyde":
+					var tX = pacman.getGridPosX();
+					var tY = pacman.getGridPosY();
+					var dist = Math.sqrt(Math.pow((pX-tX),2) + Math.pow((pY - tY),2));
+					
+					if (dist < 5) {
+						tX = this.gridBaseX;
+						tY = this.gridBaseY;
+					}
+					break;
+				
+				}
 			}	
 			
 			
@@ -667,6 +718,7 @@
 		this.radius = 15;
 		this.posX = 0;
 		this.posY = 6*2*this.radius;
+		this.speed = 5;
 		this.angle1 = 0.25;
 		this.angle2 = 1.75;
 		this.mouth = 1; /* Switches between 1 and -1, depending on mouth closing / opening */
@@ -809,8 +861,8 @@
 					}
 				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
 				
-				this.posX += 5 * this.dirX;
-				this.posY += 5 * this.dirY;
+				this.posX += this.speed * this.dirX;
+				this.posY += this.speed * this.dirY;
 				
 				// Check if out of canvas
 				if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
