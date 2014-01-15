@@ -23,8 +23,8 @@ if (isset($_POST['action'])) {
 function getHighscore() {
 
 	$db = new SQLite3('pacman.db');
-	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME)');
-	$results = $db->query('SELECT * FROM highscore ORDER BY score DESC LIMIT 10');
+	createDataBase($db);
+	$results = $db->query('SELECT name, score FROM highscore ORDER BY score DESC LIMIT 10');
 	while ($row = $results->fetchArray()) {
 		$tmp["name"] = htmlspecialchars($row['name']);
 		$tmp["score"] = strval($row['score']);
@@ -38,15 +38,23 @@ function addHighscore($name,$score) {
 
 	$db = new SQLite3('pacman.db');
 	$date = date('Y-m-d h:i:s', time());
-	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME)');
-	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '")');
+	createDataBase($db);
+	$ref = $_SERVER[ 'HTTP_REFERER'];
+	$ua = $_SERVER['HTTP_USER_AGENT'];
+	$remA = $_SERVER['REMOTE_ADDR'];
+	$remH = $_SERVER['REMOTE_HOST'];
+	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '")');
 }
 
 function resetHighscore() {
 	$db = new SQLite3('pacman.db');
 	$date = date('Y-m-d h:i:s', time());
 	$db->exec('DROP TABLE IF EXISTS highscore');
-	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME)');
+	createDataBase($db);
+}
+
+function createDataBase($db) {
+	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME), log_referer VARCHAR(200), log_user_agent VARCHAR(200), log_remote_addr VARCHAR(200), log_remote_host VARCHAR(200)');
 }
 
 ?>
