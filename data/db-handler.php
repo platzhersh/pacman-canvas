@@ -39,10 +39,10 @@ function addHighscore($name,$score) {
 	$db = new SQLite3('pacman.db');
 	$date = date('Y-m-d h:i:s', time());
 	createDataBase($db);
-	$ref = $_SERVER[ 'HTTP_REFERER'];
-	$ua = $_SERVER['HTTP_USER_AGENT'];
-	$remA = $_SERVER['REMOTE_ADDR'];
-	$remH = $_SERVER['REMOTE_HOST'];
+	$ref = isset($_SERVER[ 'HTTP_REFERER']) ? $_SERVER[ 'HTTP_REFERER'] : "";
+	$ua = isset($_SERVER[ 'HTTP_USER_AGENT']) ? $_SERVER[ 'HTTP_USER_AGENT'] : "";
+	$remA = isset($_SERVER[ 'REMOTE_ADDR']) ? $_SERVER[ 'REMOTE_ADDR'] : "";
+	$remH = isset($_SERVER[ 'REMOTE_HOST']) ? $_SERVER[ 'REMOTE_HOST'] : "";
 	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '")');
 }
 
