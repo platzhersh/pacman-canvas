@@ -1045,19 +1045,19 @@ function checkAppCache() {
 		});
 		
 		// Mobile Control Buttons
-		$(document).on('touchend mousedown','.controlButton#up',function(event) {
+		$(document).on('touchend mousedown','#up',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(up);
 		});
-		$(document).on('touchend mousedown','.controlButton#down',function(event) {
+		$(document).on('touchend mousedown','#down',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(down);
 		});
-		$(document).on('touchend mousedown','.controlButton#left',function(event) {
+		$(document).on('touchend mousedown','#left',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(left);
 		});
-		$(document).on('touchend mousedown','.controlButton#right',function(event) {
+		$(document).on('touchend mousedown','#right',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(right);
 		});

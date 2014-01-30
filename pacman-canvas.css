@@ -48,6 +48,9 @@ body {
 }
 
 #highscore-form { margin-top: 8px; }
+input[type="text"]:hover, input[type="text"]:focus, input[type="password"]:hover, input[type="password"]:focus, textarea:hover, textarea:focus {
+    border: 1px #c80a0a solid;
+}
 #highscore-list {}
 #score { float: right; }
 
