@@ -96,7 +96,13 @@ audio {display: block; }
 /* ---------- Controls ------------------------*/
 
 .controls { text-align: center; margin-top: 15px;}
-.controls-section { width: 45%; display: inline-block; margin: 0;}
+.controls-section { 
+	height: auto; 
+	width: 47%; 
+	display: inline-block; 
+	margin: 0;
+	text-align: left;
+	}
 .controls-left { }
 .controls-right .controlButton { position: relative; right: -65%; }
 
@@ -140,11 +146,13 @@ audio {display: block; }
 	font-weight: bold;
 	font-size: 60px;
 	cursor:pointer;
-	display: block;
+	text-align: center;
 }
 .controlButton:hover, .controlButton:active {
 	background: #c00202;
 }
+#up, #down, #placeholder { display: block; }
+#placeholder { visibility: hidden; }
 
 .description { display: none; }
 
