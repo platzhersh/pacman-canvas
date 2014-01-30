@@ -96,9 +96,12 @@ audio {display: block; }
 /* ---------- Controls ------------------------*/
 
 .controls { text-align: center; margin-top: 15px;}
+.controls-section { width: 45%; display: inline-block; margin: 0;}
+.controls-left { }
+.controls-right .controlButton { position: relative; right: -65%; }
 
 /* Arrow Keys - only displayed when game isn't paused */
-#game-buttons { display: none;}
+#game-buttons { display: none; }
 
 /* Game Menu - displayed when game is paused */
 #menu-buttons ul, .controls#menu-buttons ul li{ list-style: none; padding: 0;}
@@ -130,13 +133,17 @@ audio {display: block; }
 	display: inline-block;
 	width: 90px;
 	height: 90px;
-	margin: 5px;
+	margin-bottom: 10px;
 	background: #c80a0a;
 	line-height: 70px;
 	border-radius: 50%;
 	font-weight: bold;
 	font-size: 60px;
 	cursor:pointer;
+	display: block;
+}
+.controlButton:hover, .controlButton:active {
+	background: #c00202;
 }
 
 .description { display: none; }
@@ -166,11 +173,12 @@ audio {display: block; }
 	.content { min-height: 0; }
 	
 	.controlButton {
-		width: 50px;
-		height: 50px;
-		line-height: 30px;
-		font-size: 30px;
+		width: 60px;
+		height: 60px;
+		line-height: 40px;
+		font-size: 40px;
 	}
+	.controls-right .controlButton { right: -55%; }
 	/*canvas#myCanvas { margin: 5px auto; }	*/
 
 }
