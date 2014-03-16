@@ -1,4 +1,4 @@
-/* -----------------------------------------------------------------
+/*-------------------------------------------------------------------
 
 	___________    ____   _____ _____    ____  
 	\____ \__  \ _/ ___\ /     \\__  \  /    \ 
@@ -13,6 +13,7 @@
 
 /* ----- Global Variables ---------------------------------------- */
 	var canvas;
+	var joystick;
 	var context;
 	var game;
 	var inky, blinky, clyde, pinky;
@@ -71,19 +72,85 @@
 	
 	// Manages the whole game ("God Object")
 	function Game() {
-		this.refreshRate = 33;
+		this.refreshRate = 33;		// speed of the game, will increase in higher levels
 		this.running = false;
 		this.pause = true;
 		this.score = new Score();
 		this.soundfx = 0;
 		this.map;
-		this.pillCount;	// # of pills
+		this.pillCount;				// number of pills
 		this.monsters;
 		this.level = 1;
 		this.gameOver = false;
 		this.canvas = $("#myCanvas").get(0);
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
+		
+		this.ghostFrightened = false;
+		this.ghostFrightenedTimer = 240;
+		this.ghostMode = 0;			// 0 = Scatter, 1 = Chase
+		this.ghostModeTimer = 200;	// decrements each animationLoop execution
+		
+		/* Game Functions */
+		this.startGhostFrightened = function() {
+			console.log("ghost frigthened");
+			this.ghostFrightened = true;
+			this.ghostFrightenedTimer = 240;
+			inky.dazzle();	
+			pinky.dazzle();	
+			blinky.dazzle();	
+			clyde.dazzle();
+		}
+		this.endGhostFrightened = function() {
+			console.log("ghost frigthened end");		
+			this.ghostFrightened = false;
+			inky.undazzle();
+			pinky.undazzle();
+			blinky.undazzle();
+			clyde.undazzle();
+			};
+		
+			
+		this.checkGhostMode = function() {
+			if (this.ghostFrightened) {
+				
+				this.ghostFrightenedTimer--;
+				if (this.ghostFrightenedTimer == 0) {
+					this.endGhostFrightened();
+					this.ghostFrigthenedTimer = 240;
+					/*inky.reverseDirection();
+					pinky.reverseDirection();
+					clyde.reverseDirection();
+					blinky.reverseDirection();*/
+				}
+			}
+			else {
+				this.ghostModeTimer--;
+				if (this.ghostModeTimer == 0) {
+					console.log("ghostMode="+this.ghostMode);
+					this.ghostMode ^= 1;
+					this.ghostModeTimer = 200 + this.ghostMode * 450;
+					/*inky.reverseDirection();
+					pinky.reverseDirection();
+					clyde.reverseDirection();
+					blinky.reverseDirection();*/
+					}
+			}
+		}
+		
+		this.getMapContent = function (x, y) {
+			var maxX = game.width / 30 -1;
+			var maxY = game.height / 30 -1;
+			if (x < 0) x = maxX + x;
+			if (x > maxX) x = x-maxX;
+			if (y < 0) y = maxY + y;
+			if (y > maxY) y = y-maxY;
+			return this.map.posY[y].posX[x].type;
+		}
+		this.setMapContent = function (x,y,val) {
+			this.map.posY[y].posX[x].type = val;
+		}
+		
 		this.toggleSound = function() { 
 			this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0; 
 			$('#mute').toggle();
@@ -91,8 +158,11 @@
 		this.reset = function() {
 			}
 		this.newGame = function() {
-			console.log("new Game");
-            this.init(0);
+		    var r = confirm("Are you sure you want to restart?");
+            if (r) {
+        	    console.log("new Game");
+                this.init(0);
+            }
             this.pauseResume();
 		}
 		this.nextLevel = function() {
@@ -141,7 +211,7 @@
 			}
 		this.init = function (state) {
 			
-			//console.log("init game");
+			console.log("init game "+state);
 			
 			// get Level Map
 			$.ajax({
@@ -179,25 +249,29 @@
 			
 			game.drawHearts(pacman.lives);	
 			
+			this.ghostFrightened = false;
+			this.ghostFrightenedTimer = 240;
+			this.ghostMode = 0;			// 0 = Scatter, 1 = Chase
+			this.ghostModeTimer = 200;	// decrements each animationLoop execution
+			
 			// initalize Ghosts, avoid memory flooding
 			if (pinky == null) {
-				pinky = new Ghost(14*pacman.radius,10*pacman.radius,'img/pinky.svg');
-				inky = new Ghost(16*pacman.radius,10*pacman.radius,'img/inky.svg');
-				blinky = new Ghost(18*pacman.radius,10*pacman.radius,'img/blinky.svg');
-				clyde = new Ghost(20*pacman.radius,10*pacman.radius,'img/clyde.svg');
+				pinky = new Ghost("pinky",7,5,'img/pinky.svg',2,2);
+				inky = new Ghost("inky",8,5,'img/inky.svg',13,11);
+				blinky = new Ghost("blinky",9,5,'img/blinky.svg',13,0);
+				clyde = new Ghost("clyde",10,5,'img/clyde.svg',2,11);
 			}
 			else {
 				//console.log("ghosts reset");
-				pinky.setPosition(14*pacman.radius,10*pacman.radius);
-				pinky.undazzle();
-				inky.setPosition(16*pacman.radius,10*pacman.radius);
-				inky.undazzle();
-				blinky.setPosition(18*pacman.radius,10*pacman.radius);
-				blinky.undazzle();
-				clyde.setPosition(20*pacman.radius,10*pacman.radius);
-				clyde.undazzle();
+				pinky.reset();
+				inky.reset();
+				blinky.reset();
+				clyde.reset();
 			}
-		
+			blinky.start();	// blinky is the first to leave ghostHouse
+			inky.start();
+			pinky.start();
+			clyde.start();
 			}
 		this.check = function() {
 		if ((this.pillCount == 0) && game.running) {
@@ -249,13 +323,21 @@
 		this.angle2 = angle2;
 		this.dirX = dirX;
 		this.dirY = dirY;
+		this.equals = function(dir) {
+			return  JSON.stringify(this) ==  JSON.stringify(dir);
+		}
 	}
 	
 	// Direction Objects
 	var up = new Direction("up",1.75,1.25,0,-1);		// UP
 	var left = new Direction("left",1.25,0.75,-1,0);	// LEFT
 	var down = new Direction("down",0.75,0.25,0,1);		// DOWN
-	var right = new Direction("right",0.25,1.75,1,0);	// RIGHT
+	var right = new Direction("right",0.25,1.75,1,0);	// 
+	/*var directions = [{},{},{},{}];
+	directions[0] = up;
+	directions[1] = down;
+	directions[2] = right;
+	directions[3] = left;*/
 	
 	
 	// DirectionWatcher
@@ -273,15 +355,41 @@
 	//var directionWatcher = new directionWatcher();
 	
 	// Ghost object in Constructor notation
-	function Ghost(posX, posY, image) {
-		this.posX = posX;
-		this.posY = posY;
+	function Ghost(name, gridPosX, gridPosY, image, gridBaseX, gridBaseY) {
+		this.name = name;
+		this.posX = gridPosX * 30;
+		this.posY = gridPosY * 30;
+		this.startPosX = gridPosX * 30;
+		this.startPosY = gridPosY * 30;
+		this.gridBaseX = gridBaseX;
+		this.gridBaseY = gridBaseY;
 		this.speed = 5;
+		this.images = JSON.parse(
+			'{"normal" : {'
+				+ '"inky" : "0",'
+				+ '"pinky" : "1",'
+				+ '"blinky" : "2",'
+				+ '"clyde" : "3"'
+				+ '},'
+			+
+			'"frightened1" : {'
+				+
+				'"left" : "", "up": "", "right" : "", "down": ""},'
+			+
+			'"frightened2" : {'
+				+
+				'"left" : "", "up": "", "right" : "", "down": ""},'
+			+
+			'"dead" : {'
+				+
+				'"left" : "", "up": "", "right" : "", "down": ""}}'
+			);
 		this.image = new Image();
 		this.image.src = image;
+		this.ghostHouse = true;
 		this.dazzled = false;
 		this.dazzle = function() {
-			this.speed = 3;
+			this.speed = 5;
 			// ensure ghost doesnt leave grid
 			if (this.posX > 0) this.posX = this.posX - this.posX % this.speed;
 			if (this.posY > 0) this.posY = this.posY - this.posY % this.speed;
@@ -298,17 +406,22 @@
 		this.dazzleImg.src = 'img/dazzled.svg';
 		this.dazzleImg2 = new Image();
 		this.dazzleImg2.src = 'img/dazzled2.svg';
+		this.deadImg = new Image();
+		this.deadImg.src = 'img/dead.svg';
 		this.direction = right;
 		this.radius = pacman.radius;
 		this.draw = function (context) {					
-		if (this.dazzled) {
-			if (pacman.beastModeTimer < 50 && pacman.beastModeTimer % 8 > 1) {
-				context.drawImage(this.dazzleImg2, this.posX, this.posY, 2*this.radius, 2*this.radius);
-			} else {
-				context.drawImage(this.dazzleImg, this.posX, this.posY, 2*this.radius, 2*this.radius);
+			if (this.dead) {
+				context.drawImage(this.deadImg, this.posX, this.posY, 2*this.radius, 2*this.radius);
 			}
-		}
-		else context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
+			else if (this.dazzled) {
+				if (pacman.beastModeTimer < 50 && pacman.beastModeTimer % 8 > 1) {
+					context.drawImage(this.dazzleImg2, this.posX, this.posY, 2*this.radius, 2*this.radius);
+				} else {
+					context.drawImage(this.dazzleImg, this.posX, this.posY, 2*this.radius, 2*this.radius);
+				}
+			}
+			else context.drawImage(this.image, this.posX, this.posY, 2*this.radius, 2*this.radius);
 		}
 		this.getCenterX = function () {
 			return this.posX+this.radius;
@@ -318,83 +431,222 @@
 		}
 		
 		this.reset = function() {
-			this.posX = 14*pacman.radius;
-			this.posY = 10*pacman.radius;
+			this.dead = false;
+			this.posX = this.startPosX;
+			this.posY = this.startPosY;
+			this.ghostHouse = true;
 			this.undazzle();
 		}
 		
 		this.die = function() {
-			this.reset();
+			//this.reset();
+			this.dead = true;
 		}
-	
-		this.checkCollision = function() {
-			if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
-				if ((Math.floor((Math.random()*10)+1)%6) == 3) this.setRandomDirection();
+		
+		this.move = function() {
+		
+			this.checkDirectionChange();
+			this.checkCollision();
+		
+			// leave Ghost House
+			if (this.ghostHouse == true) {
+			
+				// Clyde does not start chasing before 2/3 of all pills are eaten
+				if (this.name == "clyde") {
+					if ((game.pillCount > 104/3)) this.stop = true;
+					else this.stop = false;
 				}
-			
-			// Get the Grid Position of Pac
-			var gridAheadX = this.getGridPosX();
-			var gridAheadY = this.getGridPosY();
-			
-			// get the field 1 ahead to check wall collisions
-			if ((this.dirX == 1) && (gridAheadX < 17)) gridAheadX += 1;
-			if ((this.dirY == 1) && (gridAheadY < 12)) gridAheadY += 1;
-			var fieldAhead = game.map.posY[gridAheadY].posX[gridAheadX];
-			
-			
-			/*	Check Wall Collision			*/
-			if (fieldAhead.type === "wall") {
-				this.stuckX = this.dirX;
-				this.stuckY = this.dirY;
-				this.stop=true;
-				// get out of the wall
-				if ((this.stuckX == 1) && ((this.posX % 2*this.radius) != 0)) this.posX -= this.speed;
-				if ((this.stuckY == 1) && ((this.posY % 2*this.radius) != 0)) this.posY -= this.speed;
-				if (this.stuckX == -1) this.posX += this.speed;
-				if (this.stuckY == -1) this.posY += this.speed;
-				this.setRandomDirection();
-				this.stop=false;
-			}
-			/* Check Ghost / Pacman Collision			*/
-			if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
-				&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
-			{
-				if (this.dazzled == false) {
-					pacman.die();
-					}
-				else {
-					this.die();
-					game.score.add(100);
+				// Inky starts after 30 pills
+				if (this.name == "inky") {
+					if ((game.pillCount > 104-30)) this.stop = true;
+					else this.stop = false;
+				}
+				
+				if ((this.getGridPosY() == 5) && this.inGrid()) {
+					if ((this.getGridPosX() == 7)) this.setDirection(right);
+					if ((this.getGridPosX() == 8) || this.getGridPosX() == 9) this.setDirection(up);
+					if ((this.getGridPosX() == 10)) this.setDirection(left);
+				}
+				if ((this.getGridPosY() == 4) && ((this.getGridPosX() == 8) || (this.getGridPosX() == 9)) && this.inGrid()) { 
+					console.log("ghosthouse -> false");
+					this.ghostHouse = false;
 					}
 			}
 			
+			if (!this.stop) {
+			// Move
+				this.posX += this.speed * this.dirX;
+				this.posY += this.speed * this.dirY;
+				
+				// Check if out of canvas
+				if (this.posX >= game.width-this.radius) this.posX = this.speed-this.radius;
+				if (this.posX <= 0-this.radius) this.posX = game.width-this.speed-this.radius;
+				if (this.posY >= game.height-this.radius) this.posY = this.speed-this.radius;
+				if (this.posY <= 0-this.radius) this.posY = game.height-this.speed-this.radius;
+			}
+		}
+			
+		this.checkCollision = function() {
+		
+			/* Check Back to Home */
+			if (this.dead && (this.getGridPosX() == this.startPosX /30) && (this.getGridPosY() == this.startPosY / 30)) this.reset();
+			else {
+				/* Check Ghost / Pacman Collision			*/
+				if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
+					&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
+				{
+					if ((!this.dazzled) && (!this.dead)) {
+						pacman.die();
+						}
+					else {
+						this.die();
+						game.score.add(100);
+						}
+				}
+			}
+		}
+		
+		/* Pathfinding */
+		this.getNextDirection = function() {
+			// get next field
+			var pX = this.getGridPosX();
+			var pY= this.getGridPosY();
+			game.getMapContent(pX,pY);
+			var u, d, r, l; 			// option up, down, right, left
+			
+			// get target
+			if (this.dead) {			// go Home
+				var tX = this.startPosX / 30;
+				var tY = this.startPosY / 30;
+				}
+			else if (game.ghostMode == 0) {			// Scatter Mode
+				var tX = this.gridBaseX;
+				var tY = this.gridBaseY;
+			} else if (game.ghostMode == 1) {			// Chase Mode
+				
+				switch (this.name) {
+				
+				// target: 4 ahead and 4 left of pacman
+				case "pinky":
+					var pdir = pacman.direction;
+					var pdirX = pdir.dirX == 0 ? - pdir.dirY : pdir.dirX;
+					var pdirY = pdir.dirY == 0 ? - pdir.dirX : pdir.dirY;
+					
+					var tX = (pacman.getGridPosX() + pdirX*4) % (game.width / pacman.radius +1);
+					var tY = (pacman.getGridPosY() + pdirY*4) % (game.height / pacman.radius +1);
+					break;
+				
+				// target: pacman
+				case "blinky":
+					var tX = pacman.getGridPosX();
+					var tY = pacman.getGridPosY();
+					break;
+				
+				// target: 
+				case "inky":
+					var tX = pacman.getGridPosX() + 2*pacman.direction.dirX;
+					var tY = pacman.getGridPosY() + 2*pacman.direction.dirY;
+					var vX = tX - blinky.getGridPosX();
+					var vY = tY - blinky.getGridPosY();
+					tX = Math.abs(blinky.getGridPosX() + vX*2);
+					tY = Math.abs(blinky.getGridPosY() + vY*2);
+					break;
+				
+				// target: 
+				case "clyde":
+					var tX = pacman.getGridPosX();
+					var tY = pacman.getGridPosY();
+					var dist = Math.sqrt(Math.pow((pX-tX),2) + Math.pow((pY - tY),2));
+					
+					if (dist < 5) {
+						tX = this.gridBaseX;
+						tY = this.gridBaseY;
+					}
+					break;
+				
+				}
+			}	
+			
+			
+			var oppDir = this.getOppositeDirection();	// ghosts are not allowed to change direction 180°
+			
+			var dirs = [{},{},{},{}];		
+			dirs[0].field = game.getMapContent(pX,pY-1);
+			dirs[0].dir = up;
+			dirs[0].distance = Math.sqrt(Math.pow((pX-tX),2) + Math.pow((pY -1 - tY),2));
+			
+			dirs[1].field = game.getMapContent(pX,pY+1);
+			dirs[1].dir = down;
+			dirs[1].distance = Math.sqrt(Math.pow((pX-tX),2) + Math.pow((pY+1 - tY),2));
+			
+			dirs[2].field = game.getMapContent(pX+1,pY);
+			dirs[2].dir = right;
+			dirs[2].distance = Math.sqrt(Math.pow((pX+1-tX),2) + Math.pow((pY - tY),2));
+			
+			dirs[3].field = game.getMapContent(pX-1,pY);
+			dirs[3].dir = left;
+			dirs[3].distance = Math.sqrt(Math.pow((pX-1-tX),2) + Math.pow((pY - tY),2));
+			
+			// Sort possible directions by distance
+			function compare(a,b) {
+			  if (a.distance < b.distance)
+				 return -1;
+			  if (a.distance > b.distance)
+				return 1;
+			  return 0;
+			}
+			var dirs2 = dirs.sort(compare);
+			
+			var r = this.dir;
+			var j;
+			
+			if (this.dead) {
+				for (var i = dirs2.length-1; i >= 0; i--) {
+					if ((dirs2[i].field != "wall") && !(dirs2[i].dir.equals(this.getOppositeDirection()))) {
+					r = dirs2[i].dir;
+					}
+				}
+			}
+			else {
+				for (var i = dirs2.length-1; i >= 0; i--) {
+					if ((dirs2[i].field != "wall") && (dirs2[i].field != "door") && !(dirs2[i].dir.equals(this.getOppositeDirection()))) {
+						r = dirs2[i].dir;
+						}
+				}		
+			}
+			this.directionWatcher.set(r);
+			return r;
 		}
 		this.setRandomDirection = function() {
-			 var dir = Math.floor((Math.random()*10)+1)%5; 
-
+			 var dir = Math.floor((Math.random()*10)+1)%5;
+				
 			 switch(dir) {
 				case 1:	
-					this.setDirection(up);
+					if (this.getOppositeDirection().equals(up)) this.setDirection(down);
+					else this.setDirection(up);
 					break;
 				case 2:	
-					this.setDirection(down);
+					if (this.getOppositeDirection().equals(down)) this.setDirection(up);
+					else this.setDirection(down);
 					break;
-				case 3: 	
-					this.setDirection(right);
+				case 3: 
+					if (this.getOppositeDirection().equals(right)) this.setDirection(left);				
+					else this.setDirection(right);
 					break;
 				case 4:		
-					this.setDirection(left);
-					break;
-				default: 	
-					this.setDirection(right);
+					if (this.getOppositeDirection().equals(left)) this.setDirection(right);				
+					else this.setDirection(left);
 					break;
 			 }
+		}
+		this.reverseDirection = function() {
+			console.log("reverseDirection: "+this.direction.name+" to "+this.getOppositeDirection().name);
+			this.directionWatcher.set(this.getOppositeDirection());
 		}
 		
 	}
 	
 	Ghost.prototype = new Figure();
-	
 	
 	// Super Class for Pacman & Ghosts
 	function Figure() {
@@ -406,7 +658,28 @@
 		this.direction;
 		this.stop = true;
 		this.directionWatcher = new directionWatcher();
-		this.checkDirectionChange = function() {}
+		this.getNextDirection = function() { console.log("Figure getNextDirection");};
+		this.checkDirectionChange = function() {
+			if (this.inGrid() && (this.directionWatcher.get() == null)) this.getNextDirection();
+			if ((this.directionWatcher.get() != null) && this.inGrid()) {
+				//console.log("changeDirection to "+this.directionWatcher.get().name);
+				this.setDirection(this.directionWatcher.get());
+				this.directionWatcher.set(null);
+			}
+			
+		}
+	
+		
+		this.inGrid = function() {
+			if((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) return true;
+			return false;
+		}
+		this.getOppositeDirection = function() {
+			if (this.direction.equals(up)) return down;
+			else if (this.direction.equals(down)) return up;
+			else if (this.direction.equals(right)) return left;
+			else if (this.direction.equals(left)) return right;
+		}
 		this.move = function() {
 		
 			if (!this.stop) {
@@ -446,6 +719,7 @@
 		this.radius = 15;
 		this.posX = 0;
 		this.posY = 6*2*this.radius;
+		this.speed = 5;
 		this.angle1 = 0.25;
 		this.angle2 = 1.75;
 		this.mouth = 1; /* Switches between 1 and -1, depending on mouth closing / opening */
@@ -484,29 +758,30 @@
 				var gridAheadX = gridX;
 				var gridAheadY = gridY;
 				
-				var field = game.map.posY[gridY].posX[gridX];
+				var field = game.getMapContent(gridX, gridY);
 
 				// get the field 1 ahead to check wall collisions
 				if ((this.dirX == 1) && (gridAheadX < 17)) gridAheadX += 1;
 				if ((this.dirY == 1) && (gridAheadY < 12)) gridAheadY += 1;
-				var fieldAhead = game.map.posY[gridAheadY].posX[gridAheadX];
+				var fieldAhead = game.getMapContent(gridAheadX, gridAheadY);
 
 				
 				/*	Check Pill Collision			*/
-				if ((field.type === "pill") || (field.type === "powerpill")) {
+				if ((field === "pill") || (field === "powerpill")) {
 					//console.log("Pill found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
 					if (
 						((this.dirX == 1) && (between(this.posX, game.toPixelPos(gridX)+this.radius-5, game.toPixelPos(gridX+1))))
 						|| ((this.dirX == -1) && (between(this.posX, game.toPixelPos(gridX), game.toPixelPos(gridX)+5)))
 						|| ((this.dirY == 1) && (between(this.posY, game.toPixelPos(gridY)+this.radius-5, game.toPixelPos(gridY+1))))
 						|| ((this.dirY == -1) && (between(this.posY, game.toPixelPos(gridY), game.toPixelPos(gridY)+5)))
-						|| (fieldAhead.type === "wall")
+						|| (fieldAhead === "wall")
 						)
 						{	var s;
-							if (field.type === "powerpill") {
+							if (field === "powerpill") {
 								Sound.play("powerpill");
 								s = 50;
 								this.enableBeastMode();
+								game.startGhostFrightened();
 								}
 							else {
 								Sound.play("waka");
@@ -519,7 +794,7 @@
 				}
 				
 				/*	Check Wall Collision			*/
-				if ((fieldAhead.type === "wall") || (fieldAhead.type === "door")) {
+				if ((fieldAhead === "wall") || (fieldAhead === "door")) {
 					this.stuckX = this.dirX;
 					this.stuckY = this.dirY;
 					pacman.stop();
@@ -537,7 +812,6 @@
 				//console.log("next Direction: "+directionWatcher.get().name);
 
 				if ((this.stuckX == 1) && this.directionWatcher.get() == right) this.directionWatcher.set(null);
-				else if ((this.stuckY == 1) && this.directionWatcher.get() == down) this.directionWatcher.set(null);
 				else {
 					// reset stuck events
 					this.stuckX = 0;
@@ -545,7 +819,7 @@
 					
 
 					// only allow direction changes inside the grid
-					if ((this.posX % (2*this.radius) === 0) && (this.posY % (2*this.radius) === 0)) {
+					if ((this.inGrid())) {
 					//console.log("changeDirection to "+directionWatcher.get().name);
 					this.setDirection(this.directionWatcher.get());
 					this.directionWatcher.set(null);
@@ -588,8 +862,8 @@
 					}
 				if ((this.beastModeTimer == 0) && (this.beastMode == true)) this.disableBeastMode();
 				
-				this.posX += 5 * this.dirX;
-				this.posY += 5 * this.dirY;
+				this.posX += this.speed * this.dirX;
+				this.posY += this.speed * this.dirY;
 				
 				// Check if out of canvas
 				if (this.posX >= game.width-this.radius) this.posX = 5-this.radius;
@@ -659,9 +933,10 @@
     		this.lives--;
 	        console.log("pacman died, "+this.lives+" lives left");
 	    	if (this.lives <= 0) {
-				var input = "<div id='highscore-form'><input type='text' /><span class='button' id='score-submit' onClick='addHighscore();'>save</span></div>";
+				var input = "<div id='highscore-form'><input type='text' id='playerName'/><span class='button' id='score-submit' onClick='addHighscore();'>save</span></div>";
 				game.showMessage("Game over","Total Score: "+game.score.score+input);
 				game.gameOver = true;
+				$('#playerName').focus();
 				}
 			game.drawHearts(this.lives);
 		}
@@ -672,7 +947,8 @@
 			return (this.posY - (this.posY % 30))/30;
 		}
 	}
-		var pacman = new pacman();
+	pacman.prototype = new Figure();
+	var pacman = new pacman();
 	
 // Check if a new cache is available on page load.	 
 function checkAppCache() {
@@ -704,7 +980,27 @@ function checkAppCache() {
 	
 	// Action starts here:
 	
+	function hideAdressbar() {
+		console.log("hide adressbar");
+		$("html").scrollTop(1);
+		$("body").scrollTop(1);
+	}
+	
 	$(document).ready(function() {
+	/*
+		var e = document.getElementById("game-joystick");
+		var ec = document.getElementById("game-joystick-container");
+	
+		joystick = new VirtualJoystick({
+			mouseSupport	: true,
+			stationaryBase	: true,
+			limitStickTravel : true,
+			baseX			: 200,
+			baseY			: 200
+		});
+		*/
+		//$("#game-joystick-container").hide();
+		
 	
 		$.ajaxSetup({ mimeType: "application/json" });
 		
@@ -717,8 +1013,7 @@ function checkAppCache() {
 		});
 		
 		// Hide address bar
-		$("html").scrollTop(1);
-		$("body").scrollTop(1);
+		hideAdressbar();
 		
 		if (window.applicationCache != null) checkAppCache();
 		
@@ -766,19 +1061,19 @@ function checkAppCache() {
 		});
 		
 		// Mobile Control Buttons
-		$(document).on('touchend mousedown','.controlButton#up',function(event) {
+		$(document).on('touchend mousedown','#up',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(up);
 		});
-		$(document).on('touchend mousedown','.controlButton#down',function(event) {
+		$(document).on('touchend mousedown','#down',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(down);
 		});
-		$(document).on('touchend mousedown','.controlButton#left',function(event) {
+		$(document).on('touchend mousedown','#left',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(left);
 		});
-		$(document).on('touchend mousedown','.controlButton#right',function(event) {
+		$(document).on('touchend mousedown','#right',function(event) {
 		    event.preventDefault();
 			pacman.directionWatcher.set(right);
 		});
@@ -990,14 +1285,27 @@ function checkAppCache() {
 				pacman.checkDirectionChange();
 				pacman.checkCollisions();		// has to be the LAST method called on pacman
 
-				inky.move();
-				inky.checkCollision();
-				pinky.move();			
-				pinky.checkCollision();
+				
+				
 				blinky.move();
-				blinky.checkCollision();
+				inky.move();
+				pinky.move();
 				clyde.move();
+				/*
+				inky.checkDirectionChange();
+				inky.checkCollision();
+				inky.move();
+
+				pinky.move();	
+				pinky.checkDirectionChange();				
+				pinky.checkCollision();
+				
+				clyde.move();
+				clyde.checkDirectionChange();
 				clyde.checkCollision();
+				*/
+				
+				game.checkGhostMode();
 			}
 			
 			// All dots collected?
@@ -1035,10 +1343,18 @@ function checkAppCache() {
 			case 68:	// D pressed
 				pacman.directionWatcher.set(right);
 				break;
+			case 78:	// N pressed
+			if (!$('#playerName').is(':focus')) {
+				game.pause = 1;
+				game.newGame();
+				}
+				break;
 			case 8:		// Backspace pressed -> show Game Content
 			case 27:	// ESC pressed -> show Game Content
-                evt.preventDefault();
-				game.showContent('game-content');
+				if (!$('#playerName').is(':focus')) {
+					evt.preventDefault();
+					game.showContent('game-content');
+					}
 				break;
 			case 32:	// SPACE pressed -> pause Game
                 evt.preventDefault();

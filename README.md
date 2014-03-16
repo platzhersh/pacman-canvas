@@ -13,6 +13,11 @@ changes
 ======
 
 *Version 0.8 - 13.11.2013*
+* Ghost Modes Scatter & Chase
+* Pathfinding AI for Blinky
+* Ghosts need to return to Ghost House when dead
+
+*Version 0.8 - 13.11.2013*
 * lots of small changes in the backend
 * when you go in landscape mode and your screen is too small to display the whole site, you get notified to rotate your phone into portrait mode
 * all onClick and onMousedown in HTML removed and replaced by EventListeners in JavaScript
