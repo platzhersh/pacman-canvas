@@ -12,6 +12,11 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+*Version 0.81 - 16.03.2014*
+* JS Injection protection
+* logging IP & user-agent of Higscore-Entries
+* Ghost AI almost like in the original Pacman
+
 *Version 0.8 - 13.11.2013*
 * Ghost Modes Scatter & Chase
 * Pathfinding AI for Blinky
