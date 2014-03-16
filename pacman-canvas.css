@@ -142,20 +142,17 @@ audio {display: block; }
 	display: inline-block;
 	width: 90px;
 	height: 90px;
-	margin-bottom: 10px;
-	background: #c80a0a;
+	margin: 5px;
+	background: none repeat scroll 0% 0% #C80A0A;
 	line-height: 70px;
 	border-radius: 50%;
 	font-weight: bold;
 	font-size: 60px;
-	cursor:pointer;
-	text-align: center;
+	cursor: pointer;
 }
 .controlButton:hover, .controlButton:active {
 	background: #c00202;
 }
-#up, #down, #placeholder { display: block; }
-#placeholder { visibility: hidden; }
 
 .description { display: none; }
 

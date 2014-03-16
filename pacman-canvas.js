@@ -13,6 +13,7 @@
 
 /* ----- Global Variables ---------------------------------------- */
 	var canvas;
+	var joystick;
 	var context;
 	var game;
 	var inky, blinky, clyde, pinky;
@@ -985,6 +986,20 @@ function checkAppCache() {
 	}
 	
 	$(document).ready(function() {
+	/*
+		var e = document.getElementById("game-joystick");
+		var ec = document.getElementById("game-joystick-container");
+	
+		joystick = new VirtualJoystick({
+			mouseSupport	: true,
+			stationaryBase	: true,
+			limitStickTravel : true,
+			baseX			: 200,
+			baseY			: 200
+		});
+		*/
+		//$("#game-joystick-container").hide();
+		
 	
 		$.ajaxSetup({ mimeType: "application/json" });
 		

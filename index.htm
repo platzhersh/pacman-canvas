@@ -26,6 +26,7 @@
 	<!-- Script -->
 	<script src="js/jquery-1.10.2.min.js" type="text/javascript"></script>
 	<script src="js/jquery.hammer.min.js" type="text/javascript"></script>
+	<script src='js/virtualjoystick.js'></script>
 	
 	<!-- Google Analytics -->
 	<script type="text/javascript">
@@ -40,7 +41,6 @@
 		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
-
 	</script>
 	
 </head>
@@ -132,20 +132,39 @@ dev branch
 			</canvas>
 		</div>
 		
-		<!-- inGame Controls -->
+		<!-- inGame Controls JOYSTICK
+		<div class="controls" id="game-joystick-container">
+			<div id="game-joystick"></div>
+		</div>
+		!-->
+
 		<div class="controls" id="game-buttons">
 		<!-- Will be moved to Instructions 
 		<p class="nomobile">Use W-A-S-D keys to navigate Pac-Man</p>
 		-->
 		
+			<!-- OLD Buttons -->
+			<div>
+				<span id="up" class="controlButton">&uarr;</span>
+			</div>
+			<div>
+				<span id="left" class="controlButton">&larr;</span>
+				<span id="down" class="controlButton">&darr;</span>
+				<span id="right" class="controlButton">&rarr;</span>
+			</div>
+		
+			<!-- -->
+		
+			<!-- FAT Buttons
 			<div id="up" style="height: 80px; background: red;">&uarr;</div>
-			<div style="background: white; padding: 0; width: 100%; overflow: auto;">
+			<div style="padding: 0; width: 100%; overflow: auto;">
 				<span id="left" style="height: 110px; float: left; width: 50%; margin-left:50%; padding: 0; margin: 0; background: green; display: inline-block;">&larr;</span>
 				<span id="right" style="height: 110px; float: right; display: inline-block; width:50%; padding: 0; margin: 0; background: blue;">&rarr;</span>
 			</div>
 			<div id="down" style="height: 80px; background: red;">&darr;</div>
+			-->
 		
-			<!--
+			<!-- ASIDE buttons
 			<div class="controls-section controls-left">
 				<span id="left" class="controlButton">&larr;</span>
 				<span id="right" class="controlButton">&rarr;</span>
