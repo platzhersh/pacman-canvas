@@ -1,7 +1,7 @@
 ﻿{
   "name": "Pacman Canvas (Beta)",
   "description": "An old classic, rewritten in HTML5",
-  "version": "0.81",
+  "version": "0.82",
   "manifest_version": 2,
   "icons": {
 	"128": "img/icon-128.png"

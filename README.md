@@ -12,12 +12,20 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 changes
 ======
 
+<<<<<<< HEAD
 *Version 0.81 - 16.03.2014*
 * JS Injection protection
 * logging IP & user-agent of Higscore-Entries
 * Ghost AI almost like in the original Pacman
 
 *Version 0.8 - 13.11.2013*
+=======
+*Version 0.82 - 02.04.2014*
+* small bugfixes
+* swipe gestures detection on the whole screen not only game area
+
+*Version 0.81 - 16.03.2014*
+>>>>>>> Version 0.82
 * Ghost Modes Scatter & Chase
 * Pathfinding AI for Blinky
 * Ghosts need to return to Ghost House when dead

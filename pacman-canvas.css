@@ -30,7 +30,11 @@ body {
 	font-family: 'Press Start 2P', cursive; 
 	font-weight: normal;
 	}
-.content[id*=-content]:not(#game-content) {	display: none;}
+.content[id*=-content]:not(#game-content) {	
+	display: none; 
+	overflow-y: scroll; 
+	overflow-x: hidden;
+}
 .button {
 	background: #c80a0a; 
 	cursor: pointer;

@@ -389,14 +389,15 @@
 		this.ghostHouse = true;
 		this.dazzled = false;
 		this.dazzle = function() {
-			this.speed = 5;
+			this.changeSpeed(3);
 			// ensure ghost doesnt leave grid
 			if (this.posX > 0) this.posX = this.posX - this.posX % this.speed;
 			if (this.posY > 0) this.posY = this.posY - this.posY % this.speed;
 			this.dazzled = true;
 		}
 		this.undazzle = function() {
-			this.speed = 5;
+			// only change speed if ghost is not "dead"
+			if (!this.dead) this.changeSpeed(3);
 			// ensure ghost doesnt leave grid
 			if (this.posX > 0) this.posX = this.posX - this.posX % this.speed;
 			if (this.posY > 0) this.posY = this.posY - this.posY % this.speed;
@@ -441,6 +442,13 @@
 		this.die = function() {
 			//this.reset();
 			this.dead = true;
+			this.changeSpeed(5);
+		}
+		this.changeSpeed = function(s) {
+			// adjust gridPosition to new speed
+			this.posX = Math.round(this.posX / s) * s;
+			this.posY = Math.round(this.posY / s) * s;
+			this.speed = s;
 		}
 		
 		this.move = function() {
@@ -986,21 +994,7 @@ function checkAppCache() {
 		$("body").scrollTop(1);
 	}
 	
-	$(document).ready(function() {
-	/*
-		var e = document.getElementById("game-joystick");
-		var ec = document.getElementById("game-joystick-container");
-	
-		joystick = new VirtualJoystick({
-			mouseSupport	: true,
-			stationaryBase	: true,
-			limitStickTravel : true,
-			baseX			: 200,
-			baseY			: 200
-		});
-		*/
-		//$("#game-joystick-container").hide();
-		
+	$(document).ready(function() {	
 	
 		$.ajaxSetup({ mimeType: "application/json" });
 		
@@ -1043,19 +1037,19 @@ function checkAppCache() {
 		/*Hammer('#canvas-container').on("tap", function(event) {
 			if (!(game.gameOver == true))	game.pauseResume();
 		});*/
-		Hammer('#game-content').on("swiperight", function(event) {
+		Hammer('.container').on("swiperight", function(event) {
 			event.gesture.preventDefault();
 			pacman.directionWatcher.set(right);
 		});
-		Hammer('#game-content').on("swipeleft", function(event) {
+		Hammer('.container').on("swipeleft", function(event) {
 			event.gesture.preventDefault();
 			pacman.directionWatcher.set(left);
 		});
-		Hammer('#game-content').on("swipeup", function(event) {
+		Hammer('.container').on("swipeup", function(event) {
 			event.gesture.preventDefault();
 			pacman.directionWatcher.set(up);
 		});
-		Hammer('#game-content').on("swipedown", function(event) {
+		Hammer('.container').on("swipedown", function(event) {
 			event.gesture.preventDefault();
 			pacman.directionWatcher.set(down);
 		});
