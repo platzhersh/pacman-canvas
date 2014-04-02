@@ -1038,20 +1038,28 @@ function checkAppCache() {
 			if (!(game.gameOver == true))	game.pauseResume();
 		});*/
 		Hammer('.container').on("swiperight", function(event) {
-			event.gesture.preventDefault();
-			pacman.directionWatcher.set(right);
+			if ($('#game-content').is(":visible")) {
+				event.gesture.preventDefault();
+				pacman.directionWatcher.set(right);
+				}
 		});
 		Hammer('.container').on("swipeleft", function(event) {
-			event.gesture.preventDefault();
-			pacman.directionWatcher.set(left);
+			if ($('#game-content').is(":visible")) {
+				event.gesture.preventDefault();
+				pacman.directionWatcher.set(left);
+			}
 		});
 		Hammer('.container').on("swipeup", function(event) {
-			event.gesture.preventDefault();
-			pacman.directionWatcher.set(up);
+			if ($('#game-content').is(":visible")) {
+				event.gesture.preventDefault();
+				pacman.directionWatcher.set(up);
+			}
 		});
 		Hammer('.container').on("swipedown", function(event) {
-			event.gesture.preventDefault();
-			pacman.directionWatcher.set(down);
+			if ($('#game-content').is(":visible")) {
+				event.gesture.preventDefault();
+				pacman.directionWatcher.set(down);
+			}
 		});
 		
 		// Mobile Control Buttons
