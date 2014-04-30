@@ -71,6 +71,29 @@
 	function between (x, min, max) {
 		return x >= min && x <= max;
 		}
+
+
+	// Logger
+	var logger = function() {
+	    var oldConsoleLog = null;
+	    var pub = {};
+
+	    pub.enableLogger =  function enableLogger() 
+	                        {
+	                            if(oldConsoleLog == null)
+	                                return;
+
+	                            window['console']['log'] = oldConsoleLog;
+	                        };
+
+	    pub.disableLogger = function disableLogger()
+	                        {
+	                            oldConsoleLog = console.log;
+	                            window['console']['log'] = function() {};
+	                        };
+
+	    return pub;
+	}();
 	
 	// Manages the whole game ("God Object")
 	function Game() {
@@ -833,9 +856,27 @@
 
 					// only allow direction changes inside the grid
 					if ((this.inGrid())) {
-					//console.log("changeDirection to "+directionWatcher.get().name);
-					this.setDirection(this.directionWatcher.get());
-					this.directionWatcher.set(null);
+						//console.log("changeDirection to "+directionWatcher.get().name);
+						
+						// check if possible to change direction without getting stuck
+						console.log("x: "+this.getGridPosX()+" + "+this.directionWatcher.get().dirX);
+						console.log("y: "+this.getGridPosY()+" + "+this.directionWatcher.get().dirY);
+						var x = this.getGridPosX()+this.directionWatcher.get().dirX;
+						var y = this.getGridPosY()+this.directionWatcher.get().dirY;
+						if (x == -1) x = game.width/(this.radius*2)-1;
+						if (x == game.width/(this.radius)*2) x = 0;
+						if (y == -1) x = game.height/(this.radius*2)-1;
+						if (y == game.heigth/(this.radius)*2) y = 0;
+
+						console.log("x: "+x);
+						console.log("y: "+y);
+						var nextTile = game.map.posY[y].posX[x].type;
+						console.log("checkNextTile: "+nextTile);
+
+						if (nextTile != "wall") {
+							this.setDirection(this.directionWatcher.get());
+							this.directionWatcher.set(null);
+						}
 					}
 				}
 			}
@@ -1197,6 +1238,7 @@ function checkAppCache() {
 		-------------------------------------------------------------------------- */
 		
 		game.init(0);
+		logger.disableLogger();
 		
 		renderContent();
 		});
@@ -1324,8 +1366,8 @@ function checkAppCache() {
 			game.check();
 			
 			
-			requestAnimationFrame(animationLoop);
-			//setTimeout(animationLoop, game.refreshRate);
+			//requestAnimationFrame(animationLoop);
+			setTimeout(animationLoop, game.refreshRate);
 			
 			
 		}
