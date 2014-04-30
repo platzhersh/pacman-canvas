@@ -32,7 +32,7 @@ body {
 	}
 .content[id*=-content]:not(#game-content) {	
 	display: none; 
-	overflow-y: scroll; 
+	overflow-y: auto; 
 	overflow-x: hidden;
 }
 .button {
