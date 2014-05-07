@@ -1345,19 +1345,6 @@ function checkAppCache() {
 				inky.move();
 				pinky.move();
 				clyde.move();
-				/*
-				inky.checkDirectionChange();
-				inky.checkCollision();
-				inky.move();
-
-				pinky.move();	
-				pinky.checkDirectionChange();				
-				pinky.checkCollision();
-				
-				clyde.move();
-				clyde.checkDirectionChange();
-				clyde.checkCollision();
-				*/
 				
 				game.checkGhostMode();
 			}
@@ -1403,6 +1390,9 @@ function checkAppCache() {
 				game.pause = 1;
 				game.newGame();
 				}
+				break;
+			case 77:	// M pressed
+				game.toggleSound();
 				break;
 			case 8:		// Backspace pressed -> show Game Content
 			case 27:	// ESC pressed -> show Game Content
