@@ -1,4 +1,4 @@
-pacman-canvas
+	pacman-canvas
 =============
 
 An old classic, re-written in HTML5.
@@ -10,7 +10,11 @@ http://soundfxcenter.com/ and http://soundfxnow.com/
 ------
 
 changes
-======
+
+
+*Version 0.83 - 07.05.2014
+* not possible to stop by turning into walls anymore
+* mute / unmute the game by pressing the "M" key
 
 *Version 0.82 - 02.04.2014*
 * small bugfixes
