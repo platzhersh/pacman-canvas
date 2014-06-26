@@ -1,4 +1,4 @@
-	pacman-canvas
+pacman-canvas
 =============
 
 An old classic, re-written in HTML5.
@@ -18,10 +18,11 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 
 ------
 
-changes
+Version history
+===============
 
 
-*Version 0.83 - 07.05.2014
+*Version 0.83 - 07.05.2014*
 * not possible to stop by turning into walls anymore
 * mute / unmute the game by pressing the "M" key
 
