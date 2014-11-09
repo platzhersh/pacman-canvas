@@ -863,10 +863,10 @@
 						console.log("y: "+this.getGridPosY()+" + "+this.directionWatcher.get().dirY);
 						var x = this.getGridPosX()+this.directionWatcher.get().dirX;
 						var y = this.getGridPosY()+this.directionWatcher.get().dirY;
-						if (x == -1) x = game.width/(this.radius*2)-1;
-						if (x == game.width/(this.radius)*2) x = 0;
-						if (y == -1) x = game.height/(this.radius*2)-1;
-						if (y == game.heigth/(this.radius)*2) y = 0;
+						if (x <= -1) x = game.width/(this.radius*2)-1;
+						if (x >= game.width/(this.radius*2)) x = 0;
+						if (y <= -1) x = game.height/(this.radius*2)-1;
+						if (y >= game.heigth/(this.radius*2)) y = 0;
 
 						console.log("x: "+x);
 						console.log("y: "+y);
