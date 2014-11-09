@@ -42,7 +42,7 @@ html, body {
     min-height: 100%;
     height: 100%;
 	line-height: 23px;
-	background: url(bg-pattern-black.png) repeat;
+	background: url('img/bg-pattern-black.png') repeat;
     text-align: center;
 	}
 body {
