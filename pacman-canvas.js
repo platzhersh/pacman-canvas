@@ -11,6 +11,7 @@
 -------------------------------------------------------------------*/
 
 
+function geronimo() {
 /* ----- Global Variables ---------------------------------------- */
 	var canvas;
 	var joystick;
@@ -1411,3 +1412,6 @@ function checkAppCache() {
 				if ($('#game-content').is(':visible')) addHighscore();
 			}
 		}
+}
+
+geronimo();
