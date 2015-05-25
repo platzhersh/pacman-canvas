@@ -21,6 +21,9 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 Version history
 ===============
 
+*Version 0.86 - 25.05.2015*
+* some security fixes to avoid cheaters from adding highscores
+
 *Version 0.84 - 09.11.2014*
 * fixed bug that caused game to crash when leaving game area to the right side while holding the right arrow
 

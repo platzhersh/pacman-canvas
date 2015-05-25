@@ -43,8 +43,8 @@ function addHighscore($name,$score) {
 	$remH = isset($_SERVER[ 'REMOTE_HOST']) ? $_SERVER[ 'REMOTE_HOST'] : "";
 
 	// some simple checks to avoid cheaters
-	$ref_assert = preg_match("http://.*\.pacman.platzh1rsch.ch", $ref) > 0;
-	$ua_assert = $ua != "";
+	$ref_assert = preg_match('/http:\/\/.*pacman.platzh1rsch.ch/', $ref) > 0;
+	$ua_assert = ($ua != "");
 	$cheater = 0;
 	if (!$ref_assert || !$ua_assert) {
 		$cheater = 1;
@@ -54,6 +54,10 @@ function addHighscore($name,$score) {
 	$score_clean = htmlspecialchars($score);
 
 	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
+
+	$response['status'] = "OK";
+	$response['cheater'] = $cheater;
+	return json_encode($response);
 }
 
 function resetHighscore() {

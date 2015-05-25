@@ -10,6 +10,7 @@
 	
 -------------------------------------------------------------------*/
 
+"use strict";
 
 function geronimo() {
 /* ----- Global Variables ---------------------------------------- */
@@ -19,23 +20,23 @@ function geronimo() {
 	var game;
 	var canvas_walls, context_walls;
 	var inky, blinky, clyde, pinky;
-	
-	var mapConfig = 'data/map.json';
-	
-	
+
+	var mapConfig = "data/map.json";
+
+
 	/* AJAX stuff */
 	function getHighscore() {
 		setTimeout(ajax_get,30);
 	}
 	function ajax_get() {
-	date = new Date().getTime();
+		var date = new Date().getTime();
 		$.ajax({
 		   datatype: "json",
 		   type: "GET",
 		   url: "data/db-handler.php",
 		   data: {
 			 timestamp: date,
-			 action: 'get'
+			 action: "get"
 			 },
 		   success: function(msg){
 			 $("#highscore-list").text("");
@@ -48,18 +49,27 @@ function geronimo() {
 	function ajax_add(n, s) {
 
 		$.ajax({
-		   type: "POST",
-		   url: "data/db-handler.php",
+		   type: 'POST',
+		   url: 'data/db-handler.php',
 		   data: {
 			 action: 'add',
 			 name: n,
 			 score: s
-			 }
+			 },
+		   dataType: 'json',
+		   success: function(data) {
+				console.log('Highscore added: ' + data);
+				$('#highscore-form').html('<span class="button" id="show-highscore">View Highscore List</span>');
+			},
+			error: function(errorThrown) {
+				console.log(errorThrown);
+			}
 		});
 	}
+
 	function addHighscore() {
+			$("#highscore-form").html("Saving highscore...");
 			ajax_add($("input[type=text]").val(),game.score.score);
-			$("#highscore-form").html('<span class="button" onClick="game.showContent(\'highscore-content\');getHighscore();">view highscore</span>');
 	}
 	
 	function buildWall(context,gridX,gridY,width,height) {
@@ -81,7 +91,7 @@ function geronimo() {
 
 	    pub.enableLogger =  function enableLogger() 
 	                        {
-	                            if(oldConsoleLog == null)
+	                            if(oldConsoleLog === null)
 	                                return;
 
 	                            window['console']['log'] = oldConsoleLog;
@@ -126,7 +136,8 @@ function geronimo() {
 			pinky.dazzle();	
 			blinky.dazzle();	
 			clyde.dazzle();
-		}
+		};
+
 		this.endGhostFrightened = function() {
 			console.log("ghost frigthened end");		
 			this.ghostFrightened = false;
@@ -141,7 +152,7 @@ function geronimo() {
 			if (this.ghostFrightened) {
 				
 				this.ghostFrightenedTimer--;
-				if (this.ghostFrightenedTimer == 0) {
+				if (this.ghostFrightenedTimer === 0) {
 					this.endGhostFrightened();
 					this.ghostFrigthenedTimer = 240;
 					/*inky.reverseDirection();
@@ -152,8 +163,8 @@ function geronimo() {
 			}
 			else {
 				this.ghostModeTimer--;
-				if (this.ghostModeTimer == 0) {
-					console.log("ghostMode="+this.ghostMode);
+				if (this.ghostModeTimer === 0) {
+					console.log("ghostMode=" + this.ghostMode);
 					this.ghostMode ^= 1;
 					this.ghostModeTimer = 200 + this.ghostMode * 450;
 					/*inky.reverseDirection();
@@ -162,7 +173,7 @@ function geronimo() {
 					blinky.reverseDirection();*/
 					}
 			}
-		}
+		};
 		
 		this.getMapContent = function (x, y) {
 			var maxX = game.width / 30 -1;
@@ -172,17 +183,20 @@ function geronimo() {
 			if (y < 0) y = maxY + y;
 			if (y > maxY) y = y-maxY;
 			return this.map.posY[y].posX[x].type;
-		}
+		};
+
 		this.setMapContent = function (x,y,val) {
 			this.map.posY[y].posX[x].type = val;
-		}
+		};
 		
 		this.toggleSound = function() { 
-			this.soundfx == 0 ? this.soundfx = 1 : this.soundfx = 0; 
+			this.soundfx === 0 ? this.soundfx = 1 : this.soundfx = 0; 
 			$('#mute').toggle();
-			}
+			};
+
 		this.reset = function() {
-			}
+			};
+
 		this.newGame = function() {
 		    var r = confirm("Are you sure you want to restart?");
             if (r) {
@@ -190,36 +204,42 @@ function geronimo() {
                 this.init(0);
             }
             this.pauseResume();
-		}
+		};
+
 		this.nextLevel = function() {
 			this.level++;
             console.log("Level "+game.level);
 			game.showMessage("Level "+game.level,"Level up! Click to continue!");
 			this.init(1);
-		}
+		};
+
 		this.drawHearts = function (count) {
 			var html = "";
-			for (i = 0; i<count; i++) {
+			for (var i = 0; i<count; i++) {
 				html += " <img src='img/heart.png'>";
 				}
 			$(".lives").html("Lives: "+html);
 			
-		}
+		};
+
 		this.showContent = function (id) {
 			$('.content').hide();
 			$('#'+id).show();
-		}
+		};
+
 		this.showMessage = function(title, text) {
 			this.pause = true;
 			$('#canvas-overlay-container').fadeIn(200);
 			if ($('.controls').css('display') != "none") $('.controls').slideToggle(200);
 			$('#canvas-overlay-content #title').text(title);
 			$('#canvas-overlay-content #text').html(text);
-		}
+		};
+
 		this.closeMessage = function() {
 			$('#canvas-overlay-container').fadeOut(200);
 			$('.controls').slideToggle(200);
-		}
+		};
+
 		this.pauseResume = function () {
 			if (!this.running) {
 				this.pause = false;
@@ -234,7 +254,8 @@ function geronimo() {
 			else {
 				this.showMessage("Pause","Click to Resume");
 				}
-			}
+			};
+
 		this.init = function (state) {
 			
 			console.log("init game "+state);
@@ -264,7 +285,7 @@ function geronimo() {
 			
 			this.pillCount = temp;
 	
-			if (state == 0) {
+			if (state === 0) {
 				this.score.set(0);
 				this.score.refresh(".score");
 				pacman.lives = 3;
@@ -281,7 +302,7 @@ function geronimo() {
 			this.ghostModeTimer = 200;	// decrements each animationLoop execution
 			
 			// initalize Ghosts, avoid memory flooding
-			if (pinky == null) {
+			if (pinky === null || pinky === undefined) {
 				pinky = new Ghost("pinky",7,5,'img/pinky.svg',2,2);
 				inky = new Ghost("inky",8,5,'img/inky.svg',13,11);
 				blinky = new Ghost("blinky",9,5,'img/blinky.svg',13,0);
@@ -298,20 +319,24 @@ function geronimo() {
 			inky.start();
 			pinky.start();
 			clyde.start();
-			}
+		};
+
 		this.check = function() {
-		if ((this.pillCount == 0) && game.running) {
+		if ((this.pillCount === 0) && game.running) {
 				this.nextLevel();
 			}
-		}
-		this.win = function () {}
-		this.gameover = function () {}
+		};
+
+		this.win = function () {};
+		this.gameover = function () {};
+
 		this.toPixelPos = function (gridPos) {
 			return gridPos*30;
-		}
+		};
+
 		this.toGridPos = function (pixelPos) {
 			return ((pixelPos % 30)/30);
-		}
+		};
 
 	}
 
@@ -323,26 +348,26 @@ function geronimo() {
 		this.score = 0;
 		this.set = function(i) {
 			this.score = i;
-		}
+		};
 		this.add = function(i) {
 			this.score += i;
-		}
+		};
 		this.refresh = function(h) {
 			$(h).html("Score: "+this.score);
-		}
+		};
 		
 	}
 	
 	
 	
 	// used to play sounds during the game
-	var Sound = new Object();
+	var Sound = {};
 	Sound.play = function (sound) {
 		if (game.soundfx == 1) {
 			var audio = document.getElementById(sound);
-			(audio != null) ? audio.play() : console.log(sound+" not found");
+			(audio !== null) ? audio.play() : console.log(sound+" not found");
 			}
-	}
+	};
 	
 	
 	// Direction object in Constructor notation
@@ -354,7 +379,7 @@ function geronimo() {
 		this.dirY = dirY;
 		this.equals = function(dir) {
 			return  JSON.stringify(this) ==  JSON.stringify(dir);
-		}
+		};
 	}
 	
 	// Direction Objects
@@ -374,12 +399,11 @@ function geronimo() {
 		this.dir = null;
 		this.set = function(dir) {
 			this.dir = dir;
-			
-		}
+		};
 		this.get = function() {
 			return this.dir;
-		}
-		}
+		};
+	}
 		
 	//var directionWatcher = new directionWatcher();
 	
@@ -988,7 +1012,7 @@ function geronimo() {
     		this.lives--;
 	        console.log("pacman died, "+this.lives+" lives left");
 	    	if (this.lives <= 0) {
-				var input = "<div id='highscore-form'><input type='text' id='playerName'/><span class='button' id='score-submit' onClick='addHighscore();'>save</span></div>";
+				var input = "<div id='highscore-form'><input type='text' id='playerName'/><span class='button' id='score-submit'>save</span></div>";
 				game.showMessage("Game over","Total Score: "+game.score.score+input);
 				game.gameOver = true;
 				$('#playerName').focus();
@@ -1148,6 +1172,16 @@ function checkAppCache() {
 		
 		$('#canvas-container').click(function() {
 			if (!(game.gameOver == true))	game.pauseResume();
+		});
+
+		$('body').on('click', '#score-submit', function(){
+			console.log("submit highscore pressed");
+			addHighscore();
+		});
+
+		$('body').on('click', '#show-highscore', function(){
+			game.showContent('highscore-content');
+			getHighscore();
 		});
 		
 		// Hammerjs Touch Events
