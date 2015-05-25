@@ -15,8 +15,6 @@ if (isset($_POST['action'])) {
 		}
 } else if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'get') echo getHighscore();
-	if ($_GET['action'] == 'reset') resetHighscore();
-	//if ($_GET['action'] == 'add') addHighscore($_POST['name'],$_POST['score']);
 } else echo "define action to call";
 
 
@@ -24,7 +22,7 @@ function getHighscore() {
 
 	$db = new SQLite3('pacman.db');
 	createDataBase($db);
-	$results = $db->query('SELECT name, score FROM highscore ORDER BY score DESC LIMIT 10');
+	$results = $db->query('SELECT name, score FROM highscore WHERE cheater = 0 ORDER BY score DESC LIMIT 10');
 	while ($row = $results->fetchArray()) {
 		$tmp["name"] = htmlspecialchars($row['name']);
 		$tmp["score"] = strval($row['score']);
@@ -43,7 +41,19 @@ function addHighscore($name,$score) {
 	$ua = isset($_SERVER[ 'HTTP_USER_AGENT']) ? $_SERVER[ 'HTTP_USER_AGENT'] : "";
 	$remA = isset($_SERVER[ 'REMOTE_ADDR']) ? $_SERVER[ 'REMOTE_ADDR'] : "";
 	$remH = isset($_SERVER[ 'REMOTE_HOST']) ? $_SERVER[ 'REMOTE_HOST'] : "";
-	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '")');
+
+	// some simple checks to avoid cheaters
+	$ref_assert = preg_match("http://.*\.pacman.platzh1rsch.ch", $ref) > 0;
+	$ua_assert = $ua != "";
+	$cheater = 0;
+	if (!$ref_assert || !$ua_assert) {
+		$cheater = 1;
+	}
+
+	$name_clean = htmlspecialchars($name);
+	$score_clean = htmlspecialchars($score);
+
+	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
 }
 
 function resetHighscore() {
@@ -54,7 +64,7 @@ function resetHighscore() {
 }
 
 function createDataBase($db) {
-	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME, log_referer VARCHAR(200), log_user_agent VARCHAR(200), log_remote_addr VARCHAR(200), log_remote_host VARCHAR(200))');
+	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME, log_referer VARCHAR(200), log_user_agent VARCHAR(200), log_remote_addr VARCHAR(200), log_remote_host VARCHAR(200), cheater BOOLEAN)');
 }
 
 ?>
