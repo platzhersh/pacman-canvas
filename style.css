@@ -486,3 +486,14 @@ ul.nav li:hover, ul.nav.sub li:hover {
 	ul.nav li { margin: 0; padding: 0 0.3em;}
 	ul.nav li:hover, ul.nav.sub li:hover { padding: 0 0.3em; }
 }
+
+#adsense {
+  text-align: center;
+  display: block;
+}
+
+#adsense .adsbygoogle {
+
+  margin-left: auto;
+  margin-right: auto;
+}
