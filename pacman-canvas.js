@@ -1012,7 +1012,7 @@ function geronimo() {
     		this.lives--;
 	        console.log("pacman died, "+this.lives+" lives left");
 	    	if (this.lives <= 0) {
-				var input = "<div id='highscore-form'><input type='text' id='playerName'/><span class='button' id='score-submit'>save</span></div>";
+				var input = "<div id='highscore-form'><span id='form-validater'></span><input type='text' id='playerName'/><span class='button' id='score-submit'>save</span></div>";
 				game.showMessage("Game over","Total Score: "+game.score.score+input);
 				game.gameOver = true;
 				$('#playerName').focus();
@@ -1176,7 +1176,12 @@ function checkAppCache() {
 
 		$('body').on('click', '#score-submit', function(){
 			console.log("submit highscore pressed");
-			addHighscore();
+			if ($('#playerName').val() === "" || $('#playerName').val() === undefined) {
+				$('#form-validater').html("Please enter a name<br/>");
+			} else {
+				$('#form-validater').html("");
+				addHighscore();
+			}
 		});
 
 		$('body').on('click', '#show-highscore', function(){
@@ -1255,6 +1260,7 @@ function checkAppCache() {
 		});
 		// get latest
 		$(document).on('click', '#updateCode', function(event) {
+			console.log('check for new version');
 			event.preventDefault();
 			window.applicationCache.update(); 
 		});
