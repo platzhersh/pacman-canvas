@@ -68,8 +68,9 @@ function geronimo() {
 	}
 
 	function addHighscore() {
+			var name = $("input[type=text]").val()
 			$("#highscore-form").html("Saving highscore...");
-			ajax_add($("input[type=text]").val(),game.score.score);
+			ajax_add(name ,game.score.score);
 	}
 	
 	function buildWall(context,gridX,gridY,width,height) {

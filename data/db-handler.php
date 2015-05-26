@@ -55,7 +55,9 @@ function addHighscore($name,$score) {
 
 	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
 
-	$response['status'] = "OK";
+	$response['status'] = "success";
+	$response['name'] = $name;
+	$response['score'] = $score;
 	$response['cheater'] = $cheater;
 	return json_encode($response);
 }
