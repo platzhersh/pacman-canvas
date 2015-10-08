@@ -21,6 +21,9 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 Version history
 ===============
 
+*Version 0.87 - 08.10.2015*
+* fix a bug that allowed resuming a game after game over
+
 *Version 0.86 - 25.05.2015*
 * some security fixes to avoid cheaters from adding highscores
 
