@@ -80,9 +80,9 @@ function geronimo() {
 		context.fillRect(pacman.radius/2+gridX*2*pacman.radius,pacman.radius/2+gridY*2*pacman.radius, width*pacman.radius, height*pacman.radius);
 	}
 	
-	function between (x, min, max) {
+	function between(x, min, max) {
 		return x >= min && x <= max;
-		}
+	}
 
 
 	// Logger
@@ -204,7 +204,6 @@ function geronimo() {
         	    console.log("new Game");
                 this.init(0);
             }
-            this.pauseResume();
 		};
 
 		this.nextLevel = function() {
