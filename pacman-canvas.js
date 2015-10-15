@@ -118,8 +118,12 @@ function geronimo() {
 		this.pillCount;				// number of pills
 		this.monsters;
 		this.level = 1;
+		this.refreshLevel = function(h) {
+			$(h).html("Lvl: "+this.level);
+		};
 		this.gameOver = false;
 		this.canvas = $("#myCanvas").get(0);
+		this.wallColor = "Blue";
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 		
@@ -127,6 +131,8 @@ function geronimo() {
 		this.ghostFrightenedTimer = 240;
 		this.ghostMode = 0;			// 0 = Scatter, 1 = Chase
 		this.ghostModeTimer = 200;	// decrements each animationLoop execution
+		this.ghostSpeedNormal = (this.level > 4 ? 3 : 2);	// global default for ghost speed
+		this.ghostSpeedDazzled = 2; // global default for ghost speed when dazzled
 		
 		/* Game Functions */
 		this.startGhostFrightened = function() {
@@ -162,18 +168,22 @@ function geronimo() {
 					blinky.reverseDirection();*/
 				}
 			}
-			else {
-				this.ghostModeTimer--;
-				if (this.ghostModeTimer === 0) {
-					console.log("ghostMode=" + this.ghostMode);
-					this.ghostMode ^= 1;
-					this.ghostModeTimer = 200 + this.ghostMode * 450;
-					/*inky.reverseDirection();
-					pinky.reverseDirection();
-					clyde.reverseDirection();
-					blinky.reverseDirection();*/
-					}
-			}
+			// always decrement ghostMode timer
+			this.ghostModeTimer--;
+			if (this.ghostModeTimer === 0) {
+				this.ghostMode ^= 1;
+				this.ghostModeTimer = 200 + this.ghostMode * 450;
+				console.log("ghostMode=" + this.ghostMode);
+
+				if (this.ghostMode === 0) game.wallColor = "Blue";
+				else game.wallColor = "Red";
+				game.buildWalls();
+
+				inky.reverseDirection();
+				pinky.reverseDirection();
+				clyde.reverseDirection();
+				blinky.reverseDirection();
+				}
 		};
 		
 		this.getMapContent = function (x, y) {
@@ -203,6 +213,7 @@ function geronimo() {
             if (r) {
         	    console.log("new Game");
                 this.init(0);
+                this.pauseResume();
             }
 		};
 
@@ -210,6 +221,7 @@ function geronimo() {
 			this.level++;
             console.log("Level "+game.level);
 			game.showMessage("Level "+game.level,"Level up! Click to continue!");
+			game.refreshLevel(".level");
 			this.init(1);
 		};
 
@@ -338,6 +350,78 @@ function geronimo() {
 			return ((pixelPos % 30)/30);
 		};
 
+		/* ------------ Start Pre-Build Walls  ------------ */
+		this.buildWalls = function() {
+			canvas_walls = document.createElement('canvas');
+			canvas_walls.width = game.canvas.width;
+			canvas_walls.height = game.canvas.height;
+			context_walls = canvas_walls.getContext("2d");
+
+			context_walls.fillStyle = game.wallColor;
+			context_walls.strokeStyle = game.wallColor;
+			
+			//horizontal outer
+			buildWall(context_walls,0,0,18,1);
+			buildWall(context_walls,0,12,18,1);
+			
+			// vertical outer
+			buildWall(context_walls,0,0,1,6);
+			buildWall(context_walls,0,7,1,6);
+			buildWall(context_walls,17,0,1,6);
+			buildWall(context_walls,17,7,1,6);
+			
+			// ghost base
+			buildWall(context_walls,7,4,1,1);
+			buildWall(context_walls,6,5,1,2);
+			buildWall(context_walls,10,4,1,1);
+			buildWall(context_walls,11,5,1,2);
+			buildWall(context_walls,6,6,6,1);
+			
+			// ghost base door
+			context_walls.fillRect(8*2*pacman.radius,pacman.radius/2+4*2*pacman.radius+5, 4*pacman.radius, 1);
+			
+			// single blocks
+			buildWall(context_walls,4,0,1,2);
+			buildWall(context_walls,13,0,1,2);
+			
+			buildWall(context_walls,2,2,1,2);
+			buildWall(context_walls,6,2,2,1);
+			buildWall(context_walls,15,2,1,2);
+			buildWall(context_walls,10,2,2,1);
+			
+			buildWall(context_walls,2,3,2,1);
+			buildWall(context_walls,14,3,2,1);
+			buildWall(context_walls,5,3,1,1);
+			buildWall(context_walls,12,3,1,1);
+			buildWall(context_walls,3,3,1,3);
+			buildWall(context_walls,14,3,1,3);
+			
+			buildWall(context_walls,3,4,1,1);
+			buildWall(context_walls,14,4,1,1);
+			
+			buildWall(context_walls,0,5,2,1);
+			buildWall(context_walls,3,5,2,1);
+			buildWall(context_walls,16,5,2,1);
+			buildWall(context_walls,13,5,2,1);
+			
+			buildWall(context_walls,0,7,2,2);
+			buildWall(context_walls,16,7,2,2);
+			buildWall(context_walls,3,7,2,2);
+			buildWall(context_walls,13,7,2,2);
+			
+			buildWall(context_walls,4,8,2,2);
+			buildWall(context_walls,12,8,2,2);
+			buildWall(context_walls,5,8,3,1);
+			buildWall(context_walls,10,8,3,1);
+			
+			buildWall(context_walls,2,10,1,1);
+			buildWall(context_walls,15,10,1,1);
+			buildWall(context_walls,7,10,4,1);
+			buildWall(context_walls,4,11,2,2);
+			buildWall(context_walls,12,11,2,2);
+			/* ------------ End Pre-Build Walls  ------------ */
+		};
+
 	}
 
 	game = new Game();
@@ -416,7 +500,7 @@ function geronimo() {
 		this.startPosY = gridPosY * 30;
 		this.gridBaseX = gridBaseX;
 		this.gridBaseY = gridBaseY;
-		this.speed = 5;
+		this.speed = game.ghostSpeedNormal;
 		this.images = JSON.parse(
 			'{"normal" : {'
 				+ '"inky" : "0",'
@@ -442,7 +526,7 @@ function geronimo() {
 		this.ghostHouse = true;
 		this.dazzled = false;
 		this.dazzle = function() {
-			this.changeSpeed(3);
+			this.changeSpeed(game.ghostSpeedDazzled);
 			// ensure ghost doesnt leave grid
 			if (this.posX > 0) this.posX = this.posX - this.posX % this.speed;
 			if (this.posY > 0) this.posY = this.posY - this.posY % this.speed;
@@ -450,7 +534,7 @@ function geronimo() {
 		}
 		this.undazzle = function() {
 			// only change speed if ghost is not "dead"
-			if (!this.dead) this.changeSpeed(3);
+			if (!this.dead) this.changeSpeed(game.ghostSpeedNormal);
 			// ensure ghost doesnt leave grid
 			if (this.posX > 0) this.posX = this.posX - this.posX % this.speed;
 			if (this.posY > 0) this.posY = this.posY - this.posY % this.speed;
@@ -495,7 +579,7 @@ function geronimo() {
 		this.die = function() {
 			//this.reset();
 			this.dead = true;
-			this.changeSpeed(5);
+			this.changeSpeed(game.ghostSpeedNormal);
 		}
 		this.changeSpeed = function(s) {
 			// adjust gridPosition to new speed
@@ -512,14 +596,14 @@ function geronimo() {
 			// leave Ghost House
 			if (this.ghostHouse == true) {
 			
-				// Clyde does not start chasing before 2/3 of all pills are eaten
+				// Clyde does not start chasing before 2/3 of all pills are eaten and if level is < 4
 				if (this.name == "clyde") {
-					if ((game.pillCount > 104/3)) this.stop = true;
+					if ((game.level < 4) || ((game.pillCount > 104/3))) this.stop = true;
 					else this.stop = false;
 				}
-				// Inky starts after 30 pills
+				// Inky starts after 30 pills and only from the third level on
 				if (this.name == "inky") {
-					if ((game.pillCount > 104-30)) this.stop = true;
+					if ((game.level < 3) || ((game.pillCount > 104-30))) this.stop = true;
 					else this.stop = false;
 				}
 				
@@ -613,7 +697,7 @@ function geronimo() {
 					tY = Math.abs(blinky.getGridPosY() + vY*2);
 					break;
 				
-				// target: 
+				// target: pacman, until pacman is closer than 5 grid fields, then back to scatter
 				case "clyde":
 					var tX = pacman.getGridPosX();
 					var tY = pacman.getGridPosY();
@@ -1028,76 +1112,8 @@ function geronimo() {
 	}
 	pacman.prototype = new Figure();
 	var pacman = new pacman();
+	game.buildWalls();
 
-	/* ------------ Start Pre-Build Walls  ------------ */
-	canvas_walls = document.createElement('canvas');
-	canvas_walls.width = game.canvas.width;
-	canvas_walls.height = game.canvas.height;
-	context_walls = canvas_walls.getContext("2d");
-
-	context_walls.fillStyle = "Blue";
-	context_walls.strokeStyle = "Blue";
-	
-	//horizontal outer
-	buildWall(context_walls,0,0,18,1);
-	buildWall(context_walls,0,12,18,1);
-	
-	// vertical outer
-	buildWall(context_walls,0,0,1,6);
-	buildWall(context_walls,0,7,1,6);
-	buildWall(context_walls,17,0,1,6);
-	buildWall(context_walls,17,7,1,6);
-	
-	// ghost base
-	buildWall(context_walls,7,4,1,1);
-	buildWall(context_walls,6,5,1,2);
-	buildWall(context_walls,10,4,1,1);
-	buildWall(context_walls,11,5,1,2);
-	buildWall(context_walls,6,6,6,1);
-	
-	// ghost base door
-	context_walls.fillRect(8*2*pacman.radius,pacman.radius/2+4*2*pacman.radius+5, 4*pacman.radius, 1);
-	
-	// single blocks
-	buildWall(context_walls,4,0,1,2);
-	buildWall(context_walls,13,0,1,2);
-	
-	buildWall(context_walls,2,2,1,2);
-	buildWall(context_walls,6,2,2,1);
-	buildWall(context_walls,15,2,1,2);
-	buildWall(context_walls,10,2,2,1);
-	
-	buildWall(context_walls,2,3,2,1);
-	buildWall(context_walls,14,3,2,1);
-	buildWall(context_walls,5,3,1,1);
-	buildWall(context_walls,12,3,1,1);
-	buildWall(context_walls,3,3,1,3);
-	buildWall(context_walls,14,3,1,3);
-	
-	buildWall(context_walls,3,4,1,1);
-	buildWall(context_walls,14,4,1,1);
-	
-	buildWall(context_walls,0,5,2,1);
-	buildWall(context_walls,3,5,2,1);
-	buildWall(context_walls,16,5,2,1);
-	buildWall(context_walls,13,5,2,1);
-	
-	buildWall(context_walls,0,7,2,2);
-	buildWall(context_walls,16,7,2,2);
-	buildWall(context_walls,3,7,2,2);
-	buildWall(context_walls,13,7,2,2);
-	
-	buildWall(context_walls,4,8,2,2);
-	buildWall(context_walls,12,8,2,2);
-	buildWall(context_walls,5,8,3,1);
-	buildWall(context_walls,10,8,3,1);
-	
-	buildWall(context_walls,2,10,1,1);
-	buildWall(context_walls,15,10,1,1);
-	buildWall(context_walls,7,10,4,1);
-	buildWall(context_walls,4,11,2,2);
-	buildWall(context_walls,12,11,2,2);
-	/* ------------ End Pre-Build Walls  ------------ */
 	
 // Check if a new cache is available on page load.	 
 function checkAppCache() {
@@ -1287,7 +1303,6 @@ function checkAppCache() {
 		function renderContent()
 		{
 			//context.save()
-			
 
 			// Refresh Score
 			game.score.refresh(".score");
@@ -1386,7 +1401,7 @@ function checkAppCache() {
 				inky.move();
 				pinky.move();
 				clyde.move();
-				
+
 				game.checkGhostMode();
 			}
 			

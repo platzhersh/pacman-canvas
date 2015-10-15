@@ -21,6 +21,11 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 Version history
 ===============
 
+*Version 0.9 - 15.10.2015*
+* different difficulties depending on level
+* scatter / chase indicated through wall colour
+* extended instructions
+
 *Version 0.87 - 08.10.2015*
 * fix a bug that allowed resuming a game after game over
 

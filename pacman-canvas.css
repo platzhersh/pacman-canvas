@@ -98,7 +98,7 @@ div.audio {}
 audio {display: block; }
 
 .score { width: 180px; }
-.score, .lives { display: inline-block; }
+.score, .lives, .level { display: inline-block; }
 
 /* ---------- Controls ------------------------*/
 
