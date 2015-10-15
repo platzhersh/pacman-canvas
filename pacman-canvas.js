@@ -126,6 +126,21 @@ function geronimo() {
 		this.wallColor = "Blue";
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
+
+		this.pillSize = 3;
+		this.powerpillSizeMin = 2;
+		this.powerpillSizeMax = 6;
+		this.powerpillSizeCurrent = this.powerpillSizeMax;
+		this.powerPillAnimationCounter = 0;
+		this.nextPowerPillSize = function() {
+			/*if (this.powerPillAnimationCounter === 3) {
+				this.powerPillAnimationCounter = 0;
+				this.powerpillSizeCurrent = this.powerpillSizeMin + this.powerpillSizeCurrent % (this.powerpillSizeMax-this.powerpillSizeMin);
+			} else {
+				this.powerPillAnimationCounter++;
+			}*/
+			return this.powerpillSizeCurrent;
+		};
 		
 		this.ghostFrightened = false;
 		this.ghostFrightenedTimer = 240;
@@ -170,7 +185,7 @@ function geronimo() {
 			}
 			// always decrement ghostMode timer
 			this.ghostModeTimer--;
-			if (this.ghostModeTimer === 0) {
+			if (this.ghostModeTimer === 0 && game.level > 1) {
 				this.ghostMode ^= 1;
 				this.ghostModeTimer = 200 + this.ghostMode * 450;
 				console.log("ghostMode=" + this.ghostMode);
@@ -220,7 +235,7 @@ function geronimo() {
 		this.nextLevel = function() {
 			this.level++;
             console.log("Level "+game.level);
-			game.showMessage("Level "+game.level,"Level up! Click to continue!");
+			game.showMessage("Level "+game.level, this.getLevelTitle() + "<br/>(Click to continue!)");
 			game.refreshLevel(".level");
 			this.init(1);
 		};
@@ -238,6 +253,21 @@ function geronimo() {
 			$('.content').hide();
 			$('#'+id).show();
 		};
+
+		this.getLevelTitle = function() {
+			switch(this.level) {
+				case 2:
+					return '"The chase begins"';
+				case 3:
+					return '"Inky\s awakening"';
+				case 4:
+					return '"Clyde\s awakening"';
+				case 5:
+					return '"need for speed"';
+				default:
+					return '"nothing new"';
+			}
+		}
 
 		this.showMessage = function(title, text) {
 			this.pause = true;
@@ -1312,20 +1342,21 @@ function checkAppCache() {
 			context.fillStyle = "White";
 			context.strokeStyle = "White";
 			
-			var dotPosY;		
+			var dotPosY;
 			$.each(game.map.posY, function(i, item) {
 				dotPosY = this.row;
 			   $.each(this.posX, function() { 
 				   if (this.type == "pill") {
-					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,pacman.radius/5,0*Math.PI,2*Math.PI);
+					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,game.pillSize,0*Math.PI,2*Math.PI);
 					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
 				   }
 				   else if (this.type == "powerpill") {
-					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,pacman.radius/3,0*Math.PI,2*Math.PI);
+					context.arc(game.toPixelPos(this.col-1)+pacman.radius,game.toPixelPos(dotPosY-1)+pacman.radius,game.powerpillSizeCurrent,0*Math.PI,2*Math.PI);
 					context.moveTo(game.toPixelPos(this.col-1), game.toPixelPos(dotPosY-1));
 				   }
 			   }); 
 			});
+			console.log("pps: " + game.nextPowerPillSize());
 			context.fill();
 			
 			// Walls
