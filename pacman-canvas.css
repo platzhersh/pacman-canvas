@@ -35,6 +35,12 @@ body {
 	overflow-y: auto; 
 	overflow-x: hidden;
 }
+.content img {
+	max-width: 100%;
+}
+.pull-right {
+	float: right;
+}
 .button {
 	background: #c80a0a; 
 	cursor: pointer;

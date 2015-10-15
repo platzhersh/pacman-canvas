@@ -81,7 +81,7 @@
 
 <!-- Highscore -->
 <div class="content" id="highscore-content">
-	<div class="button" id="back">back</div>
+	<div class="button" id="back">&lt; back</div>
 	<div>
 		<h1>Highscore</h1>
 		<p>
@@ -94,7 +94,7 @@
 
 <!-- INSTRUCTIONS -->
 <div class="content" id="instructions-content">
-	<div class="button" id="back">back</div>
+	<div class="button" id="back">&lt; back</div>
 	<div>
 		<h1>Instructions</h1>
 		<div class="nomobile">
@@ -113,13 +113,13 @@
 			<h2>Ghosts</h2>
 			<p>Ghosts are creatures that hunt pacman and will kill him if they catch him.</p>
 			<p>Every ghost has its own strategy to chase down pacman.</p>
-			<h3>Inky<img src="img/inky.svg" style="float: right;"></h3>
+			<h3>Inky<img src="img/inky.svg" class="pull-right">></h3>
 			Inky will stay in the ghost house until pacman has eaten at least 30 pills.	His home is the bottom right corner.
-			<h3>Blinky <img src="img/blinky.svg" style="float: right;"></h3>
+			<h3>Blinky <img src="img/blinky.svg" class="pull-right"></h3>
 			Blinky is the most agressive of the 4 ghosts. He will start chasing pacman right away, and aim directly at him. His home is the upper right corner.
-			<h3>Pinky<img src="img/pinky.svg" style="float: right;"></h3>
+			<h3>Pinky<img src="img/pinky.svg" class="pull-right"></h3>
 			Pinky will start chasing pacman right away, he will always aim 4 fields ahead and 4 fields left of pacman. His home is the upper left corner.
-			<h3>Clyde<img src="img/clyde.svg" style="float: right;"></h3>
+			<h3>Clyde<img src="img/clyde.svg" class="pull-right"></h3>
 			Inky will stay in the ghost house until pacman has eaten at least 2/3 of all pills. His home is the bottom left corner.
 		</div>
 
@@ -127,9 +127,21 @@
 			<h2>Ghost moods</h2>
 			The ghosts have two different moods that change the way they act during the game.
 			<h3>Scatter mood</h3>
-			This is the default mood. When ghosts are in scatter mood, they will just go to their home corner and stay there.
+			<p>This is the default mood. When ghosts are in scatter mood, they will just go to their home corner and stay there.</p>
+			<img src="img/instructions/instructions_scatter.PNG">
 			<h3>Chase mood</h3>
-			After a certain time the ghosts change their mood and want to go chasing pacman. This is indicated through the walls turning red.
+			<p>After a certain time the ghosts change their mood and want to go chasing pacman. This is indicated through the walls turning red.</p>
+			<img src="img/instructions/instructions_chase.PNG">
+		</div>
+
+		<div>
+			<h2>Items</h2>
+			<h3>Pills</h3>
+			<p>The goal of every level is, to eat all the white pills without getting catched by the ghosts. One pill results in 10 points.</p>
+			<h3>Powerpills</h3>
+			<p>In every level there are 4 powerpills, which are a bit bigger than the regular ones. If Pacman eats those, he will get strong enough to eat the ghosts. You can see this indicated by the ghosts turning blue. One powerpill results in 50 points.</p>
+			<img src="img/instructions/instructions_powerpill.PNG">
+			<p>Eating a ghost results in 100 points. The soul of the ghost will return to the ghost house before starting to chase Pacman again.</p>
 		</div>
 
 	</div>
@@ -137,7 +149,7 @@
 
 <!-- Info -->
 <div class="content" id="info-content">
-	<div class="button" id="back">back</div>
+	<div class="button" id="back">&lt; back</div>
 	<div>
 		<h1>Info</h1>
 		<p>Current Version: 0.9 (15.10.2015) (<a href="#" id="updateCode">get latest</a>)</p>

@@ -190,8 +190,6 @@ function geronimo() {
 				this.ghostModeTimer = 200 + this.ghostMode * 450;
 				console.log("ghostMode=" + this.ghostMode);
 
-				if (this.ghostMode === 0) game.wallColor = "Blue";
-				else game.wallColor = "Red";
 				game.buildWalls();
 
 				inky.reverseDirection();
@@ -332,6 +330,7 @@ function geronimo() {
 				this.score.refresh(".score");
 				pacman.lives = 3;
 				game.level = 1;
+				this.refreshLevel(".level");
 				game.gameOver = false;
 				}
 			pacman.reset();
@@ -382,6 +381,8 @@ function geronimo() {
 
 		/* ------------ Start Pre-Build Walls  ------------ */
 		this.buildWalls = function() {
+			if (this.ghostMode === 0) game.wallColor = "Blue";
+			else game.wallColor = "Red";
 			canvas_walls = document.createElement('canvas');
 			canvas_walls.width = game.canvas.width;
 			canvas_walls.height = game.canvas.height;
