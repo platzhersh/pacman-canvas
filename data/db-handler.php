@@ -1,13 +1,18 @@
 <?php header('Content-Type: application/json');
 
+/* IMPORTANT:
+ * change this to the main url of where you host the application, otherwise, every entry will be marked as a cheater
+*/
+$hostdomain = 'pacman.platzh1rsch.ch';
+
 if (isset($_POST['action'])) {
 	switch ($_POST['action']) {
 		case 'get':
 			echo getHighscore();
 			break;
 		case 'add':
-			if(isset($_POST['name']) || isset($_POST['score'])) 
-				echo addHighscore($_POST['name'],$_POST['score']);
+			if(isset($_POST['name']) || isset($_POST['score']) || isset($_POST['level'])) 
+				echo addHighscore($_POST['name'],$_POST['score'], $_POST['level']);
 			break;
 		case 'reset':
 			echo resetHighscore();
@@ -35,7 +40,7 @@ function getHighscore() {
 	}
 }
 
-function addHighscore($name,$score,$level) {
+function addHighscore($name, $score, $level) {
 
 	$db = new SQLite3('pacman.db');
 	$date = date('Y-m-d h:i:s', time());
@@ -46,7 +51,7 @@ function addHighscore($name,$score,$level) {
 	$remH = isset($_SERVER[ 'REMOTE_HOST']) ? $_SERVER[ 'REMOTE_HOST'] : "";
 
 	// some simple checks to avoid cheaters
-	$ref_assert = preg_match('/http:\/\/.*pacman.platzh1rsch.ch/', $ref) > 0;
+	$ref_assert = preg_match('/http:\/\/.*' . $hostdomain . '/', $ref) > 0;
 	$ua_assert = ($ua != "");
 	$cheater = 0;
 	if (!$ref_assert || !$ua_assert) {
@@ -55,14 +60,26 @@ function addHighscore($name,$score,$level) {
 	// check if score is even possible
 	if ($level < 1) {
 		$cheater = 1;
-	} else if (($points / $level) > 1600 + 1240) {
+	} else if (($score / $level) > (1600 + 1240)) {
 		$cheater = 1;
 	}
 
 	$name_clean = htmlspecialchars($name);
 	$score_clean = htmlspecialchars($score);
 
-	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $level . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
+	$db->exec('INSERT INTO highscore (name, score, level, date, log_referer, log_user_agent, log_remote_addr, log_remote_host, cheater) '
+		. 'VALUES ("' 
+			. $name . '", ' 
+			. $score . ', ' 
+			. $level . ', "' 
+			. $date . '", "' 
+			. $ref .'", "'
+			. $ua . '", "'
+			. $remA .'", "'
+			. $remH . '", "'
+			. $cheater
+		.'")'
+	);
 
 	$response['status'] = "success";
 	$response['level'] = $level;
