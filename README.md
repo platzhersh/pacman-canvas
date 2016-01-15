@@ -21,6 +21,9 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 Version history
 ===============
 
+*Version 0.91 - 15.01.2016*
+* more tests to avoid cheaters
+
 *Version 0.9 - 15.10.2015*
 * different difficulties depending on level
 * scatter / chase indicated through wall colour

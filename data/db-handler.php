@@ -32,7 +32,7 @@ function getHighscore() {
 	else return json_encode($response);
 }
 
-function addHighscore($name,$score) {
+function addHighscore($name,$score,$level) {
 
 	$db = new SQLite3('pacman.db');
 	$date = date('Y-m-d h:i:s', time());
@@ -49,11 +49,15 @@ function addHighscore($name,$score) {
 	if (!$ref_assert || !$ua_assert) {
 		$cheater = 1;
 	}
+	// check if score is even possible
+	if (($points / $level) > 1600 + 1240) {
+		$cheater = 1;
+	}
 
 	$name_clean = htmlspecialchars($name);
 	$score_clean = htmlspecialchars($score);
 
-	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
+	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $level . ', "' $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
 
 	$response['status'] = "success";
 	$response['name'] = $name;
@@ -70,7 +74,7 @@ function resetHighscore() {
 }
 
 function createDataBase($db) {
-	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, date DATETIME, log_referer VARCHAR(200), log_user_agent VARCHAR(200), log_remote_addr VARCHAR(200), log_remote_host VARCHAR(200), cheater BOOLEAN)');
+	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, level INT, date DATETIME, log_referer VARCHAR(200), log_user_agent VARCHAR(200), log_remote_addr VARCHAR(200), log_remote_host VARCHAR(200), cheater BOOLEAN)');
 }
 
 ?>
