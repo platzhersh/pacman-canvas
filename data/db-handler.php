@@ -8,8 +8,8 @@ $hostdomain = 'pacman.platzh1rsch.ch';
 if (isset($_POST['action'])) {
 	switch ($_POST['action']) {
 		case 'get':
-			if(isset($_GET['page'])) {
-				echo getHighscore($_GET['page']);	
+			if(isset($_POST['page'])) {
+				echo getHighscore($_POST['page']);	
 			} else {
 				echo getHighscore();
 			}
@@ -23,15 +23,21 @@ if (isset($_POST['action'])) {
 			break;
 		}
 } else if (isset($_GET['action'])) {
-	if ($_GET['action'] == 'get') echo getHighscore();
+	if ($_GET['action'] == 'get') {
+		if(isset($_GET['page'])) {
+			echo getHighscore($_GET['page']);	
+		} else {
+			echo getHighscore();
+		}
+	}
 } else echo "define action to call";
 
 
-function getHighscore($page=0) {
+function getHighscore($page = 1) {
 
 	$db = new SQLite3('pacman.db');
 	createDataBase($db);
-	$results = $db->query('SELECT name, score FROM highscore WHERE cheater = 0 AND name != "" ORDER BY score DESC LIMIT 10 OFFSET ' . $page*10);
+	$results = $db->query('SELECT name, score FROM highscore WHERE cheater = 0 AND name != "" ORDER BY score DESC LIMIT 10 OFFSET ' . ($page-1)*10);
 	while ($row = $results->fetchArray()) {
 		$tmp["name"] = htmlspecialchars($row['name']);
 		$tmp["score"] = strval($row['score']);
