@@ -26,6 +26,7 @@ Version history
 * better highscore form validation
 * timer integrated (not in use yet)
 * "your screen is too small to play in landscape view" message removed
+* fix number of points for eating a ghost
 
 *Version 0.9 - 15.10.2015*
 * different difficulties depending on level
