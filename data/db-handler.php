@@ -28,8 +28,11 @@ function getHighscore() {
 		$tmp["score"] = strval($row['score']);
 		$response[] = $tmp;		
 	}
-	if (!isset($response) || is_null($response)) return "[]";
-	else return json_encode($response);
+	if (!isset($response) || is_null($response)) {
+		return "[]";
+	} else {
+		return json_encode($response);
+	}
 }
 
 function addHighscore($name,$score,$level) {
@@ -57,7 +60,7 @@ function addHighscore($name,$score,$level) {
 	$name_clean = htmlspecialchars($name);
 	$score_clean = htmlspecialchars($score);
 
-	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $level . ', "' $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
+	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $level . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
 
 	$response['status'] = "success";
 	$response['name'] = $name;
