@@ -53,7 +53,9 @@ function addHighscore($name,$score,$level) {
 		$cheater = 1;
 	}
 	// check if score is even possible
-	if (($points / $level) > 1600 + 1240) {
+	if ($level < 1) {
+		$cheater = 1;
+	} else if (($points / $level) > 1600 + 1240) {
 		$cheater = 1;
 	}
 
@@ -63,6 +65,7 @@ function addHighscore($name,$score,$level) {
 	$db->exec('INSERT INTO highscore VALUES ("' . $name . '", ' . $score . ', "' . $level . ', "' . $date . '", "' . $ref .'", "'. $ua . '", "' . $remA .'", "'. $remH . '", "'. $cheater.'")');
 
 	$response['status'] = "success";
+	$response['level'] = $level;
 	$response['name'] = $name;
 	$response['score'] = $score;
 	$response['cheater'] = $cheater;

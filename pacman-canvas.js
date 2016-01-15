@@ -46,7 +46,7 @@ function geronimo() {
 		   } 
 		});
 	}
-	function ajax_add(n, s) {
+	function ajax_add(n, s, l) {
 
 		$.ajax({
 		   type: 'POST',
@@ -54,7 +54,8 @@ function geronimo() {
 		   data: {
 			 action: 'add',
 			 name: n,
-			 score: s
+			 score: s,
+			 level: l
 			 },
 		   dataType: 'json',
 		   success: function(data) {
