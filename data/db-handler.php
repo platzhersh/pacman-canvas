@@ -67,6 +67,10 @@ function addHighscore($name, $score, $level) {
 	if (!$ref_assert || !$ua_assert) {
 		$cheater = 1;
 	}
+
+	$maxlvlpoints_pills = 104 * 10;
+	$maxlvlpoints_powerpills = 4 * 50;
+	$maxlvlpoints_ghosts = 4 * 4 * 100;
 	// check if score is even possible
 	if ($level < 1) {
 		$cheater = 1;

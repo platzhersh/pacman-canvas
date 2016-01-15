@@ -594,6 +594,7 @@ function geronimo() {
 		this.image.src = image;
 		this.ghostHouse = true;
 		this.dazzled = false;
+        this.dead = false;
 		this.dazzle = function() {
 			this.changeSpeed(game.ghostSpeedDazzled);
 			// ensure ghost doesnt leave grid
@@ -646,9 +647,12 @@ function geronimo() {
 		}
 		
 		this.die = function() {
-			//this.reset();
-			this.dead = true;
-			this.changeSpeed(game.ghostSpeedNormal);
+            if (!this.dead) {
+                game.score.add(100);
+                //this.reset();
+                this.dead = true;
+                this.changeSpeed(game.ghostSpeedNormal);
+            }
 		}
 		this.changeSpeed = function(s) {
 			// adjust gridPosition to new speed
@@ -701,10 +705,11 @@ function geronimo() {
 		}
 			
 		this.checkCollision = function() {
-		
+		  
 			/* Check Back to Home */
 			if (this.dead && (this.getGridPosX() == this.startPosX /30) && (this.getGridPosY() == this.startPosY / 30)) this.reset();
 			else {
+
 				/* Check Ghost / Pacman Collision			*/
 				if ((between(pacman.getCenterX(), this.getCenterX()-10, this.getCenterX()+10)) 
 					&& (between(pacman.getCenterY(), this.getCenterY()-10, this.getCenterY()+10)))
@@ -712,10 +717,9 @@ function geronimo() {
 					if ((!this.dazzled) && (!this.dead)) {
 						pacman.die();
 						}
-					else {
-						this.die();
-						game.score.add(100);
-						}
+					else {                            
+                        this.die();
+					}
 				}
 			}
 		}
