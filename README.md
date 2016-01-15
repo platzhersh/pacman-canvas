@@ -23,6 +23,9 @@ Version history
 
 *Version 0.91 - 15.01.2016*
 * more tests to avoid cheaters
+* better highscore form validation
+* timer integrated (not in use yet)
+* "your screen is too small to play in landscape view" message removed
 
 *Version 0.9 - 15.10.2015*
 * different difficulties depending on level

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Pacman 0.91	15.01.2016
+# Pacman 0.91	15.01.2016 a
 
 CACHE:
 
@@ -38,9 +38,9 @@ img/heart.png
 img/audio-icon.png
 img/audio-icon-mute.png
 img/platzh1rsch-logo.png
-img/instructions_chase.PNG
-img/instructions_scatter.PNG
-img/instructions_powerpill.PNG
+img/instructions/instructions_chase.PNG
+img/instructions/instructions_scatter.PNG
+img/instructions/instructions_powerpill.PNG
 
 # MP3
 mp3/die.mp3

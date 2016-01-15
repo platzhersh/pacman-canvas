@@ -69,9 +69,9 @@ function geronimo() {
 	}
 
 	function addHighscore() {
-			var name = $("input[type=text]").val()
-			$("#highscore-form").html("Saving highscore...");
-			ajax_add(name ,game.score.score, game.level);
+			var name = $("input[type=text]").val();
+            $("#highscore-form").html("Saving highscore...");
+            ajax_add(name ,game.score.score, game.level);
 	}
 	
 	function buildWall(context,gridX,gridY,width,height) {
@@ -107,9 +107,34 @@ function geronimo() {
 
 	    return pub;
 	}();
+
+	// stop watch to measure the time
+	function Timer() {
+		this.time_diff = 0;
+		this.time_start = 0;
+		this.time_stop = 0;
+		this.start = function() {
+			this.time_start = new Date().getTime();
+		}
+		this.stop = function() {
+			this.time_stop = new Date().getTime();
+			this.time_diff += this.time_stop - this.time_start;
+			this.time_stop = 0;
+			this.time_start = 0;
+		}
+		this.reset = function() {
+			this.time_diff = 0;
+			this.time_start = 0;
+			this.time_stop = 0;
+		}
+		this.get_time_diff = function() {
+			return this.time_diff;
+		}
+	}
 	
 	// Manages the whole game ("God Object")
 	function Game() {
+		this.timer = new Timer();
 		this.refreshRate = 33;		// speed of the game, will increase in higher levels
 		this.running = false;
 		this.pause = true;
@@ -269,6 +294,7 @@ function geronimo() {
 		}
 
 		this.showMessage = function(title, text) {
+			this.timer.stop();
 			this.pause = true;
 			$('#canvas-overlay-container').fadeIn(200);
 			if ($('.controls').css('display') != "none") $('.controls').slideToggle(200);
@@ -283,12 +309,18 @@ function geronimo() {
 
 		this.pauseResume = function () {
 			if (!this.running) {
+				// start timer
+				this.timer.start();
+
 				this.pause = false;
 				this.running = true;
 				this.closeMessage();
 				animationLoop();
 			}
 			else if (this.pause) {
+				// stop timer
+				this.timer.stop();
+
 				this.pause = false;
 				this.closeMessage();
 				}
@@ -300,6 +332,11 @@ function geronimo() {
 		this.init = function (state) {
 			
 			console.log("init game "+state);
+
+			// reset timer if restart
+			if( state === 0 ) {
+                this.timer.reset();
+			}
 			
 			// get Level Map
 			$.ajax({
@@ -1203,13 +1240,14 @@ function checkAppCache() {
 		/* -------------------- EVENT LISTENERS -------------------------- */
 		
 		// Listen for resize changes
-		window.addEventListener("resize", function() {
+		/*window.addEventListener("resize", function() {
 			// Get screen size (inner/outerWidth, inner/outerHeight)
+			// deactivated because of problems
 			if ((window.outerHeight < window.outerWidth) && (window.outerHeight < 720)) {
 			game.showMessage("Rotate Device","Your screen is too small to play in landscape view.");
 			console.log("rotate your device to portrait!");
 			}
-		}, false);
+		}, false);*/
 		
 		
 		// --------------- Controls
@@ -1496,8 +1534,6 @@ function checkAppCache() {
 					&& $('#game-content').is(':visible')
 					)	game.pauseResume();
 				break;
-			case 13: 	// ENTER pressed
-				if ($('#game-content').is(':visible')) addHighscore();
 			}
 		}
 }
