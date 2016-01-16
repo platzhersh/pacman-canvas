@@ -282,12 +282,28 @@ function geronimo() {
 			switch(this.level) {
 				case 2:
 					return '"The chase begins"';
+                    // activate chase / scatter switching
 				case 3:
 					return '"Inky\s awakening"';
+                    // Inky starts leaving the ghost house
 				case 4:
 					return '"Clyde\s awakening"';
+                    // Clyde starts leaving the ghost house
 				case 5:
 					return '"need for speed"';
+                    // All the ghosts get faster from now on
+                case 6:
+                    return '"hunting season 1"';
+                    // TODO: No scatter mood this time
+                case 7:
+                    return '"the big calm"';
+                    // TODO: Only scatter mood this time
+                case 8:
+                    return '"hunting season 2"';
+                    // TODO: No scatter mood and all ghosts leave instantly
+                case 9:
+                    return '"ghosts on speed"';
+                    // TODO: Ghosts get even faster for this level
 				default:
 					return '"nothing new"';
 			}
