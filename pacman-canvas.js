@@ -1327,18 +1327,22 @@ function checkAppCache() {
 		// Mobile Control Buttons
 		$(document).on('touchend mousedown','#up',function(event) {
 		    event.preventDefault();
+		    window.navigator.vibrate(200);
 			pacman.directionWatcher.set(up);
 		});
 		$(document).on('touchend mousedown','#down',function(event) {
 		    event.preventDefault();
+		    window.navigator.vibrate(200);
 			pacman.directionWatcher.set(down);
 		});
 		$(document).on('touchend mousedown','#left',function(event) {
 		    event.preventDefault();
+		    window.navigator.vibrate(200);
 			pacman.directionWatcher.set(left);
 		});
 		$(document).on('touchend mousedown','#right',function(event) {
 		    event.preventDefault();
+		    window.navigator.vibrate(200);
 			pacman.directionWatcher.set(right);
 		});
 		
