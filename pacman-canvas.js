@@ -802,7 +802,7 @@ function geronimo() {
 			}	
 			
 			
-			var oppDir = this.getOppositeDirection();	// ghosts are not allowed to change direction 180°
+			var oppDir = this.getOppositeDirection();	// ghosts are not allowed to change direction 180ï¿½
 			
 			var dirs = [{},{},{},{}];		
 			dirs[0].field = game.getMapContent(pX,pY-1);
@@ -1327,22 +1327,18 @@ function checkAppCache() {
 		// Mobile Control Buttons
 		$(document).on('touchend mousedown','#up',function(event) {
 		    event.preventDefault();
-		    window.navigator.vibrate(200);
 			pacman.directionWatcher.set(up);
 		});
 		$(document).on('touchend mousedown','#down',function(event) {
 		    event.preventDefault();
-		    window.navigator.vibrate(200);
 			pacman.directionWatcher.set(down);
 		});
 		$(document).on('touchend mousedown','#left',function(event) {
 		    event.preventDefault();
-		    window.navigator.vibrate(200);
 			pacman.directionWatcher.set(left);
 		});
 		$(document).on('touchend mousedown','#right',function(event) {
 		    event.preventDefault();
-		    window.navigator.vibrate(200);
 			pacman.directionWatcher.set(right);
 		});
 		

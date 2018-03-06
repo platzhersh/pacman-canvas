@@ -21,6 +21,9 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 Version history
 ===============
 
+*Version 0.92 - 6.3.2018*
+* remove navigator.vibrate() calls
+
 *Version 0.91 - 15.01.2016*
 * more tests to avoid cheaters
 * better highscore form validation
