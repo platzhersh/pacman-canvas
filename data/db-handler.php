@@ -61,7 +61,7 @@ function addHighscore($name, $score, $level) {
 	$remH = isset($_SERVER[ 'REMOTE_HOST']) ? $_SERVER[ 'REMOTE_HOST'] : "";
 
 	// some simple checks to avoid cheaters
-	$ref_assert = preg_match('/http:\/\/.*' . $hostdomain . '/', $ref) > 0;
+	$ref_assert = preg_match('/http(s)?:\/\/.*' . $hostdomain . '/', $ref) > 0;
 	$ua_assert = ($ua != "");
 	$cheater = 0;
 	if (!$ref_assert || !$ua_assert) {
