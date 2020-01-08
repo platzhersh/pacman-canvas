@@ -21,6 +21,9 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 Version history
 ===============
 
+*Version 0.93 - 8.1.2020*
+* add `ads.txt`
+
 *Version 0.92 - 6.3.2018*
 * remove navigator.vibrate() calls
 
