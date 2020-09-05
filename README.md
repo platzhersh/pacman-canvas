@@ -22,6 +22,7 @@ Version history
 ===============
 
 *Version 1.0.0 - 5.9.2020*
+* use "default" version number format, go up to 1.0.0
 * add `package.json`
 * add `server.js`
 * you can now run pacman running an express JS server, using `npm start`
