@@ -1,0 +1,23 @@
+{
+  "name": "pacman-canvas",
+  "version": "1.0.0",
+  "description": "pacman-canvas =============",
+  "main": "pacman-canvas.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/platzhersh/pacman-canvas.git"
+  },
+  "author": "platzh1rsch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/platzhersh/pacman-canvas/issues"
+  },
+  "homepage": "https://github.com/platzhersh/pacman-canvas#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
