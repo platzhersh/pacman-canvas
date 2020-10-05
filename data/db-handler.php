@@ -29,9 +29,20 @@ if (isset($_POST['action'])) {
 		} else {
 			echo getHighscore();
 		}
+	} else if ($_GET['action'] == 'version') {
+		echo getVersionInfo();
 	}
 } else echo "define action to call";
 
+
+function getVersionInfo() {
+	$strJsonFileContents = file_get_contents("../package.json");
+	// Convert to array 
+	$array = json_decode($strJsonFileContents, true);
+	$version = $array['version'];
+
+	return $version;
+}
 
 function getHighscore($page = 1) {
 
