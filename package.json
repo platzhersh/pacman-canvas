@@ -1,6 +1,6 @@
 {
   "name": "pacman-canvas",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "pacman-canvas =============",
   "main": "pacman-canvas.js",
   "scripts": {

@@ -2,6 +2,7 @@
   "name": "Pacman Canvas",
   "description": "An old classic, rewritten in HTML5",
   "launch_path": "/",
+  "version": "1.0.1",
   "developer": {
     "name": "platzh1rsch",
     "url": "http://platzh1rsch.ch"
