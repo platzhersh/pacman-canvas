@@ -39,9 +39,14 @@ function getVersionInfo() {
 	$strJsonFileContents = file_get_contents("../package.json");
 	// Convert to array 
 	$array = json_decode($strJsonFileContents, true);
-	$version = $array['version'];
+	
+	$response["version"] = $array["version"];
 
-	return $version;
+	if (!isset($response) || is_null($response)) {
+		return "[]";
+	} else {
+		return json_encode($response);
+	}
 }
 
 function getHighscore($page = 1) {
