@@ -21,6 +21,9 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 Version history
 ===============
 
+*Version 1.0.1 - 6.10.2020*
+* add `bump-version.sh` to make versioning easier
+
 *Version 1.0.0 - 5.9.2020*
 * use "default" version number format, go up to 1.0.0
 * add `package.json`
