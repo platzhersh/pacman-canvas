@@ -1,29 +1,23 @@
 ﻿{
+  "manifest_version": 2,
   "name": "Pacman Canvas",
+  "version": "1.0.1",
+
   "short_name": "Pacman Canvas",
   "description": "An old classic, rewritten in HTML5",
-  "version": "1.0.1",
-  "lang": "en-US",
 
-  "display": "standalone",
-  "orientation": "portrait",
-  "start_url": "./?utm_source=web_app_manifest",
+  "author": "Platzh1rsch",
 
-  "icons": [
-    {
-      "src": "img/icon-128.png",
-      "sizes": "128x128"
-    }
-  ],
+  "icons": {
+    "128": "img/icon-128.png"
+  },
+
+  "offline_enabled": true,
 
   "app": {
     "urls": ["http://pacman.platzh1rsch.ch/"],
     "launch": {
       "web_url": "http://pacman.platzh1rsch.ch"
     }
-  },
-
-  "verification_key": "eca78f4d-14f3-4fe7-8b44-3e0006a9a9c7",
-  "type": "web",
-  "last_update": "2018-03-06 16:45:11+0000"
+  }
 }
