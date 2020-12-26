@@ -95,8 +95,10 @@ function write_new_version {
     local rep="\"version\": \"${newVersion}\""
     sed -i "" "s/${line}/${rep}/g" package.json
 
+    # in package-lock.json we only want to replace the very first occurence
     echo " package-lock.json"
-    sed -i "" "s/${line}/${rep}/g" package-lock.json
+    sed -e "/${line}/{s//${rep}/;:a" -e '$!N;$!ba' -e '}' package-lock.json > tmp && mv tmp package-lock.json
+
 
     # TODO: update last_update
     echo " web-app-manifest.json"
