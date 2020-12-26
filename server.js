@@ -11,7 +11,7 @@ app.use(myLogger);
 app.use(express.static('.'))
 
 // viewed at http://localhost:8080
-app.get('/', function (req, res) {
+app.get('/', function (req, res, next) {
     res.sendFile(path.join(__dirname + '/index.htm'));
 });
 
