@@ -262,7 +262,6 @@ function geronimo() {
 			$('#mute').toggle();
 		};
 
-		// TODO: 
 		this.reset = function () {
 			this.score.set(0);
 			this.score.refresh(".score");
@@ -385,6 +384,7 @@ function geronimo() {
 					<input type='text' id='playerName'/>
 					<span class='button' id='score-submit'>save</span>
 				</div>` : `<div id='invalid-score'>Your score looks fake, the highscore list is only for honest players ;)</div>`;
+
 			this.pauseAndShowMessage("Game over", "Total Score: " + this.score.score + (HIGHSCORE_ENABLED ? inputHTML : ''));
 			$('#playerName').focus();
 		}
@@ -652,7 +652,7 @@ function geronimo() {
 	var up = new Direction("up", 1.75, 1.25, 0, -1);		// UP
 	var left = new Direction("left", 1.25, 0.75, -1, 0);	// LEFT
 	var down = new Direction("down", 0.75, 0.25, 0, 1);		// DOWN
-	var right = new Direction("right", 0.25, 1.75, 1, 0);	// 
+	var right = new Direction("right", 0.25, 1.75, 1, 0);	// RIGHT
 	/*var directions = [{},{},{},{}];
 	directions[0] = up;
 	directions[1] = down;
