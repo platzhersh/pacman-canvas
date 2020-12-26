@@ -35,6 +35,7 @@ Version history
 * add get started section in README
 * limit to 10 levels for now
 * small refactorings
+* add score validation in JS
 
 *Version 1.0.1 - 6.10.2020*
 * add `bump-version.sh` to make versioning easier
