@@ -22,6 +22,10 @@ const GHOSTS = {
 
 // global constants
 const FINAL_LEVEL = 10;
+const PILL_POINTS = 10;
+const POWERPILL_POINTS = 50;
+const GHOST_POINTS = 100;
+const HIGHSCORE_ENABLED = true;
 
 
 function geronimo() {
@@ -342,7 +346,7 @@ function geronimo() {
 		this.pauseAndShowMessage = function (title, text) {
 			this.timer.stop();
 			this.pause = true;
-			this.showMessage(title,text);
+			this.showMessage(title, text);
 		};
 
 		this.closeMessage = function () {
@@ -350,9 +354,28 @@ function geronimo() {
 			$('.controls').slideToggle(200);
 		};
 
+		this.validateScoreWithLevel = function () {
+			const maxLevelPointsPills = 104 * PILL_POINTS;
+			const maxLevelPointsPowerpills = 4 * POWERPILL_POINTS;
+			const maxLevelPointsGhosts = 4 * 4 * GHOST_POINTS;
+			const maxLevelPoints = maxLevelPointsPills + maxLevelPointsPowerpills + maxLevelPointsGhosts;
+
+			const scoreIsValid = this.score.score / this.level <= maxLevelPoints;
+			console.log('validate score. score: ' + this.score.score + ', level: ' + this.level, scoreIsValid);
+			return scoreIsValid;
+
+		}
+
 		this.showHighscoreForm = function () {
-			var input = "<div id='highscore-form'><span id='form-validater'></span><input type='text' id='playerName'/><span class='button' id='score-submit'>save</span></div>";
-			this.pauseAndShowMessage("Game over", "Total Score: " + this.score.score + input);
+			var scoreIsValid = this.validateScoreWithLevel();
+
+			var inputHTML = scoreIsValid ? `<div id='highscore-form'>
+					<span id='form-validator'></span>
+					<input type='text' id='playerName'/>
+					<span class='button' id='score-submit'>save</span>
+				</div>` : `<div id='invalid-score'>Your score looks fake, the highscore list is only for honest players ;)</div>`;
+			
+			this.pauseAndShowMessage("Game over", "Total Score: " + this.score.score + (HIGHSCORE_ENABLED ? inputHTML : ''));
 			$('#playerName').focus();
 		}
 
@@ -496,7 +519,7 @@ function geronimo() {
 			this.gameOver = true;
 			this.running = false;
 		}
-		
+
 
 		this.toPixelPos = function (gridPos) {
 			return gridPos * 30;
@@ -737,7 +760,7 @@ function geronimo() {
 
 		this.die = function () {
 			if (!this.dead) {
-				game.score.add(100);
+				game.score.add(GHOST_POINTS);
 				//this.reset();
 				this.dead = true;
 				this.changeSpeed(game.ghostSpeedNormal);
@@ -1085,13 +1108,13 @@ function geronimo() {
 						var s;
 						if (field === "powerpill") {
 							Sound.play("powerpill");
-							s = 50;
+							s = POWERPILL_POINTS;
 							this.enableBeastMode();
 							game.startGhostFrightened();
 						}
 						else {
 							Sound.play("waka");
-							s = 10;
+							s = PILL_POINTS;
 							game.pillCount--;
 						}
 						game.map.posY[gridY].posX[gridX].type = "null";
@@ -1351,9 +1374,9 @@ function geronimo() {
 		$('body').on('click', '#score-submit', function () {
 			console.log("submit highscore pressed");
 			if ($('#playerName').val() === "" || $('#playerName').val() === undefined) {
-				$('#form-validater').html("Please enter a name<br/>");
+				$('#form-validator').html("Please enter a name<br/>");
 			} else {
-				$('#form-validater').html("");
+				$('#form-validator').html("");
 				addHighscore();
 			}
 		});
