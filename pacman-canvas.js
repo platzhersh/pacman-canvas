@@ -148,8 +148,11 @@ function geronimo() {
 	function Game() {
 		this.timer = new Timer();	// TODO: implememnt properly, and submit with highscore
 		this.refreshRate = 33;		// speed of the game, will increase in higher levels
-		this.running = false;
+
+		this.started = false;		// TODO: what's the purpose of this exactly?
 		this.pause = true;
+		this.gameOver = false;
+
 		this.score = new Score();
 		this.soundfx = 0;
 		this.map;
@@ -159,7 +162,6 @@ function geronimo() {
 		this.refreshLevel = function (h) {
 			$(h).html("Lvl: " + this.level);
 		};
-		this.gameOver = false;
 		this.canvas = $("#myCanvas").get(0);
 		this.wallColor = "Blue";
 		this.width = this.canvas.width;
@@ -260,8 +262,15 @@ function geronimo() {
 			$('#mute').toggle();
 		};
 
-		// TODO: 
 		this.reset = function () {
+			this.score.set(0);
+			this.score.refresh(".score");
+			pacman.lives = 3;
+			game.level = 1;
+			this.refreshLevel(".level");
+
+			this.pause = false;
+			this.gameOver = false;
 		};
 
 		this.newGame = function () {
@@ -269,7 +278,7 @@ function geronimo() {
 			if (r) {
 				console.log("new Game");
 				this.init(0);
-				this.pauseResume();
+				this.forceResume();
 			}
 		};
 
@@ -278,6 +287,7 @@ function geronimo() {
 				console.log('next level, ' + FINAL_LEVEL + ', end game');
 				game.endGame(true);
 				game.showHighscoreForm();
+				this.init(0);
 			} else {
 				this.level++;
 				console.log("Level " + game.level);
@@ -374,34 +384,32 @@ function geronimo() {
 					<input type='text' id='playerName'/>
 					<span class='button' id='score-submit'>save</span>
 				</div>` : `<div id='invalid-score'>Your score looks fake, the highscore list is only for honest players ;)</div>`;
-			
+
 			this.pauseAndShowMessage("Game over", "Total Score: " + this.score.score + (HIGHSCORE_ENABLED ? inputHTML : ''));
 			$('#playerName').focus();
 		}
 
 		/* game controls */
 
-		this.forceRunning = function () {
+		this.forceStartAnimationLoop = function () {
 			// start timer
 			this.timer.start();
 
 			this.pause = false;
-			this.running = true;
+			this.started = true;
 			this.closeMessage();
 			animationLoop();
 		}
 
 		this.forcePause = function () {
-			// TODO: should stop timer probably
+			this.timer.stop();
 			this.pauseAndShowMessage("Pause", "Click to Resume");
 		}
 
 		this.forceResume = function () {
-			// stop timer -> TODO: should start timer probably
-			this.timer.stop();
-
-			this.pause = false;
 			this.closeMessage();
+			this.pause = false;
+			this.timer.start();
 		}
 
 		this.pauseResume = function () {
@@ -409,8 +417,8 @@ function geronimo() {
 				console.log('Cannot pause / resume. GameOver set to true.');
 				return;
 			}
-			if (!this.running) {
-				this.forceRunning();
+			if (!this.started) {
+				this.forceStartAnimationLoop();
 			}
 			else if (this.pause) {
 				this.forceResume();
@@ -421,7 +429,7 @@ function geronimo() {
 		};
 
 		this.loadMapConfig = async () => {
-			console.log('load map connfig');
+			console.log('load map config');
 			return new Promise((resolve, reject) => {
 				$.ajax({
 					url: mapConfig,
@@ -439,8 +447,6 @@ function geronimo() {
 						reject(response);
 					}
 				});
-
-
 			})
 		};
 
@@ -471,13 +477,9 @@ function geronimo() {
 
 			this.pillCount = this.getPillCount();
 
+			// TODO: why are there 2 state checks?
 			if (state === 0) {
-				this.score.set(0);
-				this.score.refresh(".score");
-				pacman.lives = 3;
-				game.level = 1;
-				this.refreshLevel(".level");
-				game.gameOver = false;
+				game.reset();
 			}
 			pacman.reset();
 
@@ -508,7 +510,7 @@ function geronimo() {
 		};
 
 		this.checkForLevelUp = function () {
-			if ((this.pillCount === 0) && game.running) {
+			if ((this.pillCount === 0) && game.started) {
 				this.nextLevel();
 			}
 		};
@@ -517,7 +519,6 @@ function geronimo() {
 			const win = allLevelsCompleted ?? false;
 			console.log('Game Over by ' + (win ? 'WIN' : 'LOSS'));
 			this.gameOver = true;
-			this.running = false;
 		}
 
 
@@ -1514,7 +1515,7 @@ function geronimo() {
 		context.drawImage(canvas_walls, 0, 0);
 
 
-		if (game.running == true) {
+		if (game.started) {
 			// Ghosts
 			pinky.draw(context);
 			blinky.draw(context);
@@ -1561,6 +1562,7 @@ function geronimo() {
 		context.restore();
 	}
 
+	
 	function animationLoop() {
 		canvas.width = canvas.width;
 		// enable next line to show grid
