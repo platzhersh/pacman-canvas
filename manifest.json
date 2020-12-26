@@ -1,7 +1,7 @@
 ﻿{
   "manifest_version": 2,
   "name": "Pacman Canvas",
-  "version": "1.0.2",
+  "version": "1.0.3",
 
   "short_name": "Pacman Canvas",
   "description": "An old classic, rewritten in HTML5",
