@@ -16,10 +16,26 @@ Feel free to use / copy / modify my code, as long as you reshare your version an
 
 <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" property="dct:title">Pacman Canvas</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://platzh1rsch.ch" property="cc:attributionName" rel="cc:attributionURL">Platzh1rsch</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.<br />Based on a work at <a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/platzhersh/pacman-canvas" rel="dct:source">https://github.com/platzhersh/pacman-canvas</a>.
 
+
+Get started
+===========
+
+To just run the game locally, run `npm start`.
+If you want to see the console logs in your browser, use the `npm run start-dev` instead.
+
+To modify the game for your needs, look at the `pacman-canvas.js` file and make your modifications.
+To change the look and feel, edit the `pacman-canvas.css` file or also the `index.htm`file, where everything comes together.
+
 ------
 
 Version history
 ===============
+
+*Version 1.0.2 - 26.12.2020*
+* add get started section in README
+* limit to 10 levels for now
+* small refactorings
+* add score validation in JS
 
 *Version 1.0.1 - 6.10.2020*
 * add `bump-version.sh` to make versioning easier
