@@ -90,7 +90,7 @@ function addHighscore($name, $score, $level) {
 	$maxlvlpoints = $maxlvlpoints_pills + $maxlvlpoints_powerpills + $maxlvlpoints_ghosts;
 
 	// check if score is even possible
-	if ($level < 1) {
+	if ($level < 1 || $level > 10) {
 		$cheater = 1;
 	} else if (($score / $level) > $maxlvlpoints) {
 		$cheater = 1;
