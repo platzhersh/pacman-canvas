@@ -262,6 +262,7 @@ function geronimo() {
 			$('#mute').toggle();
 		};
 
+		// TODO: 
 		this.reset = function () {
 			this.score.set(0);
 			this.score.refresh(".score");
