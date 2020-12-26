@@ -262,6 +262,7 @@ function geronimo() {
 			$('#mute').toggle();
 		};
 
+		// TODO: 
 		this.reset = function () {
 			this.score.set(0);
 			this.score.refresh(".score");
@@ -384,7 +385,6 @@ function geronimo() {
 					<input type='text' id='playerName'/>
 					<span class='button' id='score-submit'>save</span>
 				</div>` : `<div id='invalid-score'>Your score looks fake, the highscore list is only for honest players ;)</div>`;
-
 			this.pauseAndShowMessage("Game over", "Total Score: " + this.score.score + (HIGHSCORE_ENABLED ? inputHTML : ''));
 			$('#playerName').focus();
 		}
