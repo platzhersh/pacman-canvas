@@ -31,6 +31,12 @@ To change the look and feel, edit the `pacman-canvas.css` file or also the `inde
 Version history
 ===============
 
+*Version 1.0.4 - 26.12.2020*
+* remove highscore reset endpoint
+
+*Version 1.0.3 - 26.12.2020*
+* fix speed issue
+
 *Version 1.0.2 - 26.12.2020*
 * add get started section in README
 * limit to 10 levels for now
