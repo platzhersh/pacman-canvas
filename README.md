@@ -31,6 +31,11 @@ To change the look and feel, edit the `pacman-canvas.css` file or also the `inde
 Version history
 ===============
 
+*Version 1.0.5 - 22.03.2021*
+* add webpack config
+* fix finished game state
+* show console logs when started locally
+
 *Version 1.0.4 - 26.12.2020*
 * remove highscore reset endpoint
 
