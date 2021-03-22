@@ -124,7 +124,7 @@ function write_new_version {
 
     echo ""
     echo "All files up to date. New Version ${newVersion} (${currentDateTime})."
-    echo "Don't forget to update README.md."
+    echo "Don't forget to update README.md and to set the git tag."
 }
 
 function run {
