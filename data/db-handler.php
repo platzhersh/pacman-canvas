@@ -96,19 +96,8 @@ function addHighscore($name, $score, $level) {
 	$name_clean = htmlspecialchars($name);
 	$score_clean = htmlspecialchars($score);
 
-	$db->exec('INSERT INTO highscore (name, score, level, date, log_referer, log_user_agent, log_remote_addr, log_remote_host, cheater) '
-		. 'VALUES ("' 
-			. $name . '", ' 
-			. $score . ', ' 
-			. $level . ', "' 
-			. $date . '", "' 
-			. $ref .'", "'
-			. $ua . '", "'
-			. $remA .'", "'
-			. $remH . '", "'
-			. $cheater
-		.'")'
-	);
+	$db->exec('INSERT INTO highscore (name, score, level, date, log_referer, log_user_agent, log_remote_addr, log_remote_host, cheater)VALUES(?,?,?,?,?,?,?,?,?)',$name, $score,$level,$date,$ref,$ua,$remA,$remH,$cheater);
+
 
 	$response['status'] = "success";
 	$response['level'] = $level;
