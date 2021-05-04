@@ -8,21 +8,21 @@ $hostdomain = 'pacman.platzh1rsch.ch';
 if (isset($_POST['action'])) {
 	switch ($_POST['action']) {
 		case 'get':
-			if(isset($_POST['page'])) {
-				echo getHighscore($_POST['page']);	
+			if (isset($_POST['page'])) {
+				echo getHighscore($_POST['page']);
 			} else {
 				echo getHighscore();
 			}
 			break;
 		case 'add':
-			if(isset($_POST['name']) || isset($_POST['score']) || isset($_POST['level'])) 
-				echo addHighscore($_POST['name'],$_POST['score'], $_POST['level']);
+			if (isset($_POST['name']) || isset($_POST['score']) || isset($_POST['level']))
+				echo addHighscore($_POST['name'], $_POST['score'], $_POST['level']);
 			break;
-		}
+	}
 } else if (isset($_GET['action'])) {
 	if ($_GET['action'] == 'get') {
-		if(isset($_GET['page'])) {
-			echo getHighscore($_GET['page']);	
+		if (isset($_GET['page'])) {
+			echo getHighscore($_GET['page']);
 		} else {
 			echo getHighscore();
 		}
@@ -32,11 +32,12 @@ if (isset($_POST['action'])) {
 } else echo "define action to call";
 
 
-function getVersionInfo() {
+function getVersionInfo()
+{
 	$strJsonFileContents = file_get_contents("../package.json");
 	// Convert to array 
 	$array = json_decode($strJsonFileContents, true);
-	
+
 	$response["version"] = $array["version"];
 
 	if (!isset($response) || is_null($response)) {
@@ -46,15 +47,16 @@ function getVersionInfo() {
 	}
 }
 
-function getHighscore($page = 1) {
+function getHighscore($page = 1)
+{
 
 	$db = new SQLite3('pacman.db');
 	createDataBase($db);
-	$results = $db->query('SELECT name, score FROM highscore WHERE cheater = 0 AND name != "" ORDER BY score DESC LIMIT 10 OFFSET ' . ($page-1)*10);
+	$results = $db->query('SELECT name, score FROM highscore WHERE cheater = 0 AND name != "" ORDER BY score DESC LIMIT 10 OFFSET ' . ($page - 1) * 10);
 	while ($row = $results->fetchArray()) {
 		$tmp["name"] = htmlspecialchars($row['name']);
 		$tmp["score"] = strval($row['score']);
-		$response[] = $tmp;		
+		$response[] = $tmp;
 	}
 	if (!isset($response) || is_null($response)) {
 		return "[]";
@@ -63,15 +65,18 @@ function getHighscore($page = 1) {
 	}
 }
 
-function addHighscore($name, $score, $level) {
+function addHighscore($name, $score, $level)
+{
+
+	global $hostdomain;
 
 	$db = new SQLite3('pacman.db');
 	$date = date('Y-m-d h:i:s', time());
 	createDataBase($db);
-	$ref = isset($_SERVER[ 'HTTP_REFERER']) ? $_SERVER[ 'HTTP_REFERER'] : "";
-	$ua = isset($_SERVER[ 'HTTP_USER_AGENT']) ? $_SERVER[ 'HTTP_USER_AGENT'] : "";
-	$remA = isset($_SERVER[ 'REMOTE_ADDR']) ? $_SERVER[ 'REMOTE_ADDR'] : "";
-	$remH = isset($_SERVER[ 'REMOTE_HOST']) ? $_SERVER[ 'REMOTE_HOST'] : "";
+	$ref = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : "";
+	$ua = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : "";
+	$remA = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : "";
+	$remH = isset($_SERVER['REMOTE_HOST']) ? $_SERVER['REMOTE_HOST'] : "";
 
 	// some simple checks to avoid cheaters
 	$ref_assert = preg_match('/http(s)?:\/\/.*' . $hostdomain . '/', $ref) > 0;
@@ -96,7 +101,7 @@ function addHighscore($name, $score, $level) {
 	$name_clean = htmlspecialchars($name);
 	$score_clean = htmlspecialchars($score);
 
-	$db->exec('INSERT INTO highscore (name, score, level, date, log_referer, log_user_agent, log_remote_addr, log_remote_host, cheater)VALUES(?,?,?,?,?,?,?,?,?)',$name, $score,$level,$date,$ref,$ua,$remA,$remH,$cheater);
+	$db->exec('INSERT INTO highscore (name, score, level, date, log_referer, log_user_agent, log_remote_addr, log_remote_host, cheater)VALUES(?,?,?,?,?,?,?,?,?)', $name_clean, $score_clean, $level, $date, $ref, $ua, $remA, $remH, $cheater);
 
 
 	$response['status'] = "success";
@@ -107,8 +112,7 @@ function addHighscore($name, $score, $level) {
 	return json_encode($response);
 }
 
-function createDataBase($db) {
+function createDataBase($db)
+{
 	$db->exec('CREATE TABLE IF NOT EXISTS highscore(name VARCHAR(60),score INT, level INT, date DATETIME, log_referer VARCHAR(200), log_user_agent VARCHAR(200), log_remote_addr VARCHAR(200), log_remote_host VARCHAR(200), cheater BOOLEAN)');
 }
-
-?>
