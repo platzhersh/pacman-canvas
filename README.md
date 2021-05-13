@@ -7,6 +7,11 @@ Visit http://pacman.platzh1rsch.ch to see it live.
 Sounds from 
 http://soundfxcenter.com/ and http://soundfxnow.com/
 
+If you like this project, feel free to buy me a coffee:
+
+<a href="https://www.buymeacoffee.com/platzh1rsch" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
+
 ------
 
 License
