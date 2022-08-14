@@ -28,6 +28,11 @@ To change the look and feel, edit the `pacman-canvas.css` file or also the `inde
 
 # Version history
 
+_Version 1.0.6 - 14.08.2022_
+
+- adjust license
+- update npm dependencies
+
 _Version 1.0.5 - 22.03.2021_
 
 - add webpack config
