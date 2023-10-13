@@ -1096,10 +1096,10 @@ function geronimo() {
 				if ((field === "pill") || (field === "powerpill")) {
 					//console.log("Pill found at ("+gridX+"/"+gridY+"). Pacman at ("+this.posX+"/"+this.posY+")");
 					if (
-						((this.dirX == 1) && (between(this.posX, game.toPixelPos(gridX) + this.radius - 5, game.toPixelPos(gridX + 1)))) ||
-						((this.dirX == -1) && (between(this.posX, game.toPixelPos(gridX), game.toPixelPos(gridX) + 5))) ||
-						((this.dirY == 1) && (between(this.posY, game.toPixelPos(gridY) + this.radius - 5, game.toPixelPos(gridY + 1)))) ||
-						((this.dirY == -1) && (between(this.posY, game.toPixelPos(gridY), game.toPixelPos(gridY) + 5))) ||
+						((this.dirX == 1) && (between(this.posX, game.toPixelPos(gridX) + this.radius - this.speed, game.toPixelPos(gridX + 1)))) ||
+						((this.dirX == -1) && (between(this.posX, game.toPixelPos(gridX), game.toPixelPos(gridX) + this.speed))) ||
+						((this.dirY == 1) && (between(this.posY, game.toPixelPos(gridY) + this.radius - this.speed, game.toPixelPos(gridY + 1)))) ||
+						((this.dirY == -1) && (between(this.posY, game.toPixelPos(gridY), game.toPixelPos(gridY) + this.speed))) ||
 						(fieldAhead === "wall")
 					) {
 						var s;
@@ -1124,10 +1124,10 @@ function geronimo() {
 					this.stuckY = this.dirY;
 					pacman.stop();
 					// get out of the wall
-					if ((this.stuckX == 1) && ((this.posX % 2 * this.radius) != 0)) this.posX -= 5;
-					if ((this.stuckY == 1) && ((this.posY % 2 * this.radius) != 0)) this.posY -= 5;
-					if (this.stuckX == -1) this.posX += 5;
-					if (this.stuckY == -1) this.posY += 5;
+					if ((this.stuckX == 1) && ((this.posX % 2 * this.radius) != 0)) this.posX -= this.speed;
+					if ((this.stuckY == 1) && ((this.posY % 2 * this.radius) != 0)) this.posY -= this.speed;
+					if (this.stuckX == -1) this.posX += this.speed;
+					if (this.stuckY == -1) this.posY += this.speed;
 				}
 
 			}
