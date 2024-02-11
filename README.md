@@ -1,5 +1,13 @@
 # pacman-canvas
 
+## disclaimer
+
+> I am currenty migrating this project to Typescript and React.
+> You can check it out at https://github.com/platzhersh/pacman-canvas-next (work in progress).
+> I will most probably not further update this repository.
+
+## description
+
 An old classic, re-written in HTML5.
 Visit http://pacman.platzh1rsch.ch to see it live.
 
