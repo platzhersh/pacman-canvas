@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/platzhersh/pacman-canvas#readme",
   "dependencies": {
-    "express": "4.18.1"
+    "express": "4.19.2"
   },
   "devDependencies": {
     "jest": "28.1.3",
