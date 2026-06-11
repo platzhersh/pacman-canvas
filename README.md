@@ -1,5 +1,7 @@
 # pacman-canvas
 
+DEMOing commits and Pull Requests
+
 Disclaimer
 ----------
 
