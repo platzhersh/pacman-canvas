@@ -34,6 +34,16 @@ If you want to see the console logs in your browser, use the `npm run start:dev`
 To modify the game for your needs, look at the `pacman-canvas.js` file and make your modifications.
 To change the look and feel, edit the `pacman-canvas.css` file or also the `index.htm`file, where everything comes together.
 
+## Star History
+
+<a href="https://www.star-history.com/?repos=platzhersh%2Fpacman-canvas&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=platzhersh/pacman-canvas&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=platzhersh/pacman-canvas&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=platzhersh/pacman-canvas&type=date&legend=top-left" />
+ </picture>
+</a>
+
 ---
 
 # Version history
